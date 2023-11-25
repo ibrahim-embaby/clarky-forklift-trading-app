@@ -1,0 +1,77 @@
+{
+  "name": "client",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@emoji-mart/data": "^1.1.2",
+    "@emoji-mart/react": "^1.1.1",
+    "@emotion/react": "^11.11.0",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.14.3",
+    "@mui/joy": "^5.0.0-alpha.78",
+    "@mui/material": "^5.12.3",
+    "@mui/x-data-grid": "^6.11.0",
+    "@reduxjs/toolkit": "^1.9.5",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "axios": "^1.4.0",
+    "emoji-mart": "^5.5.2",
+    "i18next": "^23.4.1",
+    "i18next-browser-languagedetector": "^7.1.0",
+    "i18next-xhr-backend": "^3.2.2",
+    "moment": "^2.29.4",
+    "react": "^18.2.0",
+    "react-circular-progressbar": "^2.1.0",
+    "react-cookie": "^6.1.0",
+    "react-detect-offline": "^2.4.5",
+    "react-dom": "^18.2.0",
+    "react-i18next": "^13.0.3",
+    "react-icons": "^4.10.1",
+    "react-material-ui-carousel": "^3.4.2",
+    "react-medium-image-zoom": "^5.1.8",
+    "react-moment": "^1.1.3",
+    "react-redux": "^8.0.5",
+    "react-router-dom": "^6.11.0",
+    "react-scripts": "5.0.1",
+    "react-select": "^5.7.3",
+    "react-toastify": "^9.1.2",
+    "socket.io-client": "^4.7.1",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 6,
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "jsx": true
+      }
+    }
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "babel-preset-es2015": "^6.24.1"
+  }
+}

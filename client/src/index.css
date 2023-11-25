@@ -1,0 +1,63 @@
+:root {
+  --main-color: #efefef;
+  --primary-color: #ff9800; /*#1b1c1f*/ /*# fe5e50*/
+  --lighted-primary-color: #ffc107;
+  /* --primary-color: #2181ef; */
+  --secondary-color: #495e74;
+  --gray-color: #778697;
+  --dark-color: #292b2c;
+  --blue-color: #0275d8;
+  --green-color: #27ae60;
+  --green-sea-color: #16a085;
+  --pumpkin-color: #d35400;
+  --red-color: #d9534f;
+  --white-color: #fff;
+  --difference-value: 140px;
+  --font-family: -apple-system, BlinkMacSystemFont, "Cairo", "Segoe UI",
+    "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+    "Helvetica Neue", sans-serif;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+.loading-page {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  padding: 20px;
+}
+
+/* Scrollbar Classes For Google Chrome */
+html::-webkit-scrollbar {
+  width: 6px;
+}
+
+html::-webkit-scrollbar-track {
+  /* background-color: rgb(255, 253, 147); */
+}
+
+html::-webkit-scrollbar-thumb {
+  background-color: var(--lighted-primary-color);
+}
