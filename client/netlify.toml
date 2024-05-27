@@ -5,8 +5,9 @@
 [functions]
   directory = "netlify/functions"
 
-[edge_functions]
-  directory = "netlify/edge-functions"
+[[edge_functions]]
+  path = "/ads/*"
+  function = "ad-preview"
 
 [[redirects]]
   from = "/ads/*"
