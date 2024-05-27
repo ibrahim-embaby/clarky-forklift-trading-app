@@ -33,7 +33,10 @@ function SearchSidebar({
               type="text"
               className="sidebar-input"
               value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
+              onChange={(e) => {
+                setSearchInput(e.target.value);
+                setPage(1);
+              }}
               placeholder={t("search_placeholder")}
             />
           </div>
@@ -42,7 +45,7 @@ function SearchSidebar({
               value={itemType?._id ? JSON.stringify(itemType) : ""}
               onChange={(e) => {
                 setItemType(JSON.parse(e.target.value));
-                // setPage(1);
+                setPage(1);
                 params.set("itemType", JSON.parse(e.target.value).value);
               }}
               className="siderbar-select"
@@ -78,7 +81,7 @@ function SearchSidebar({
               value={status?._id ? JSON.stringify(status) : ""}
               onChange={(e) => {
                 setStatus(JSON.parse(e.target.value));
-                // setPage(1);
+                setPage(1);
                 params.set("status", JSON.parse(e.target.value).value);
               }}
               className="siderbar-select"
@@ -114,7 +117,7 @@ function SearchSidebar({
               value={province?._id ? JSON.stringify(province) : ""}
               onChange={(e) => {
                 setProvince(JSON.parse(e.target.value));
-                // setPage(1);
+                setPage(1);
                 params.set("province", JSON.parse(e.target.value).value);
               }}
               className="siderbar-select"
