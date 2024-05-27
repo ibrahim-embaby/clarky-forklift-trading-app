@@ -14,7 +14,6 @@ import { useParams } from "react-router-dom";
 import formatTime from "../../utils/formatTime";
 import { Loading } from "../../components/loading/Loading";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
-import { Helmet } from "react-helmet";
 
 function Ad() {
   const { i18n, t } = useTranslation();
@@ -29,14 +28,6 @@ function Ad() {
     <Loading />
   ) : (
     <div className="ad">
-      <Helmet>
-        <title>{currentAd?.title}</title>
-        <meta property="og:title" content={currentAd?.title} />
-        <meta property="og:description" content={currentAd?.description} />
-        <meta property="og:image" content={currentAd?.photos[0]} />
-        <meta property="og:url" content={window.location.href} />
-        <meta property="og:type" content="website" />
-      </Helmet>
       <div className="container">
         <div
           className="ad-wrapper"
