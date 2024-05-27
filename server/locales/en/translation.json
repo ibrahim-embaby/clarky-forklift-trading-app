@@ -1,6 +1,6 @@
 {
-    "rating_deleted": "rating is deleted successfully",
-    "rating_created": "rating was added successfully",
+    "ad_created": "ad have sent to review",
+    "clark_created": "added successfully",
     "user_not_found": "this user doesn't exist",
     "no_users": "there is no users",
     "user_deleted": "user was deleted successfully",
@@ -29,5 +29,7 @@
     "forbidden": "forbidden",
     "not_deleted": "The deletion was not successful, please try again",
     "cloudinary_error": "internal server error (cloudinary)",
-    "success":"succeeded"
+    "success":"succeeded",
+    "ad_accepted":"ad accepted",
+    "ad_refused": "ad refused"
 }

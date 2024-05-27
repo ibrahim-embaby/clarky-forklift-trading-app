@@ -3,7 +3,12 @@ const Joi = require("joi");
 
 const CarSchema = new mongoose.Schema(
   {
-    name: {
+    code: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    make: {
       type: String,
       unique: true,
       required: true,
@@ -15,6 +20,28 @@ const CarSchema = new mongoose.Schema(
       unique: true,
       trim: true,
     },
+    model: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    forkLength: {
+      type: Number,
+    },
+    capacity: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    fuelType: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    yearManufactured: { type: String, required: true, trim: true },
+    mastType: { type: String, required: true, trim: true },
+    tireType: { type: String, required: true, trim: true },
+    features: { type: Array },
     isActive: {
       type: Boolean,
       default: true,

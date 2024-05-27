@@ -1,13 +1,13 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { logoutUser } from "../../redux/apiCalls/authApiCall";
 import ArrowDropDown from "@mui/icons-material/KeyboardArrowDown";
 import SwitchLanguage from "../switch-language/SwitchLanguage";
-import { useTranslation } from "react-i18next";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import limitText from "../../utils/limitText.js";
+import { useTranslation } from "react-i18next";
 
 function HeaderRight({ toggle, setToggle }) {
   const dispatch = useDispatch();
@@ -31,87 +31,76 @@ function HeaderRight({ toggle, setToggle }) {
     };
 
     document.addEventListener("click", handleClickOutside);
-
-    const handleBeforeUnload = () => {
-      setToggleMenu(false);
-    };
-
-    window.addEventListener("beforeunload", handleBeforeUnload);
+    window.addEventListener("beforeunload", () => setToggleMenu(false));
 
     return () => {
       document.removeEventListener("click", handleClickOutside);
-      window.removeEventListener("beforeunload", handleBeforeUnload);
+      window.removeEventListener("beforeunload", () => setToggleMenu(false));
     };
-  }, [menuRef]);
+  }, []);
 
   return (
     <div className="header-right">
       <SwitchLanguage />
       {user ? (
-        <>
+        <div
+          className="user-settings"
+          onClick={() => setToggleMenu(!toggleMenu)}
+          ref={menuRef}
+        >
+          <ArrowDropDown size="medium" />
+          <p style={{ direction: i18n.language === "ar" ? "rtl" : "ltr" }}>
+            {limitText(user.username, 10)}
+          </p>
           <div
-            className="user-settings"
-            onClick={() => setToggleMenu(!toggleMenu)}
-            ref={menuRef}
+            className="user-menu"
+            style={{ display: toggleMenu ? "block" : "none" }}
           >
-            <ArrowDropDown size="medium" />
+            <Link
+              to={
+                user.workshopName
+                  ? `/mechanic/profile/${user.id}`
+                  : `/profile/${user.id}`
+              }
+              onClick={() => setToggleMenu(false)}
+              className="user-menu-item"
+            >
+              {t("dropdown_account")}
+            </Link>
+            <Link
+              to="/conversations"
+              onClick={() => setToggleMenu(false)}
+              className="user-menu-item"
+            >
+              {t("dropdown_conversations")}
+            </Link>
+            <Link
+              to={`/profile/${user.id}/settings`}
+              onClick={() => setToggleMenu(false)}
+              className="user-menu-item"
+            >
+              {t("dropdown_settings")}
+            </Link>
             <p
-              style={{
-                direction: i18n.language === "ar" ? "rtl" : "ltr",
-              }}
+              className="user-menu-item"
+              onClick={handleLogoutUser}
+              style={{ borderBottom: "none" }}
             >
-              {limitText(user?.username, 10)}
+              {t("logout")}
             </p>
-            <div
-              className="user-menu"
-              style={{ display: toggleMenu ? "block" : "none" }}
-            >
-              <Link
-                to={
-                  user.workshopName
-                    ? `/mechanic/profile/${user.id}`
-                    : `/profile/${user?.id}`
-                }
-                onClick={() => setToggleMenu(false)}
-                className="user-menu-item"
-              >
-                {t("dropdown_account")}
-              </Link>
-              <Link
-                to={`/conversations`}
-                onClick={() => setToggleMenu(false)}
-                className="user-menu-item"
-              >
-                {t("dropdown_conversations")}
-              </Link>
-              <Link
-                to={`/profile/${user?.id}/settings`}
-                onClick={() => setToggleMenu(false)}
-                className="user-menu-item"
-              >
-                {t("dropdown_settings")}
-              </Link>
-              <p
-                className="user-menu-item"
-                onClick={handleLogoutUser}
-                style={{ borderBottom: "none" }}
-              >
-                {t("logout")}
-              </p>
-            </div>
           </div>
-        </>
+        </div>
       ) : (
         <div className="header-auth-links">
-          <Link to={"/login"} className="login-button auth-link">
+          <Link to="/login" className="login-button auth-link">
             {t("login")}
           </Link>
-          <Link to={"/register"} className="register-button auth-link">
+          <Link to="/register" className="register-button auth-link">
             {t("register")}
           </Link>
         </div>
       )}
-      <div className="header-menu" onClick={() => setToggle((perv) => !perv)}>
+      <div className="header-menu" onClick={() => setToggle((prev) => !prev)}>
         {toggle ? (
           <CloseIcon
             sx={{

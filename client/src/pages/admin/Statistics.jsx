@@ -1,4 +1,4 @@
-function Statistics({ usersNumber, workshopsNumber }) {
+function Statistics({ usersNumber, adsCount }) {
   return (
     <div className=" statistics">
       <div className="statistics-item">
@@ -6,8 +6,8 @@ function Statistics({ usersNumber, workshopsNumber }) {
         <p>{usersNumber}</p>
       </div>
       <div className="statistics-item">
-        <h4 className="number-title">عدد الورش</h4>
-        <p>{workshopsNumber}</p>
+        <h4 className="number-title">عدد الإعلانات المنشورة</h4>
+        <p>{adsCount}</p>
       </div>
     </div>
   );

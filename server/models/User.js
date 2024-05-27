@@ -1,6 +1,9 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+const crypto = require("crypto");
+
 const UserSchema = new mongoose.Schema(
   {
     username: {
@@ -22,7 +25,6 @@ const UserSchema = new mongoose.Schema(
     },
     mobile: {
       type: String,
-      required: true,
       unique: true,
       trim: true,
     },
@@ -38,17 +40,32 @@ const UserSchema = new mongoose.Schema(
         publicId: "df9ucku2gdjixyavkoul",
       },
     },
+    isAccountVerified: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
 
+// hash password before save
+UserSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) {
+    return next();
+  }
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(this.password, salt);
+  this.password = hashedPassword;
+  next();
+});
+
 // Generate Auth Tokens
 UserSchema.methods.getSignedToken = function () {
   const accessToken = jwt.sign(
-    { id: this._id },
+    { id: this._id, role: this.role },
     process.env.ACCESS_TOKEN_SECRET,
     {
-      expiresIn: "1min",
+      expiresIn: "2min",
     }
   );
   const refreshToken = jwt.sign(
@@ -59,6 +76,22 @@ UserSchema.methods.getSignedToken = function () {
     }
   );
   return { accessToken, refreshToken };
+};
+
+UserSchema.methods.getToken = function (secret) {
+  const randomstring = crypto.randomBytes(20).toString("hex");
+  const token = jwt.sign(
+    {
+      randomstring,
+      id: this._id,
+    },
+    secret,
+    {
+      expiresIn: "30m",
+    }
+  );
+
+  return token;
 };
 
 const User = mongoose.model("User", UserSchema);

@@ -3,41 +3,45 @@ const Joi = require("joi");
 
 const ProvinceSchema = new mongoose.Schema(
   {
-    name: {
-      type: String,
-      required: true,
-      trim: true,
-      unique: true,
+    label: {
+      ar: {
+        type: String,
+        required: true,
+        trim: true,
+      },
+      en: {
+        type: String,
+        required: true,
+        trim: true,
+      },
     },
-    code: {
+    value: {
       type: String,
-      unique: true,
       required: true,
+      unique: true,
+      trim: true,
     },
     isActive: {
       type: Boolean,
       default: true,
     },
-    cities: [
-      {
-        name: { type: String, required: true },
-        code: { type: String, required: true },
-      },
-    ],
   },
-  { timestamps: true }
+  { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
+
+ProvinceSchema.virtual("cities", {
+  ref: "City",
+  foreignField: "province",
+  localField: "_id",
+});
 
 function validateCreateProvince(object) {
   const schema = Joi.object({
-    name: Joi.string().trim().required(),
-    code: Joi.string().required(),
-    cities: Joi.array().items(
-      Joi.object({
-        name: Joi.string().required(),
-        code: Joi.string().required(),
-      })
-    ),
+    value: Joi.string().trim().required(),
+    label: Joi.object({
+      ar: Joi.string().required(),
+      en: Joi.string().required(),
+    }).required(),
   });
 
   return schema.validate(object, {

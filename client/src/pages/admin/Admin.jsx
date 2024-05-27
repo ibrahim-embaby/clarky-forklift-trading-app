@@ -1,27 +1,26 @@
 import "./admin.css";
 import { useEffect, useState } from "react";
-import Workshops from "./Workshops";
 import Users from "./Users";
 import Manage from "./Manage";
 import Statistics from "./Statistics";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllUsers } from "../../redux/apiCalls/profileApiCall";
-import Ratings from "./Ratings";
-import { fetchWorkshopsCount } from "../../redux/apiCalls/mechanicApiCall";
+import Ads from "./Ads";
 import { useTranslation } from "react-i18next";
+import { adminfetchAdsCount } from "../../redux/apiCalls/adminApiCalls";
 
 function Admin() {
   const [currentComponent, setCurrentComponent] = useState(1);
 
   const dispatch = useDispatch();
-  const { workshopsCount } = useSelector((state) => state.workshopOwner);
   const { users } = useSelector((state) => state.profile);
-  const { t } = useTranslation();
+  const { publishedAdsCount } = useSelector((state) => state.admin);
+  const { i18n, t } = useTranslation();
   document.title = t("admin_page_title");
 
   useEffect(() => {
     dispatch(fetchAllUsers());
-    dispatch(fetchWorkshopsCount());
+    dispatch(adminfetchAdsCount("published"));
   }, [dispatch]);
 
   return (
@@ -56,7 +55,7 @@ function Admin() {
           style={{ backgroundColor: currentComponent === 4 && "#ffd1d1da" }}
           className="admin-sidebar-component"
         >
-          <p className="admin-sidebar-text">التقييمات</p>
+          <p className="admin-sidebar-text">الإعلانات</p>
         </div>
 
         <div
@@ -67,18 +66,16 @@ function Admin() {
           <p className="admin-sidebar-text">ادارة</p>
         </div>
       </div>
-      <div className="admin-dashboard">
+      <div
+        className="admin-dashboard"
+        style={{ direction: i18n.language === "en" ? "ltr" : "rtl" }}
+      >
         {currentComponent === 1 ? (
-          <Statistics
-            usersNumber={users.length}
-            workshopsNumber={workshopsCount}
-          />
+          <Statistics usersNumber={users.length} adsCount={publishedAdsCount} />
         ) : currentComponent === 2 ? (
-          <Workshops />
-        ) : currentComponent === 3 ? (
           <Users users={users} />
-        ) : currentComponent === 4 ? (
-          <Ratings />
+        ) : currentComponent === 3 ? (
+          <Ads />
         ) : (
           <Manage />
         )}

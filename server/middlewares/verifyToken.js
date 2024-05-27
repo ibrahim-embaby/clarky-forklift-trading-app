@@ -7,7 +7,7 @@ function verifyToken(req, res, next) {
   if (authToken) {
     const token = authToken.split(" ")[1];
     try {
-      const decodedPayload = jwt.verify(token, process.env.JWT_SECRET);
+      const decodedPayload = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
       req.user = decodedPayload;
       next();
     } catch (err) {
@@ -31,7 +31,7 @@ function verifyTokenAndOnlyUser(req, res, next) {
 
 function verifyTokenAndAdmin(req, res, next) {
   verifyToken(req, res, () => {
-    if (req.user.isAdmin) {
+    if (req.user.role === "admin") {
       next();
     } else {
       return res.status(403).json({ message: "دخول غير مسموح" });
@@ -41,7 +41,7 @@ function verifyTokenAndAdmin(req, res, next) {
 
 function verifyTokenAndAuthorization(req, res, next) {
   verifyToken(req, res, () => {
-    if (req.user.id === req.params.id || req.user.isAdmin) {
+    if (req.user.id === req.params.id || req.user.role === "admin") {
       next();
     } else {
       return res.status(403).json({ message: "دخول غير مسموح" });

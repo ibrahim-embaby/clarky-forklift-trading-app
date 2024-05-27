@@ -8,14 +8,16 @@
 
 .search-results-wrapper {
   display: flex;
+  flex-direction: column;
   gap: 20px;
   min-height: calc(100vh - var(--difference-value));
+  position: relative;
 }
 
 .search-results-main {
-  flex: 9;
   display: flex;
   flex-direction: column;
+  padding-top: 10px;
 }
 .search-results-count {
   font-weight: 700;
@@ -24,20 +26,20 @@
 
 .search-results-main-items {
   height: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
 }
 
 /* SIDEBAR */
 .search-results-sidebar {
-  flex: 3;
+  position: sticky;
+  top: 70px;
+  width: 100%;
 }
 
 .search-results-sidebar-wrapper {
   background-color: var(--white-color);
-  position: sticky;
-  top: 90px;
   width: -webkit-fill-available;
 }
 .search-results-sidebar-wrapper h4 {
@@ -49,14 +51,36 @@
 }
 .search-results-form {
   display: flex;
-  flex-direction: column;
+  padding: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  border-radius: 5px;
+}
+
+.sidebar-input-wrapper {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  cursor: pointer;
+  border: 1px solid var(--primary-color);
+  padding: 11px 10px;
+  gap: 10px;
+}
+
+.sidebar-input {
+  flex: 1;
+  border: none;
+  font-family: var(--font-family);
+  outline: none;
+  font-size: 15px;
 }
 
 .select-wrapper {
   display: flex;
+  flex: 1;
   align-items: center;
   border: 1px solid var(--primary-color);
-  margin: 5px 10px;
   padding: 10px;
 }
 
@@ -70,8 +94,7 @@
 }
 
 .search-results-form-btn {
-  padding: 10px 15px;
-  margin: 5px 10px 10px 10px;
+  padding: 11.5px 15px;
   font-size: 16px;
   border: none;
   cursor: pointer;
@@ -97,10 +120,26 @@
   background-color: #f8f9fa;
 }
 
+.search-item-img-wrapper {
+  width: 100%;
+  height: 200px;
+}
+.search-item-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 .search-item-title {
-  font-weight: bold;
-  color: var(--secondary-color);
   margin-left: 5px;
+  font-size: 18px;
+}
+.search-item-price {
+  font-size: 20px;
+  font-weight: bold;
+}
+.search-item-date {
+  font-size: 12px;
+  color: var(--gray-color);
 }
 .image-wrapper {
   display: flex;
@@ -166,26 +205,25 @@
 
 /* Media Query */
 
-@media (max-width: 970px) {
-  .search-results-sidebar {
-    flex: 4;
-  }
-  .search-results-main {
-    flex: 8;
-  }
-}
 @media (max-width: 720px) {
   .search-results-wrapper {
     flex-direction: column;
   }
-  .search-results-sidebar {
-    flex: unset;
-    position: unset;
-  }
+
   .search-results-sidebar-wrapper {
     position: unset;
   }
   .workshop-name {
     font-size: 20px;
+  }
+
+  .search-results-main-items {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 590px) {
+  .search-results-main-items {
+    grid-template-columns: repeat(1, 1fr);
   }
 }

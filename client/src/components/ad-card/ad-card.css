@@ -1,0 +1,93 @@
+.ad-card {
+  text-decoration: none;
+  color: unset;
+}
+
+.ad i {
+  margin: 0 5px;
+}
+
+.add-ad-component-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  padding-bottom: 5px;
+}
+
+.add-ad-text {
+  padding: 15px 10px;
+  width: 100%;
+  border: 1px solid var(--primary-color);
+  font-size: 20px;
+}
+
+.add-ad-btn {
+  padding: 3px 20px;
+  color: var(--white-color);
+  background-color: var(--primary-color);
+  margin: 10px 0;
+  font-size: 18px;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-family);
+}
+
+.ad-item {
+  padding: 15px;
+  background-color: var(--white-color);
+  border-radius: 10px;
+}
+
+.ad-item-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.ad-item-info-name-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.ad-item-text {
+  color: var(--secondry-color);
+}
+
+.ad-item-date-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.ad-item-date {
+  font-size: 13px;
+  color: var(--gray-color);
+}
+
+.delete-ad-btn {
+  padding: 2px 10px 2px 5px;
+  color: var(--red-color);
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-family: var(--font-family);
+  display: flex;
+  background-color: antiquewhite;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.workshop-name-ad-wrapper {
+  display: flex;
+  gap: 5px;
+  font-size: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+}

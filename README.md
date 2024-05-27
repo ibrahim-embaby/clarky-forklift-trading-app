@@ -1,8 +1,8 @@
-# Arabity
+# Clarky
 
-Arabity is designed to connect car owners with qualified mechanics in their area. Whether you need routine maintenance, or repairs, our platform makes it easy to find a reputable mechanic who can get the job done.
+Clarky is an app for forklift trading.
 
-[Demo - Visit Now](https://arabity-fzmr.onrender.com) 🚀
+<!-- [Demo - Visit Now](https://arabity-fzmr.onrender.com) 🚀 -->
 
 ## 🖥️ Tech Stack
 
@@ -11,7 +11,7 @@ Arabity is designed to connect car owners with qualified mechanics in their area
 ![reactjs](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)&nbsp;
 ![react-router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white)&nbsp;
 ![redux-toolkit](https://img.shields.io/badge/Redux-593D88?style=for-the-badge&logo=redux&logoColor=white)&nbsp;
-![mui](https://img.shields.io/badge/Material--UI-0081CB?style=for-the-badge&logo=material-ui&logoColor=white)&nbsp;
+![mui](https://img.shields.io/badge/Material--Icons-0081CB?style=for-the-badge&logo=material-ui&logoColor=white)&nbsp;
 
 **Backend:**
 
@@ -20,35 +20,26 @@ Arabity is designed to connect car owners with qualified mechanics in their area
 ![mongodb](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)&nbsp;
 ![jwt](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=JSON%20web%20tokens&logoColor=white)&nbsp;
 
-**Realtime Communication:**
+<!-- **Deployed On:**
 
-![socketio](https://img.shields.io/badge/Socket.io-010101?&style=for-the-badge&logo=Socket.io&logoColor=white)
-
-**Deployed On:**
-
-![netlify](https://img.shields.io/badge/netlify-32e6e2?style=for-the-badge&logo=netlify&logoColor=white)
+![netlify](https://img.shields.io/badge/netlify-32e6e2?style=for-the-badge&logo=netlify&logoColor=white) -->
 
 ## 🚀 Features
 
-- ✅ Login/Signup User/Mechanic Account
-- ✅ Update Profile/Password User Account
-- ✅ Search Mechanic Accounts by Province, Car Model, and Service Type
-- ✅ Results Pagination
-- ✅ View Mechanic Profiles
-- ✅ Rate on Mechanic
-- ✅ User/Mechanic Post & Comment feature
-- ✅ Real Time User-to-Mechanic Chat
+- ✅ Login/Signup
+- ✅ Search ads by province, condtion, purpose and text
+- ✅ Search Results Pagination
+- ✅ View ad details
+- ✅ Create ad and send it for review
 - ✅ Multilingual (Arabic/English)
-- ✅ Emoji Enabled (Emoji Mart)
 
 ## ⌛ Upcoming Features
 
-- 🚧 Follow a Mechanic
-- 🚧 User Notfications
-- 🚧 Search Results Sorting
-- 🚧 Search By City After Selecting Province
-- 🚧 Admin Dashboard
-- 🚧 Reset Password Mail using Nodemailer
+- 🚧 User notfications
+- 🚧 Update ad
+- 🚧 Update profile/password
+- 🚧 Sorting search results
+- 🚧 Admin dashboard
 
 ## Sneak Peek of Website Pages ✨:
 
@@ -56,15 +47,11 @@ Arabity is designed to connect car owners with qualified mechanics in their area
 
 <table>
   <tr>
-    <td><img src="images/img-2.png" alt="mockup" /></td>
     <td><img src="images/img-3.png" alt="mockups" /></td>
-  </tr>
-  <tr>
     <td><img src="images/img-4.png" alt="mockup" /></td>
-    <td><img src="images/img-5.png" alt="mockups" /></td>
   </tr>
-  <tr>
-    <td><img src="images/img-6.png" alt="mockups" /></td>
+   <tr>
+    <td><img src="images/img-2.png" alt="mockup" /></td>
   </tr>
 </table>
 

@@ -1,6 +1,6 @@
 {
-    "rating_deleted": "تم حذف التقييم بنجاح", 
-    "rating_created": "تمت إضافة التقييم بنجاح",
+    "ad_created": "تم إرسال الإعلان للمراجعة", 
+    "clark_created": "تمت الإضافة بنجاح",
     "user_not_found": "هذا المستخدم غير موجود" ,
     "no_users": "لا يوجد مستخدمين",
     "user_deleted": "تم حذف المستخدم بنجاح",
@@ -29,5 +29,7 @@
     "forbidden": "دخول غير مسموح",
     "not_deleted": "لم يتم الحذف بنجاح، اعد المحاولة",
     "cloudinary_error": "خطأ في الخادم (cloudinary)",
-    "success": "تم بنجاح"
+    "success": "تم بنجاح",
+    "ad_accepted":"تم قبول الإعلان",
+    "ad_refused": "تم رفض الإعلان"
 }

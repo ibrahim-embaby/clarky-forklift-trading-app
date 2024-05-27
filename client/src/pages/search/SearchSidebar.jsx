@@ -1,105 +1,146 @@
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
+import SearchIcon from "@mui/icons-material/Search";
+
 function SearchSidebar({
   params,
-  service,
-  services,
-  setService,
   province,
   provinces,
   setProvince,
-  car,
-  cars,
-  setCar,
+  setPage,
+  itemTypes,
+  itemType,
+  setItemType,
+  statuses,
+  status,
+  setStatus,
   t,
+  searchInput,
+  setSearchInput,
   resetFormHandler,
+  lang,
 }) {
   return (
     <div className="search-results-sidebar">
       <div className="search-results-sidebar-wrapper">
-        <h4>{t("search_edit")}</h4>
         <form className="search-results-form">
-          <div className="select-wrapper">
-            <select
-              value={service}
-              onChange={(e) => {
-                setService(e.target.value);
-                params.set("service", e.target.value);
+          <div className="sidebar-input-wrapper">
+            <SearchIcon
+              sx={{
+                color: "var(--primary-color)",
               }}
-              className="siderbar-select"
-            >
-              <option value={""} disabled>
-                {t("service_select")}
-              </option>
-              {services.map((service) => (
-                <option key={service.value} value={service.label}>
-                  {service.label}
-                </option>
-              ))}
-            </select>
-            {service && (
-              <HighlightOffIcon
-                sx={{
-                  color: "red",
-                  cursor: "pointer",
-                }}
-                onClick={() => setService("")}
-              />
-            )}
+            />
+            <input
+              type="text"
+              className="sidebar-input"
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              placeholder={t("search_placeholder")}
+            />
           </div>
           <div className="select-wrapper">
             <select
-              value={car}
+              value={itemType?._id ? JSON.stringify(itemType) : ""}
               onChange={(e) => {
-                setCar(e.target.value);
-                params.set("car", e.target.value);
+                setItemType(JSON.parse(e.target.value));
+                // setPage(1);
+                params.set("itemType", JSON.parse(e.target.value).value);
               }}
               className="siderbar-select"
             >
               <option value={""} disabled>
-                {t("car_select")}
+                {t("item_type_select")}
               </option>
-              {cars.map((car) => (
-                <option key={car.value} value={car.value}>
-                  {car.label}
+              {itemTypes.map((itemType) => (
+                <option
+                  key={itemType.value}
+                  value={JSON.stringify({
+                    value: itemType.value,
+                    _id: itemType._id,
+                  })}
+                >
+                  {itemType.label[lang]}
                 </option>
               ))}
             </select>
-            {car && (
+            {itemType?._id && (
               <HighlightOffIcon
                 sx={{
                   color: "red",
                   cursor: "pointer",
                 }}
-                onClick={() => setCar("")}
+                onClick={() => setItemType({ value: "", _id: "" })}
               />
             )}
           </div>
 
           <div className="select-wrapper">
             <select
-              value={province}
+              value={status?._id ? JSON.stringify(status) : ""}
               onChange={(e) => {
-                setProvince(e.target.value);
-                params.set("province", e.target.value);
+                setStatus(JSON.parse(e.target.value));
+                // setPage(1);
+                params.set("status", JSON.parse(e.target.value).value);
               }}
               className="siderbar-select"
             >
               <option value={""} disabled>
-                {t("province_select")}
+                {t("condition")}
               </option>
-              {provinces.map((province) => (
-                <option key={province.name} value={province.name}>
-                  {province.name}
+              {statuses.map((status) => (
+                <option
+                  key={status.value}
+                  value={JSON.stringify({
+                    value: status.value,
+                    _id: status._id,
+                  })}
+                >
+                  {status.label[lang]}
                 </option>
               ))}
             </select>
-            {province && (
+            {status?._id && (
               <HighlightOffIcon
                 sx={{
                   color: "red",
                   cursor: "pointer",
                 }}
-                onClick={() => setProvince("")}
+                onClick={() => setStatus({ value: "", _id: "" })}
+              />
+            )}
+          </div>
+
+          <div className="select-wrapper">
+            <select
+              value={province?._id ? JSON.stringify(province) : ""}
+              onChange={(e) => {
+                setProvince(JSON.parse(e.target.value));
+                // setPage(1);
+                params.set("province", JSON.parse(e.target.value).value);
+              }}
+              className="siderbar-select"
+            >
+              <option value={""} disabled>
+                {t("province")}
+              </option>
+              {provinces.map((province) => (
+                <option
+                  key={province.value}
+                  value={JSON.stringify({
+                    value: province.value,
+                    _id: province._id,
+                  })}
+                >
+                  {province.label[lang]}
+                </option>
+              ))}
+            </select>
+            {province?._id && (
+              <HighlightOffIcon
+                sx={{
+                  color: "red",
+                  cursor: "pointer",
+                }}
+                onClick={() => setProvince({ value: "", _id: "" })}
               />
             )}
           </div>
