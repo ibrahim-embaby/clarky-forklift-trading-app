@@ -1,6 +1,6 @@
 [build]
   publish = "build"
-  command = "npm run build"
+  command = "CI= npm run build"
 
 # Redirect all requests to the Edge Function for dynamic ad previews
 [[redirects]]
