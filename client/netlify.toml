@@ -2,8 +2,14 @@
   publish = "build"
   command = "CI= npm run build"
 
-# Redirect all requests to the Edge Function for dynamic ad previews
+[functions]
+  directory = "netlify/functions"
+
+[edge_functions]
+  directory = "netlify/edge-functions"
+
 [[redirects]]
   from = "/ads/*"
-  to = "/netlify/functions/ad-preview"
+  to = "/.netlify/edge-functions/ad-preview"
   status = 200
+  force = true
