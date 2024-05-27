@@ -37,7 +37,7 @@ module.exports.createAdCtrl = asyncHandler(async (req, res, next) => {
 module.exports.getAllAdsCtrl = asyncHandler(async (req, res, next) => {
   try {
     const { province, status, itemType, adStatus, search, page } = req.query;
-    const pageSize = 10;
+    const pageSize = 12;
     const currentPage = parseInt(page, 10) || 1;
     const skip = (currentPage - 1) * pageSize;
     let count;
@@ -49,7 +49,10 @@ module.exports.getAllAdsCtrl = asyncHandler(async (req, res, next) => {
     if (province) query["province"] = province;
     if (status) query["status"] = status;
     if (itemType) query["itemType"] = itemType;
-    if (search) query["$text"] = { $search: search };
+    if (search) {
+      const regex = { $regex: search, $options: "i" };
+      query["$or"] = [{ title: regex }, { description: regex }];
+    }
 
     const ads = await Ad.find(query)
       .populate("userId", "username  _id")

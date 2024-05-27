@@ -11,6 +11,7 @@ const i18next = require("i18next");
 const i18nextMiddleware = require("i18next-http-middleware");
 const { configI18n } = require("./config/i18n");
 const { errorHandler, notFound } = require("./middlewares/error");
+const allowedOrigins = require("./utils/allowedOrigins");
 
 // const production = require("./utils/constants");
 
@@ -30,7 +31,7 @@ app.use(helmet());
 // Cors
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
+    origin: allowedOrigins,
     credentials: true,
   })
 );
