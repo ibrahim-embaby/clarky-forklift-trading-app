@@ -31,7 +31,7 @@ function Toast() {
       position={i18n.language === "ar" ? "bottom-right" : "bottom-left"}
       richColors
       duration={1500}
-      dir={i18n.language === "ar" && "rtl"}
+      dir={i18n.language === "ar" ? "rtl" : "ltr"}
     />
   );
 }

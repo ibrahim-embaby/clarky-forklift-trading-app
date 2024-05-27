@@ -37,7 +37,7 @@ function SearchResults() {
   const { t, i18n } = useTranslation();
   document.title = t("search_page_title");
 
-  const RESULTS_PER_PAGE = 10;
+  const RESULTS_PER_PAGE = 12;
   const pages = Math.ceil((searchResultsCount ?? 0) / RESULTS_PER_PAGE);
 
   const resetFormHandler = (e) => {

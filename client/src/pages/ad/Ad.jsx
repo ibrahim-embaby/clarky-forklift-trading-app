@@ -40,6 +40,7 @@ function Ad() {
                   modules={[Navigation, Pagination]}
                   navigation={true}
                   pagination={{ clickable: true }}
+                  key={i18n.language}
                 >
                   {currentAd.photos.map((img, index) => (
                     <SwiperSlide key={index}>

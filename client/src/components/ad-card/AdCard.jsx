@@ -5,7 +5,6 @@ import formatTime from "../../utils/formatTime";
 import PersonIcon from "@mui/icons-material/Person";
 import { Link } from "react-router-dom";
 function AdCard({ ad }) {
-  console.log(ad);
   return (
     <Link className="ad-card" to={`/ads/${ad?._id}`}>
       <div className="ad-item">

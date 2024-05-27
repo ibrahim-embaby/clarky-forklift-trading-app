@@ -10,31 +10,37 @@ function SwitchLanguage() {
   const [toggle, setToggle] = useState(initialLang);
   const [cookies, setCookies] = useCookies(["i18next"]);
 
-  useEffect(() => {
-    // Set i18next language when component mounts
-    i18next.changeLanguage(toggle);
-    setCookies("i18next", toggle);
-  }, [toggle]);
+  const changeLanguage = (lang) => {
+    setToggle(lang);
+    i18next.changeLanguage(lang);
+    setCookies("i18next", lang, { path: "/" });
+    localStorage.setItem("lang", lang);
+    i18n.init({ lng: lang });
+  };
 
   useEffect(() => {
-    localStorage.setItem("lang", toggle);
+    // Initialize language on component mount
+    if (cookies.i18next !== toggle) {
+      changeLanguage(toggle);
+    }
+  }, [cookies, toggle]);
 
-    // Reinitialize i18n with the new language
-    i18n.init({
-      lng: toggle,
-    });
-    setCookies("i18next", toggle);
-  }, [toggle]);
-
-  console.log(cookies);
   return (
     <div className="switch-language">
       {i18n.language === "ar" ? (
-        <button className="switch-language-btn" onClick={() => setToggle("en")}>
+        <button
+          className="switch-language-btn"
+          onClick={() => changeLanguage("en")}
+          aria-label="Switch to English"
+        >
           EN
         </button>
       ) : (
-        <button className="switch-language-btn" onClick={() => setToggle("ar")}>
+        <button
+          className="switch-language-btn"
+          onClick={() => changeLanguage("ar")}
+          aria-label="التبديل إلى العربية"
+        >
           ع
         </button>
       )}
