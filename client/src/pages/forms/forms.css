@@ -159,12 +159,13 @@
 .register-form-btn {
   padding: 12px;
   background-color: var(--primary-color);
-  font-size: 18px;
+  font-size: 14px;
   border: none;
   border-radius: 4px;
   color: var(--white-color);
   cursor: pointer;
   transition: background-color 0.3s ease;
+  font-family: var(--font-family);
 }
 
 .register-form-btn:hover {
@@ -176,7 +177,8 @@
     flex-direction: column;
   }
 
-  .background-image {
-    height: 200px;
+  .login-background-image,
+  .register-background-image {
+    display: none;
   }
 }
