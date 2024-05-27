@@ -43,12 +43,12 @@ function Ad() {
                 >
                   {currentAd.photos.map((img, index) => (
                     <SwiperSlide key={index}>
-                      <img src={img} className="ad-photo" />
+                      <img src={img} className="ad-photo" alt="" />
                     </SwiperSlide>
                   ))}
                 </Swiper>
               ) : (
-                <img src="" />
+                <img src="" alt="" />
               )}
             </div>
             <div className="ad-details">

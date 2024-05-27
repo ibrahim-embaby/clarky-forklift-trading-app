@@ -9,7 +9,7 @@ function Footer() {
     <div className="footer">
       <div className="footer-left">{t("footer_title")}</div>
       <div className="footer-right">
-        <a className="footer-right-icon facebook">
+        <a href="#" className="footer-right-icon facebook">
           <FacebookIcon sx={{ fontSize: 35 }} />
         </a>
         <p className="footer-right-icon instagram">
