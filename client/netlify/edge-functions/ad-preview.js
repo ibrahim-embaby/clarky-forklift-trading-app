@@ -1,6 +1,6 @@
 // netlify/functions/ad-meta-tags.js
 
-exports.handler = async (event, context) => {
+module.exports.handler = async (event, context) => {
   const url = new URL(event.rawUrl);
   const adId = url.pathname.split("/").pop();
 
