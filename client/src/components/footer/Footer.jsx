@@ -18,6 +18,7 @@ function Footer() {
         <a
           href="https://www.linkedin.com/in/ibrahim-embaby/"
           target="_blank"
+          rel="noreferrer"
           className="footer-right-icon linkedin"
         >
           <LinkedIn sx={{ fontSize: 35 }} />
