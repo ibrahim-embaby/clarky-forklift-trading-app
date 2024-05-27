@@ -5,5 +5,5 @@
 # Redirect all requests to the Edge Function for dynamic ad previews
 [[redirects]]
   from = "/ads/*"
-  to = "/.netlify/functions/ad-meta"
+  to = "/.netlify/functions/ad-preview"
   status = 200
