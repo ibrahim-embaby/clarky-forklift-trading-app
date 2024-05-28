@@ -11,12 +11,13 @@ export default async (request, context) => {
     const response = await fetch(
       `https://clarky.onrender.com/api/v1/ads/${adId}`
     );
-    const ad = await response.json();
+    const { data: ad } = await response.json();
+    console.log("response =====> ", response);
     console.log("ad data =====> ", ad);
 
     if (response.ok && ad) {
       const metaTags = `
-      <meta property="og:title" content="${ad.title}" />
+      <meta property="og:title" content="${ad.data.title}" />
       <meta property="og:description" content="${ad.description}" />
       <meta property="og:image" content="${ad.photos[0]}" />
       <meta property="og:url" content="${request.url}" />
@@ -25,6 +26,7 @@ export default async (request, context) => {
       <meta name="twitter:description" content="${ad.description}" />
       <meta name="twitter:image" content="${ad.photos[0]}" />
     `;
+      console.log("============ reatched= =========");
 
       return {
         statusCode: 200,
