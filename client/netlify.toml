@@ -5,8 +5,4 @@
 [[edge_functions]]
   path = "/ads/*"
   function = "ad-preview"
-
   
-[[edge_functions]]
-  path = "/*"
-  function = "site-preview"
