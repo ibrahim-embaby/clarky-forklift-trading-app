@@ -7,9 +7,13 @@ import { useTranslation } from "react-i18next";
 // import LocationOnIcon from "@mui/icons-material/LocationOn";
 
 function SearchItem({ item }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   return (
-    <Link to={`/ads/${item?._id}`} className="search-item">
+    <Link
+      to={`/ads/${item?._id}`}
+      className="search-item"
+      style={{ direction: i18n.language === "ar" ? "rtl" : "ltr" }}
+    >
       <div className="info-wrapper">
         <div className="search-item-img-wrapper">
           <img src={item?.photos[0]} alt="" className="search-item-img" />

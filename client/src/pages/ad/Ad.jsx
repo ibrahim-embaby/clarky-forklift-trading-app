@@ -71,7 +71,7 @@ function Ad() {
               </div>
             </div>
             <div className="ad-sepcifications">
-              <h3>{t("Details")}</h3>
+              <h3>{t("details")}</h3>
               <table className="rotated-table">
                 <tr>
                   <th>{t("condition")}</th>
