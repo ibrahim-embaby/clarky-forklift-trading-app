@@ -7,7 +7,10 @@ export default async (request, context) => {
     const updatedPage = page
       .replace("__META_TITLE__", "Clarky | كلاركي")
       .replace("__META_DESCRIPTION__", "Forklift Trading Platform")
-      .replace("__META_IMAGE__", "/images/logo-q.png");
+      .replace(
+        "__META_IMAGE__",
+        `${new URL(request.url).origin}/images/logo-q.png`
+      );
 
     return new Response(updatedPage, responsepage);
   } catch (error) {
