@@ -1,13 +1,11 @@
 // netlify/functions/ad-meta-tags.js
 export default async (request, context) => {
   try {
+    const responsepage = await context.next();
+    const page = await responsepage.text();
+
     const url = new URL(request.url);
     const adId = url.pathname.split("/").pop();
-    const userAgent = request.headers.get("User-Agent");
-
-    if (userAgent.includes("Googlebot") || userAgent.includes("bingbot")) {
-      return Response.redirect(url.origin + "/ads/" + adId, 301);
-    }
 
     // Fetch the ad details from your backend
     const response = await fetch(
@@ -15,43 +13,12 @@ export default async (request, context) => {
     );
     const { data: ad } = await response.json();
 
-    if (response.ok && ad) {
-      const metaTags = `
-      <meta property="og:title" content="${ad.title}" />
-      <meta property="og:description" content="${ad.description}" />
-      <meta property="og:image" content="${ad.photos[0]}" />
-      <meta property="og:url" content="${request.url}" />
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content="${ad.title}" />
-      <meta name="twitter:description" content="${ad.description}" />
-      <meta name="twitter:image" content="${ad.photos[0]}" />
-    `;
+    const updatedPage = page
+      .replace("__META_TITLE__", ad.title)
+      .replace("__META_DESCRIPTION__", ad.description)
+      .replace("__META_IMAGE__", ad.photos[0]);
 
-      const html = `
-      <!DOCTYPE html>
-      <html lang="en">
-      <head>
-        ${metaTags}
-        <title>${ad.title}</title>
-        <script>
-          window.location = '${url.origin}/ads/${adId}';
-        </script>
-      </head>
-      <body>
-        Redirecting...
-      </body>
-      </html>
-    `;
-      return new Response(html, {
-        status: 200,
-        headers: { "Content-Type": "text/html" },
-      });
-    }
-
-    return {
-      statusCode: 404,
-      body: "Not Found",
-    };
+    return new Response(updatedPage, responsepage);
   } catch (error) {
     console.error("Error in Edge Function:", error);
     return {
