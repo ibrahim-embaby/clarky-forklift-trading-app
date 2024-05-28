@@ -1,4 +1,3 @@
-// netlify/functions/ad-meta-tags.js
 export default async (request, context) => {
   try {
     const url = new URL(request.url);
@@ -22,36 +21,42 @@ export default async (request, context) => {
       <meta name="twitter:image" content="${ad.photos[0]}" />
     `;
 
+      const userAgent = request.headers.get("user-agent") || "";
+      const isBot = /bot|crawler|spider|crawling/i.test(userAgent);
+
       const html = `
       <!DOCTYPE html>
       <html lang="en">
       <head>
         ${metaTags}
         <title>${ad.title}</title>
-        <script>
+        ${
+          !isBot
+            ? `<script>
           window.location = '${url.origin}/ads/${adId}';
-        </script>
+        </script>`
+            : ""
+        }
       </head>
       <body>
-        Redirecting...
+        ${isBot ? "Viewing ad metadata" : "Redirecting..."}
       </body>
       </html>
     `;
+
       return new Response(html, {
         status: 200,
         headers: { "Content-Type": "text/html" },
       });
     }
 
-    return {
-      statusCode: 404,
-      body: "Not Found",
-    };
+    return new Response("Not Found", {
+      status: 404,
+    });
   } catch (error) {
     console.error("Error in Edge Function:", error);
-    return {
-      statusCode: 500,
-      body: "Internal Server Error",
-    };
+    return new Response("Internal Server Error", {
+      status: 500,
+    });
   }
 };
