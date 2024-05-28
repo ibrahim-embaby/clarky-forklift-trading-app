@@ -1,18 +1,18 @@
 // netlify/functions/ad-meta-tags.js
-
 export default async (request, context) => {
   try {
     console.log("request: =--->", request);
     const url = new URL(request.url);
-    console.log("request.rawUrl: =--->", request.url);
+    console.log("request.url: =--->", request.url);
     const adId = url.pathname.split("/").pop();
     console.log("adId =========> ", adId);
 
     // Fetch the ad details from your backend
     const response = await fetch(
-      `${process.env.REACT_APP_SERVER_URL}/api/v1/ads/${adId}`
+      `https://clarky.onrender.com/api/v1/ads/${adId}`
     );
     const ad = await response.json();
+    console.log("ad data =====> ", ad);
 
     if (response.ok && ad) {
       const metaTags = `
