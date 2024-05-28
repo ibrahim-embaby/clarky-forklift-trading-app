@@ -17,7 +17,7 @@ export default async (request, context) => {
 
     if (response.ok && ad) {
       const metaTags = `
-      <meta property="og:title" content="${ad.data.title}" />
+      <meta property="og:title" content="${ad.title}" />
       <meta property="og:description" content="${ad.description}" />
       <meta property="og:image" content="${ad.photos[0]}" />
       <meta property="og:url" content="${request.url}" />
