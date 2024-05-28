@@ -2,8 +2,11 @@
 
 export default async (request, context) => {
   try {
+    console.log("request: =--->", request);
     const url = new URL(request.rawUrl);
+    console.log("request.rawUrl: =--->", request.rawUrl);
     const adId = url.pathname.split("/").pop();
+    console.log("adId =========> ", adId);
 
     // Fetch the ad details from your backend
     const response = await fetch(
