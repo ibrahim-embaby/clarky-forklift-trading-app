@@ -1,19 +1,14 @@
 // netlify/functions/ad-meta-tags.js
 export default async (request, context) => {
   try {
-    console.log("request: =--->", request);
     const url = new URL(request.url);
-    console.log("request.url: =--->", request.url);
     const adId = url.pathname.split("/").pop();
-    console.log("adId =========> ", adId);
 
     // Fetch the ad details from your backend
     const response = await fetch(
       `https://clarky.onrender.com/api/v1/ads/${adId}`
     );
     const { data: ad } = await response.json();
-    console.log("response =====> ", response);
-    console.log("ad data =====> ", ad);
 
     if (response.ok && ad) {
       const metaTags = `
@@ -26,7 +21,6 @@ export default async (request, context) => {
       <meta name="twitter:description" content="${ad.description}" />
       <meta name="twitter:image" content="${ad.photos[0]}" />
     `;
-      console.log("============ reatched= =========");
 
       const html = `
       <!DOCTYPE html>
@@ -35,7 +29,7 @@ export default async (request, context) => {
         ${metaTags}
         <title>${ad.title}</title>
         <script>
-          window.location = '${url.origin}/#/ads/${adId}';
+          window.location = '${url.origin}/ads/${adId}';
         </script>
       </head>
       <body>
