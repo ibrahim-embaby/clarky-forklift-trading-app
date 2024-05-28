@@ -3,6 +3,11 @@ export default async (request, context) => {
   try {
     const url = new URL(request.url);
     const adId = url.pathname.split("/").pop();
+    const userAgent = request.headers.get("User-Agent");
+
+    if (userAgent.includes("Googlebot") || userAgent.includes("bingbot")) {
+      return Response.redirect(url.origin + "/ads/" + adId, 301);
+    }
 
     // Fetch the ad details from your backend
     const response = await fetch(
