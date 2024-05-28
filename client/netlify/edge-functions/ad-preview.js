@@ -3,8 +3,8 @@
 export default async (request, context) => {
   try {
     console.log("request: =--->", request);
-    const url = new URL(request.rawUrl);
-    console.log("request.rawUrl: =--->", request.rawUrl);
+    const url = new URL(request.url);
+    console.log("request.rawUrl: =--->", request.url);
     const adId = url.pathname.split("/").pop();
     console.log("adId =========> ", adId);
 
@@ -19,7 +19,7 @@ export default async (request, context) => {
       <meta property="og:title" content="${ad.title}" />
       <meta property="og:description" content="${ad.description}" />
       <meta property="og:image" content="${ad.photos[0]}" />
-      <meta property="og:url" content="${request.rawUrl}" />
+      <meta property="og:url" content="${request.url}" />
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content="${ad.title}" />
       <meta name="twitter:description" content="${ad.description}" />
