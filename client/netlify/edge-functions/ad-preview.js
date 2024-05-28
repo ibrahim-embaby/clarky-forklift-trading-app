@@ -28,25 +28,25 @@ export default async (request, context) => {
     `;
       console.log("============ reatched= =========");
 
-      return {
-        statusCode: 200,
+      const html = `
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        ${metaTags}
+        <title>${ad.title}</title>
+        <script>
+          window.location = '${url.origin}/#/ads/${adId}';
+        </script>
+      </head>
+      <body>
+        Redirecting...
+      </body>
+      </html>
+    `;
+      return new Response(html, {
+        status: 200,
         headers: { "Content-Type": "text/html" },
-        body: `
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-          ${metaTags}
-          <title>${ad.title}</title>
-          <script>
-            window.location = '${url.origin}/#/ads/${adId}';
-          </script>
-        </head>
-        <body>
-          Redirecting...
-        </body>
-        </html>
-      `,
-      };
+      });
     }
 
     return {
