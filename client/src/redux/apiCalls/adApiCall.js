@@ -157,19 +157,35 @@ export function deleteAd(adId) {
 
 // /api/v1/ads/:adId
 export function getAd(adId) {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
+    const user = getState()?.auth?.user;
     try {
       dispatch(adActions.setAdLoading());
+
       const { data } = await request.get(`/api/v1/ads/${adId}`, {
         headers: {
-          Cookie: document.i18next,
+          Authorization: user?.token ? "Bearer " + user.token : "",
+          Cookie: document.i18next, // Include cookie for language preferences
         },
         withCredentials: true,
       });
+
       dispatch(adActions.setCurrentAd(data.data));
       dispatch(adActions.clearAdLoading());
     } catch (error) {
       console.log(error);
+      if (user) {
+        if (error?.response?.status === 401) {
+          await dispatch(refreshToken()); // Refresh token if necessary
+          await dispatch(getAd(adId));
+          return;
+        } else {
+          toast.error(error.response.data.message);
+        }
+      } else {
+        toast.error("يرجي اعادة المحاولة لاحقا");
+      }
+      dispatch(adActions.clearAdLoading());
     }
   };
 }

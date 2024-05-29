@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const { validateCreateAd, Ad, validateUpdateAd } = require("../models/Ad");
 const ErrorResponse = require("../utils/ErrorResponse");
 const { AdStatus } = require("../models/AdStatus");
+const jwt = require("jsonwebtoken");
 const S3 = require("aws-sdk/clients/s3");
 const s3 = new S3({
   region: process.env.AWS_S3_BUCKET_REGION,
@@ -105,12 +106,36 @@ module.exports.getSingleAdCtrl = asyncHandler(async (req, res, next) => {
   try {
     const { adId } = req.params;
     const publishedStatus = await AdStatus.findOne({ value: "published" });
-    const ad = await Ad.findOne({
-      _id: adId,
-      adStatus: publishedStatus,
-    }).populate("userId province city status saleOrRent adStatus");
 
-    if (!ad) return next(new ErrorResponse(req.t("ad_not_found"), 404));
+    const token = req.headers?.authorization?.split(" ")[1];
+
+    let user = null;
+
+    if (token) {
+      try {
+        user = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+      } catch (error) {
+        return next(new ErrorResponse("دخول غير مسموح1", 401));
+      }
+    }
+
+    let ad;
+
+    if (user) {
+      ad = await Ad.findOne({
+        _id: adId,
+        $or: [{ userId: user.id }, { adStatus: publishedStatus }],
+      }).populate("userId province city status saleOrRent adStatus");
+    } else {
+      ad = await Ad.findOne({
+        _id: adId,
+        adStatus: publishedStatus,
+      }).populate("userId province city status saleOrRent adStatus");
+    }
+
+    if (!ad) {
+      return next(new ErrorResponse(req.t("ad_not_found"), 404));
+    }
 
     res.status(200).json({
       success: true,

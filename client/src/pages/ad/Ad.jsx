@@ -8,7 +8,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { deleteAd, getAd } from "../../redux/apiCalls/adApiCall";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import formatTime from "../../utils/formatTime";
@@ -19,7 +19,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import InfoIcon from "@mui/icons-material/Info";
 import PlaceIcon from "@mui/icons-material/Place";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
-import { fetchMyAd } from "../../redux/apiCalls/profileApiCall";
 
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
@@ -29,11 +28,7 @@ const MySwal = withReactContent(Swal);
 function Ad() {
   const { i18n, t } = useTranslation();
   const { user } = useSelector((state) => state.auth);
-  const { currentAd: publishedAd, adLoading } = useSelector(
-    (state) => state.ad
-  );
-  const { ad: userAd, loading } = useSelector((state) => state.profile);
-  const [currentAd, setCurrentAd] = useState(null);
+  const { currentAd, adLoading } = useSelector((state) => state.ad);
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -43,20 +38,8 @@ function Ad() {
   }, [id]);
 
   useEffect(() => {
-    if (user) {
-      dispatch(fetchMyAd(id));
-    } else {
-      dispatch(getAd(id));
-    }
-  }, [dispatch, user, id]);
-
-  useEffect(() => {
-    if (userAd) {
-      setCurrentAd(userAd);
-    } else if (publishedAd) {
-      setCurrentAd(publishedAd);
-    }
-  }, [userAd, publishedAd]);
+    dispatch(getAd(id));
+  }, [dispatch, id]);
 
   const handleDeleteAd = () => {
     MySwal.fire({
@@ -76,7 +59,7 @@ function Ad() {
     });
   };
 
-  return adLoading || loading ? (
+  return adLoading ? (
     <Loading />
   ) : (
     <div className="ad">
@@ -116,7 +99,7 @@ function Ad() {
                   <p>{currentAd?.adStatus?.label[i18n.language]}</p>
                 </div>
                 <Link
-                  to={`/ads/${currentAd._id}/edit`}
+                  to={`/ads/${currentAd?._id}/edit`}
                   className="ad-option ad-edit"
                 >
                   <EditIcon />
