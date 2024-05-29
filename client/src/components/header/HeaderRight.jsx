@@ -57,23 +57,13 @@ function HeaderRight({ toggle, setToggle }) {
             style={{ display: toggleMenu ? "block" : "none" }}
           >
             <Link
-              to={
-                user.workshopName
-                  ? `/mechanic/profile/${user.id}`
-                  : `/profile/${user.id}`
-              }
+              to={`/profile/${user.id}`}
               onClick={() => setToggleMenu(false)}
               className="user-menu-item"
             >
-              {t("dropdown_account")}
+              {t("my_ads")}
             </Link>
-            <Link
-              to="/conversations"
-              onClick={() => setToggleMenu(false)}
-              className="user-menu-item"
-            >
-              {t("dropdown_conversations")}
-            </Link>
+
             <Link
               to={`/profile/${user.id}/settings`}
               onClick={() => setToggleMenu(false)}

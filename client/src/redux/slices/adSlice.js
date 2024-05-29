@@ -24,6 +24,7 @@ const adSlice = createSlice({
     },
     removeAdFromAds(state, action) {
       state.ads = state.ads.filter((ad) => ad._id !== action.payload);
+      state.searchResultsCount = state.searchResultsCount - 1;
     },
     updateAd(state, action) {
       const { _id: id } = action.payload;

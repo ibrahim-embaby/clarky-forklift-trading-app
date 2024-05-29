@@ -39,20 +39,12 @@ function Admin() {
           style={{ backgroundColor: currentComponent === 2 && "#ffd1d1da" }}
           className="admin-sidebar-component"
         >
-          <p className="admin-sidebar-text">الورش</p>
+          <p className="admin-sidebar-text">المستخدمين</p>
         </div>
 
         <div
           onClick={() => setCurrentComponent(3)}
           style={{ backgroundColor: currentComponent === 3 && "#ffd1d1da" }}
-          className="admin-sidebar-component"
-        >
-          <p className="admin-sidebar-text">المستخدمين</p>
-        </div>
-
-        <div
-          onClick={() => setCurrentComponent(4)}
-          style={{ backgroundColor: currentComponent === 4 && "#ffd1d1da" }}
           className="admin-sidebar-component"
         >
           <p className="admin-sidebar-text">الإعلانات</p>

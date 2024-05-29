@@ -56,6 +56,73 @@ export function fetchAllUsers() {
   };
 }
 
+// /api/v1/user/:useId/ads/
+export function fetchMyAds(userId, adStatus, page) {
+  return async (dispatch, getState) => {
+    try {
+      dispatch(profileActions.setLoading());
+      const { data } = await request.get(
+        `/api/v1/user/${userId}/profile/ads?adStatus=${adStatus}&page=${page}`,
+        {
+          headers: {
+            Authorization: "Bearer " + getState().auth.user.token,
+            Cookie: document.i18next,
+          },
+          withCredentials: true,
+        }
+      );
+
+      dispatch(profileActions.setUserAds(data.ads));
+      dispatch(profileActions.setUserAdsCount(data.count));
+      dispatch(profileActions.clearLoading());
+    } catch (error) {
+      console.log(error);
+      if (error?.response?.status === 401) {
+        await dispatch(refreshToken());
+        await dispatch(fetchMyAds(userId, adStatus));
+        return;
+      } else {
+        console.log(error);
+        toast.error(error.response.data.message);
+        dispatch(profileActions.clearLoading());
+      }
+    }
+  };
+}
+
+// /api/v1/user/:useId/profile/ads/:adId
+export function fetchMyAd(adId) {
+  return async (dispatch, getState) => {
+    try {
+      dispatch(profileActions.setLoading());
+      const { data } = await request.get(
+        `/api/v1/user/${getState().auth.user.id}/profile/ads/${adId}`,
+        {
+          headers: {
+            Authorization: "Bearer " + getState().auth.user.token,
+            Cookie: document.i18next,
+          },
+          withCredentials: true,
+        }
+      );
+
+      dispatch(profileActions.setUserAd(data.data));
+      dispatch(profileActions.clearLoading());
+    } catch (error) {
+      console.log(error);
+      if (error?.response?.status === 401) {
+        await dispatch(refreshToken());
+        await dispatch(fetchMyAd(adId));
+        return;
+      } else {
+        console.log(error);
+        toast.error(error.response.data.message);
+        dispatch(profileActions.clearLoading());
+      }
+    }
+  };
+}
+
 // delete single user
 export function deleteUser(id) {
   return async (dispatch, getState) => {

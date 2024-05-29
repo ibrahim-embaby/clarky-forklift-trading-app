@@ -1,6 +1,9 @@
 const asyncHandler = require("express-async-handler");
 const { User } = require("../models/User");
 const bcrypt = require("bcrypt");
+const { Ad } = require("../models/Ad");
+const ErrorResponse = require("../utils/ErrorResponse");
+const { AdStatus } = require("../models/AdStatus");
 
 /**
  * @desc get user profile
@@ -14,6 +17,61 @@ module.exports.getUserCtrl = asyncHandler(async (req, res) => {
     return res.status(404).json({ message: req.t("user_not_found") });
   }
   res.status(200).json(user);
+});
+
+/**
+ * @desc get user ads
+ * @route /api/user/:userId/profile/ads
+ * @method GET
+ * @access public
+ */
+module.exports.getMyAdsCtrl = asyncHandler(async (req, res, next) => {
+  try {
+    const { adStatus, page } = req.query;
+    const pageSize = 12;
+    const currentPage = parseInt(page, 10) || 1;
+    const skip = (currentPage - 1) * pageSize;
+    let count;
+
+    const publishedStatus = await AdStatus.findOne({ value: "published" });
+
+    if (adStatus !== publishedStatus._id && req.user.id !== req.params.userId) {
+      return next(new ErrorResponse(req.t("forbidden"), 400));
+    }
+
+    const ads = await Ad.find({ userId: req.params.userId, adStatus })
+      .populate("province city")
+      .skip(skip)
+      .limit(pageSize);
+
+    count = await Ad.countDocuments({ userId: req.params.userId, adStatus });
+    res.status(200).json({ ads, count });
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * @desc get user ads
+ * @route /api/user/:userId/profile/ads/:adId
+ * @method GET
+ * @access public
+ */
+module.exports.getMyAdCtrl = asyncHandler(async (req, res, next) => {
+  try {
+    const ad = await Ad.findOne({
+      _id: req.params.adId,
+      userId: req.user.id,
+    }).populate("userId province city status saleOrRent adStatus itemType");
+
+    res.status(200).json({
+      success: true,
+      data: ad,
+      message: "Success",
+    });
+  } catch (error) {
+    next(error);
+  }
 });
 
 /**

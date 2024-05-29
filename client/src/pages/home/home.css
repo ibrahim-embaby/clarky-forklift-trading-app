@@ -28,11 +28,46 @@
   align-items: center;
 }
 
+.home-top-title-wrapper {
+  margin: 20px 0;
+  text-align: center;
+}
 .home-top-title {
   font-size: 48px;
-  margin: 20px 0;
+  display: flex;
+  gap: 50px;
+  justify-content: center;
 }
 
+.buy {
+  color: #fff; /* Green */
+  text-shadow: 0 0 5px #97ff00, /* Inner light green glow */ 0 0 10px #2ecc71,
+    /* Green glow */ 0 0 15px #00ff00; /* Outer lime green glow */
+}
+
+.rent {
+  color: #fff; /* Orange */
+  text-shadow: 0 0 5px #ffa726, /* Inner light orange glow */ 0 0 10px #ff9500,
+    /* Orange glow */ 0 0 15px #ff7f00; /* Outer dark orange glow */
+}
+
+.sell {
+  color: #fff; /* Red */
+  text-shadow: 0 0 5px #ff4500, 0 0 10px #f00, /* Red glow */ 0 0 15px #c00;
+}
+
+.advanced-search-title {
+  color: black;
+  align-self: flex-start;
+  line-height: 1;
+  padding-top: 15px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.title-rest {
+  font-size: 25px;
+}
 .search-bar {
   display: flex;
   flex-direction: column;
@@ -42,15 +77,14 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   margin-bottom: 40px;
-  width: 100%;
-  max-width: 600px;
+  width: 600px;
 }
 .search-bar-input-wrapper {
   width: 100%;
   border: 1px solid var(--primary-color);
   display: flex;
   align-items: center;
-  padding: 10px;
+  padding: 11px;
   gap: 10px;
   border-radius: 5px;
 }
@@ -98,8 +132,9 @@
 }
 
 .search-bar-btn {
-  padding: 10px 20px;
-  font-size: 18px;
+  padding: 15px 20px;
+  font-size: 20px;
+  line-height: 1;
   border: none;
   cursor: pointer;
   color: var(--white-color);
@@ -107,19 +142,20 @@
   border-radius: 5px;
   width: 100%;
   font-family: var(--font-family);
+  font-weight: 600;
+}
+
+.cancel-btn {
+  font-size: 11px;
+  padding: 0 10px;
+  color: red;
+  cursor: pointer;
 }
 
 /* Media Query */
 @media (max-width: 650px) {
-  .home-top .home-top-title {
-    font-size: 35px;
-    text-align: center;
-    padding: 10px;
-  }
-
   .home-top-title {
-    margin: 30px 0px;
-    font-size: 30px;
+    font-size: 35px;
   }
 
   .search-bar {

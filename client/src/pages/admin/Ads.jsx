@@ -19,8 +19,8 @@ function Ads() {
     dispatch(adminFetchAds("pending"));
   }, []);
 
-  const deleteAdHandler = (adId) => {
-    dispatch(adminAcceptRefuseAd(adId, "blocked"));
+  const rejectAdHandler = (adId) => {
+    dispatch(adminAcceptRefuseAd(adId, "rejected"));
   };
 
   const acceptAdHandler = (adId) => {
@@ -31,16 +31,17 @@ function Ads() {
       {pendingAds.length ? (
         pendingAds.map((ad) => (
           <div
+            key={ad._id}
             className="admin-ad-wrapper"
             style={{ direction: i18n.language === "en" ? "ltr" : "rtl" }}
           >
             <AdCard ad={ad} />
             <div className="admin-ad-options">
               <span
-                onClick={() => deleteAdHandler(ad._id)}
+                onClick={() => rejectAdHandler(ad._id)}
                 className="admin-delete-ad-btn"
               >
-                حذف
+                رفض
               </span>
               <span
                 onClick={() => acceptAdHandler(ad._id)}

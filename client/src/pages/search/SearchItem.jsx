@@ -9,18 +9,15 @@ import { useTranslation } from "react-i18next";
 function SearchItem({ item }) {
   const { t, i18n } = useTranslation();
   return (
-    <Link
-      to={`/ads/${item?._id}`}
-      className="search-item"
-      style={{ direction: i18n.language === "ar" ? "rtl" : "ltr" }}
-    >
-      <div className="info-wrapper">
+    <Link to={`/ads/${item?._id}`} className="search-item">
+      <div
+        className="info-wrapper"
+        style={{ direction: i18n.language === "ar" ? "rtl" : "ltr" }}
+      >
         <div className="search-item-img-wrapper">
           <img src={item?.photos[0]} alt="" className="search-item-img" />
         </div>
-        <div className="search-item-title">
-          <span>{item.title}</span>
-        </div>
+
         <div className="info-items">
           {/* <div className="info-item-wrapper">
             <PersonIcon sx={{ color: "#aaa" }} />
@@ -29,7 +26,16 @@ function SearchItem({ item }) {
           <p className="search-item-price">
             {item.price} {t("price_sign")}
           </p>
-          <p className="search-item-date">{formatTime(item.createdAt)}</p>
+          <div className="search-item-title">
+            <span>{item.title}</span>
+          </div>
+          <div className="search-item-bottm">
+            <p className="search-item-address">
+              {item.province.label[i18n.language]} -{" "}
+              {item.city.label[i18n.language]}
+            </p>
+            <p className="search-item-date">{formatTime(item.createdAt)}</p>
+          </div>
         </div>
       </div>
     </Link>

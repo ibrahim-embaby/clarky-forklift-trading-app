@@ -4,46 +4,30 @@
   align-items: center;
   flex-direction: column;
   direction: rtl;
+  background-color: #eee;
 }
-.profile-top {
-  height: 300px;
-  background-color: var(--main-color);
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.profile-bottom {
-  display: flex;
-  width: 100%;
-}
-.profile-bottom-right {
-  flex: 1;
-}
-.profile-bottom-left {
-  flex: 1;
+
+.profile-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 10px;
 }
 
-.user-ratings-wrapper {
+.profile-filter {
   display: flex;
-  flex-wrap: wrap;
   gap: 10px;
+  padding: 20px 0;
+}
+.filter-item {
+  padding: 5px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
 }
 
-.user-rating {
-  display: flex;
-  flex-direction: column;
-  width: 185px;
-  padding: 10px;
-  background-color: var(--main-color);
-}
-
-.user-rating a {
-  text-decoration: none;
-  color: var(--dark-color);
+.user-ads {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
 }
 
 /* USER SETTINGS */

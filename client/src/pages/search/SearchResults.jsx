@@ -57,7 +57,6 @@ function SearchResults() {
     window.scrollTo({ top: 0, left: 0 });
     dispatch(
       fetchAllAds(
-        "published",
         province?._id,
         status?._id,
         itemType?._id,

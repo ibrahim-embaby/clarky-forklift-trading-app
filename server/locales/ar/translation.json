@@ -6,7 +6,6 @@
     "user_deleted": "تم حذف المستخدم بنجاح",
     "data_updated": "تم تحديث بياناتك بنجاح",
     "account_deleted": "تم حذف الحساب بنجاح",
-    "no_workshop": "هذه الورشة غير موجودة، أو ربما تم حذفها",
     "workshop_updated": "تم تحديث بيانات الورشة بنجاح",
     "attatch_image": "يرجي ارفاق الصورة",
     "photo_uploaded": "تم تحميل الصورة بنجاح",
@@ -31,5 +30,6 @@
     "cloudinary_error": "خطأ في الخادم (cloudinary)",
     "success": "تم بنجاح",
     "ad_accepted":"تم قبول الإعلان",
-    "ad_refused": "تم رفض الإعلان"
+    "ad_refused": "تم رفض الإعلان",
+    "ad_deleted": "تم حذف الإعلان"
 }

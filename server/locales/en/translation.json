@@ -31,5 +31,6 @@
     "cloudinary_error": "internal server error (cloudinary)",
     "success":"succeeded",
     "ad_accepted":"ad accepted",
-    "ad_refused": "ad refused"
+    "ad_refused": "ad refused",
+    "ad_deleted": "ad deleted successfully"
 }

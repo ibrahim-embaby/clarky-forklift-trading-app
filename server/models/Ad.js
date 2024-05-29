@@ -73,10 +73,9 @@ const AdSchema = new mongoose.Schema(
       required: true,
     },
     adStatus: {
-      type: String,
-      enum: ["private", "pending", "published", "blocked"],
-      default: "pending",
-      lowercase: true,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "AdStatus",
+      default: "66561ffef02664c8780482f7",
     },
   },
   { timestamps: true }

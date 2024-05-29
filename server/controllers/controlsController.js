@@ -4,6 +4,7 @@ const { City, validateCreateCity } = require("../models/City");
 const { Status, validateStatus } = require("../models/Status");
 const { validateItemType, ItemType } = require("../models/ItemType");
 const { validateAdTarget, AdTarget } = require("../models/AdTarget");
+const { validateAdStatus, AdStatus } = require("../models/AdStatus");
 
 /* ============= PROVINCE CONTROLLERS ============= */
 /**
@@ -200,6 +201,46 @@ module.exports.getAdTargetCtrl = asyncHandler(async (req, res) => {
     );
 
     res.status(200).json(adTargets);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: req.t("server_error") });
+  }
+});
+
+/* ============= AD STATUS CONTROLLERS ============= */
+/**
+ * @desc add new ad status
+ * @route /api/controls/ad-statuses
+ * @method POST
+ * @access private (only admin)
+ */
+module.exports.addAdStatusCtrl = asyncHandler(async (req, res) => {
+  try {
+    const { error } = validateAdStatus(req.body);
+    if (error)
+      return res.status(400).json({ message: error.details[0].message });
+
+    const newAdStatus = await AdStatus.create(req.body);
+    res.status(201).json({ data: newAdStatus, message: "تمت الإضافة" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: req.t("server_error") });
+  }
+});
+
+/**
+ * @desc get ad targets
+ * @route /api/controls/ad-targets
+ * @method GET
+ * @access public
+ */
+module.exports.getAdStatusCtrl = asyncHandler(async (req, res) => {
+  try {
+    const adStatuses = await AdStatus.find({ isActive: true }).select(
+      "_id label value backgroundColor"
+    );
+
+    res.status(200).json(adStatuses);
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: req.t("server_error") });

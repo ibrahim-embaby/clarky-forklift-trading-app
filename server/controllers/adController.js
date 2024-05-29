@@ -1,6 +1,15 @@
 const asyncHandler = require("express-async-handler");
 const { validateCreateAd, Ad, validateUpdateAd } = require("../models/Ad");
 const ErrorResponse = require("../utils/ErrorResponse");
+const { AdStatus } = require("../models/AdStatus");
+const S3 = require("aws-sdk/clients/s3");
+const s3 = new S3({
+  region: process.env.AWS_S3_BUCKET_REGION,
+  credentials: {
+    accessKeyId: process.env.AWS_IAM_ACCESS_KEY,
+    secretAccessKey: process.env.AWS_IAM_SECRET_ACCESS_KEY,
+  },
+});
 
 /**
  * @desc create ad
@@ -36,14 +45,15 @@ module.exports.createAdCtrl = asyncHandler(async (req, res, next) => {
  */
 module.exports.getAllAdsCtrl = asyncHandler(async (req, res, next) => {
   try {
-    const { province, status, itemType, adStatus, search, page } = req.query;
+    const { province, status, itemType, search, page } = req.query;
     const pageSize = 12;
     const currentPage = parseInt(page, 10) || 1;
     const skip = (currentPage - 1) * pageSize;
     let count;
 
+    const publishedStatus = await AdStatus.find({ value: "published" });
     const query = {
-      adStatus: adStatus || "published",
+      adStatus: publishedStatus,
     };
 
     if (province) query["province"] = province;
@@ -56,6 +66,7 @@ module.exports.getAllAdsCtrl = asyncHandler(async (req, res, next) => {
 
     const ads = await Ad.find(query)
       .populate("userId", "username  _id")
+      .populate("province city")
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(pageSize);
@@ -93,10 +104,14 @@ module.exports.getAllUserAdsCtrl = asyncHandler(async (req, res, next) => {
 module.exports.getSingleAdCtrl = asyncHandler(async (req, res, next) => {
   try {
     const { adId } = req.params;
-    const ad = await Ad.findById(adId).populate(
-      "userId province city status saleOrRent"
-    );
+    const publishedStatus = await AdStatus.findOne({ value: "published" });
+    const ad = await Ad.findOne({
+      _id: adId,
+      adStatus: publishedStatus,
+    }).populate("userId province city status saleOrRent adStatus");
+
     if (!ad) return next(new ErrorResponse(req.t("ad_not_found"), 404));
+
     res.status(200).json({
       success: true,
       data: ad,
@@ -143,9 +158,9 @@ module.exports.updateSingleAdCtrl = asyncHandler(async (req, res, next) => {
  * @desc delete ad
  * @route /api/ads/:adId
  * @method DELETE
- * @access private (only user himself)
+ * @access private (only admin and user himself)
  */
-// TODO: delete all photos of the ad from cloudinary
+// TODO: delete all photos of the ad from S3
 module.exports.deleteSingleAdCtrl = asyncHandler(async (req, res, next) => {
   try {
     const { adId } = req.params;
@@ -153,10 +168,32 @@ module.exports.deleteSingleAdCtrl = asyncHandler(async (req, res, next) => {
     const ad = await Ad.findById(adId);
     if (!ad) return next(new ErrorResponse(req.t("ad_not_found"), 404));
 
-    if (ad.userId.toString() !== req.user.id) {
+    if (ad.userId.toString() !== req.user.id || req.user.role !== "admin") {
       return next(new ErrorResponse(req.t("forbidden"), 301));
     }
+    // Extract the S3 keys from the ad's photos
+    const objectsToDelete = ad.photos.map((photoUrl) => {
+      // Extract the key from the photo URL
+      const urlParts = photoUrl.split("/");
+      const key = urlParts.slice(3).join("/");
+      return { Key: key };
+    });
+
+    // Delete the images from S3
+    if (objectsToDelete.length > 0) {
+      await s3
+        .deleteObjects({
+          Bucket: process.env.AWS_S3_BUCKET_NAME,
+          Delete: {
+            Objects: objectsToDelete,
+            Quiet: false, // If you want to receive info about each object deleted
+          },
+        })
+        .promise();
+    }
+
     const deletedAd = await Ad.findByIdAndDelete(adId);
+
     res
       .status(200)
       .json({ success: true, data: deletedAd, message: req.t("ad_deleted") });

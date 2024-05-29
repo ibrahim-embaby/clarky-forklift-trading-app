@@ -22,6 +22,7 @@ import "./i18n";
 import AddAd from "./pages/ad/AddAd";
 import { Toaster } from "sonner";
 import { useTranslation } from "react-i18next";
+import EditAd from "./pages/ad/EditAd";
 
 function Toast() {
   const { i18n } = useTranslation();
@@ -62,6 +63,7 @@ function App() {
         />
         <Route path="/profile/:id" element={<UserProfile />} />
         <Route path="/ads/:id" element={<Ad />} />
+        <Route path="/ads/:id/edit" element={user && <EditAd />} />
         <Route path="/sell" element={user && <AddAd />} />
         <Route
           path="/profile/:id/settings"

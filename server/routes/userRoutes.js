@@ -3,6 +3,8 @@ const {
   getUsersCtrl,
   deleteUserCtrl,
   updateUserCtrl,
+  getMyAdsCtrl,
+  getMyAdCtrl,
 } = require("../controllers/userController");
 const validateObjectId = require("../middlewares/validateObjectId");
 const {
@@ -23,5 +25,11 @@ router
 
 // /api/user/profile/
 router.route("/profile/").put(verifyToken, updateUserCtrl);
+
+// /api/v1/user/:userId/profile/ads
+router.get("/:userId/profile/ads", verifyToken, getMyAdsCtrl);
+
+// /api/v1/user/:userId/profile/ads/:adId
+router.get("/:userId/profile/ads/:adId", verifyToken, getMyAdCtrl);
 
 module.exports = router;

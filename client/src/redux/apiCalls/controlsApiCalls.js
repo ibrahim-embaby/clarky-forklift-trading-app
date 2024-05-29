@@ -107,17 +107,17 @@ export function fetchCars() {
 }
 
 // /api/controls/provinces
-export function fetchProvinces() {
+export function fetchAdStatuses() {
   return async (dispatch) => {
     try {
       dispatch(controlsActions.setLoading());
-      const { data } = await request.get("/api/controls/provinces", {
+      const { data } = await request.get("/api/v1/controls/ad-statuses", {
         headers: {
           Cookie: document.cookie.i18next,
         },
         withCredentials: true,
       });
-      dispatch(controlsActions.setProvinces(data));
+      dispatch(controlsActions.setAdStatuses(data));
       dispatch(controlsActions.clearLoading());
     } catch (error) {
       console.log(error);

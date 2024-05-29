@@ -7,6 +7,7 @@ const controlsSlice = createSlice({
     itemTypes: [],
     provinces: [],
     adTargets: [],
+    adStatuses: [],
     province: null,
     loading: false,
   },
@@ -19,6 +20,9 @@ const controlsSlice = createSlice({
     },
     setAdTargets(state, action) {
       state.adTargets = action.payload;
+    },
+    setAdStatuses(state, action) {
+      state.adStatuses = action.payload;
     },
     setProvinces(state, action) {
       state.provinces = action.payload;

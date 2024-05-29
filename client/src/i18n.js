@@ -13,13 +13,22 @@ i18n
   .init({
     fallbackLng,
     detection: {
+      order: [
+        "cookie",
+        "localStorage",
+        "navigator",
+        "htmlTag",
+        "path",
+        "subdomain",
+      ],
+      caches: ["cookie", "localStorage"],
       checkWhitelist: true,
     },
-    lng: "ar",
+    lng: localStorage.getItem("lang") || "ar",
     debug: false,
     whitelist: availableLanguages,
     interpolation: {
-      escapeValue: false, // no need for react. it escapes by default
+      escapeValue: false,
     },
   });
 

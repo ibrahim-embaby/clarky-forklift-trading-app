@@ -20,7 +20,8 @@
     "dropdown_conversations": "المحادثات",
     "dropdown_settings": "اعدادات",
     "footer_title": "كلاركي",
-    "home_top_section_title": "اشتري، اجر، وبيع كل ما يخص الكلاركات",
+   
+    "title_rest": "كل ما يخص الكلاركات في مصر",
     "search_btn": "بحث",
     "search_placeholder": "بحث عن ...",
     "province": "المحافظة",
@@ -89,7 +90,6 @@
     "add_another_service":"أضف خدمة أخري",
     "choose_model": "اختر ماركة أو أكثر",
     "add_another_model": "أضف ماركة أخري",
-    "founder": "إبراهيم محمد",
     "home_card_create_account": "انشأ حساب",
     "home_card_browse": "اعلن عن منتجك",
     "home_card_contact": "تواصل مع مركز الصيانة",
@@ -121,5 +121,22 @@
     "seller_info": "بيانات المعلن",
     "see_all_seller_ads": "مشاهدة جميع الاعلانات من ", 
     "submit_ad_for_review": "إرسال الإعلان للمراجعة",
-    "details":  "التفاصيل"
+    "details":  "التفاصيل",
+    "cancel": "الغاء",
+    "avanced_search": "بحث متقدم",
+    "buy": "شراء",
+    "rent": "ايجار",
+    "sell": "بيع",
+    "my_ads": "إعلاناتي", 
+    "ad_status": "حالة الإعلان: ",
+    "edit_ad": "تعديل الإعلان",
+    "confirmation_title": "هل أنت متأكد؟",
+    "confirmation_text": "!لن تتمكن من التراجع عن هذا الإجراء",
+    "confirmation_btn_text": "تأكيد",
+    "confirmation_btn_cancel": "إلغاء",
+    "confirmation_success_title": "تم الحذف!",
+    "confirmation_success_text": "لقد تم حذف الإعلان بنجاح.",
+    "edit": "تعديل",
+    "delete": "حذف"
+
 }

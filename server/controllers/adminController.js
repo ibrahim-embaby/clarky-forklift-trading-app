@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const ErrorResponse = require("../utils/ErrorResponse");
 const { Ad } = require("../models/Ad");
+const { AdStatus } = require("../models/AdStatus");
 
 /**
  * @desc get ads
@@ -10,19 +11,21 @@ const { Ad } = require("../models/Ad");
  */
 module.exports.getAdminAdsCtrl = asyncHandler(async (req, res, next) => {
   try {
-    const { adStatus, page } = req.query;
+    const { page } = req.query;
     const pageSize = 10;
     const currentPage = parseInt(page, 10) || 1;
     const skip = (currentPage - 1) * pageSize;
     let count;
 
-    const ads = await Ad.find({ adStatus })
+    const adStatus = await AdStatus.findOne({ value: req.query.adStatus });
+
+    const ads = await Ad.find({ adStatus: adStatus._id })
       .populate("userId", "username  _id")
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(pageSize);
 
-    count = await Ad.countDocuments({ adStatus });
+    count = await Ad.countDocuments({ adStatus: adStatus._id });
     res.status(200).json({ ads, count });
   } catch (error) {
     next(error);
@@ -37,7 +40,7 @@ module.exports.getAdminAdsCtrl = asyncHandler(async (req, res, next) => {
  */
 module.exports.getAdminAdsCountCtrl = asyncHandler(async (req, res, next) => {
   try {
-    const { adStatus } = req.query;
+    const adStatus = await AdStatus.findOne({ value: req.query.adStatus });
 
     const adsCount = await Ad.find({ adStatus }).count();
 
@@ -53,7 +56,6 @@ module.exports.getAdminAdsCountCtrl = asyncHandler(async (req, res, next) => {
  * @method PUT
  * @access private (only admin)
  */
-// TODO: delete all photos of the ad from cloudinary
 module.exports.adminAcceptRefuseAdCtrl = asyncHandler(
   async (req, res, next) => {
     try {
@@ -66,9 +68,11 @@ module.exports.adminAcceptRefuseAdCtrl = asyncHandler(
         return next(new ErrorResponse(req.t("forbidden"), 301));
       }
 
+      const adStatus = await AdStatus.findOne({ value: req.body.adStatus });
+
       const acceptedAd = await Ad.findByIdAndUpdate(
         adId,
-        { adStatus: req.body.adStatus },
+        { adStatus: adStatus._id.toString() },
         { new: true }
       );
 

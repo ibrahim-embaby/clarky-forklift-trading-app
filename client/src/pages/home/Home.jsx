@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import "./home.css";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchControls } from "../../redux/apiCalls/controlsApiCalls";
 import { Loading } from "../../components/loading/Loading";
@@ -10,9 +9,9 @@ import SearchIcon from "@mui/icons-material/Search";
 
 function Home() {
   const navigate = useNavigate();
-  const [itemType, setItemType] = useState(null);
-  const [status, setStatus] = useState(null);
-  const [province, setProvince] = useState(null);
+  const [itemType, setItemType] = useState({ value: "", _id: "" });
+  const [status, setStatus] = useState({ value: "", _id: "" });
+  const [province, setProvince] = useState({ value: "", _id: "" });
   const [searchInput, setSearchInput] = useState("");
   const { t, i18n } = useTranslation();
 
@@ -63,15 +62,21 @@ function Home() {
       {loading ? (
         <Loading />
       ) : (
-        <div className="home">
+        <div
+          className="home"
+          style={{ direction: i18n.language === "en" ? "ltr" : "rtl" }}
+        >
           <section className="home-top">
             <div className="home-top-wrapper">
-              <h1 className="home-top-title">{t("home_top_section_title")}</h1>
-              <form
-                className="search-bar"
-                onSubmit={searchFormHandler}
-                style={{ direction: i18n.language === "en" ? "ltr" : "rtl" }}
-              >
+              <div className="home-top-title-wrapper">
+                <h1 className="home-top-title">
+                  <span className="buy">{t("buy")}</span>
+                  <span className="rent">{t("rent")}</span>
+                  <span className="sell">{t("sell")}</span>
+                </h1>
+                <h1 className="title-rest">{t("title_rest")}</h1>
+              </div>
+              <form className="search-bar" onSubmit={searchFormHandler}>
                 <div className="search-bar-input-wrapper">
                   <SearchIcon
                     sx={{
@@ -86,19 +91,22 @@ function Home() {
                     placeholder={t("search_placeholder")}
                   />
                 </div>
+
+                <p className="advanced-search-title">{t("avanced_search")} </p>
                 <div className="search-bar-inputs-wrapper">
                   <div
                     className="search-bar-select-wrapper"
                     style={{
-                      backgroundColor: itemType && "#ffd7d7",
+                      backgroundColor: itemType?._id && "#ccffcc",
+                      borderColor: itemType?._id && "green",
                     }}
                   >
                     <select
                       className="search-bar-item"
-                      value={itemType ? JSON.stringify(itemType) : ""}
+                      value={itemType?._id ? JSON.stringify(itemType) : ""}
                       onChange={(e) => setItemType(JSON.parse(e.target.value))}
                       style={{
-                        backgroundColor: itemType && "#ffd7d7",
+                        backgroundColor: itemType._id && "#ccffcc",
                       }}
                     >
                       <option
@@ -124,26 +132,29 @@ function Home() {
                           </option>
                         ))}
                     </select>
-                    {itemType && (
-                      <HighlightOffIcon
-                        sx={{ color: "red", cursor: "pointer" }}
-                        onClick={() => setItemType("")}
-                      />
+                    {itemType._id && (
+                      <p
+                        onClick={() => setItemType({ value: "", _id: "" })}
+                        className="cancel-btn"
+                      >
+                        {t("cancel")}
+                      </p>
                     )}
                   </div>
 
                   <div
                     className="search-bar-select-wrapper"
                     style={{
-                      backgroundColor: status && "#ffd7d7",
+                      backgroundColor: status._id && "#ccffcc",
+                      borderColor: status._id && "green",
                     }}
                   >
                     <select
                       className="search-bar-item"
-                      value={status ? JSON.stringify(status) : ""}
+                      value={status._id ? JSON.stringify(status) : ""}
                       onChange={(e) => setStatus(JSON.parse(e.target.value))}
                       style={{
-                        backgroundColor: status && "#ffd7d7",
+                        backgroundColor: status._id && "#ccffcc",
                       }}
                     >
                       <option
@@ -169,26 +180,29 @@ function Home() {
                           </option>
                         ))}
                     </select>
-                    {status && (
-                      <HighlightOffIcon
-                        sx={{ color: "red", cursor: "pointer" }}
-                        onClick={() => setStatus("")}
-                      />
+                    {status._id && (
+                      <p
+                        onClick={() => setStatus({ value: "", _id: "" })}
+                        className="cancel-btn"
+                      >
+                        {t("cancel")}
+                      </p>
                     )}
                   </div>
 
                   <div
                     className="search-bar-select-wrapper"
                     style={{
-                      backgroundColor: province && "#ffd7d7",
+                      backgroundColor: province._id && "#ccffcc",
+                      borderColor: province._id && "green",
                     }}
                   >
                     <select
                       className="search-bar-item"
-                      value={province ? JSON.stringify(province) : ""}
+                      value={province._id ? JSON.stringify(province) : ""}
                       onChange={(e) => setProvince(JSON.parse(e.target.value))}
                       style={{
-                        backgroundColor: province && "#ffd7d7",
+                        backgroundColor: province._id && "#ccffcc",
                       }}
                     >
                       <option
@@ -214,11 +228,13 @@ function Home() {
                           </option>
                         ))}
                     </select>
-                    {province && (
-                      <HighlightOffIcon
-                        sx={{ color: "red", cursor: "pointer" }}
-                        onClick={() => setProvince("")}
-                      />
+                    {province._id && (
+                      <p
+                        onClick={() => setProvince({ value: "", _id: "" })}
+                        className="cancel-btn"
+                      >
+                        {t("cancel")}
+                      </p>
                     )}
                   </div>
                 </div>

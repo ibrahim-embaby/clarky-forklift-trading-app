@@ -9,6 +9,8 @@ const {
   getStatusCtrl,
   addAdTargetCtrl,
   getAdTargetCtrl,
+  addAdStatusCtrl,
+  getAdStatusCtrl,
 } = require("../controllers/controlsController");
 const { verifyTokenAndAdmin } = require("../middlewares/verifyToken");
 
@@ -48,5 +50,12 @@ router
   .route("/ad-targets")
   .post(verifyTokenAndAdmin, addAdTargetCtrl)
   .get(getAdTargetCtrl);
+
+// AD STATUS ROUTES
+// /api/controls/ad-statuses
+router
+  .route("/ad-statuses")
+  .post(verifyTokenAndAdmin, addAdStatusCtrl)
+  .get(getAdStatusCtrl);
 
 module.exports = router;

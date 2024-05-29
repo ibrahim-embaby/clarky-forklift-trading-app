@@ -1,8 +1,9 @@
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import request from "../../utils/request";
 import { adActions } from "../slices/adSlice";
 import axios from "axios";
 import { refreshToken } from "./authApiCall";
+import { profileActions } from "../slices/profileSlice";
 
 // /api/v1/posts/
 export function createAd(ad) {
@@ -68,7 +69,6 @@ export function createAd(ad) {
 
 // /api/v1/ads/
 export function fetchAllAds(
-  adStatus,
   province = "",
   status = "",
   itemType = "",
@@ -79,7 +79,7 @@ export function fetchAllAds(
     try {
       dispatch(adActions.setAdLoading());
       const { data } = await request.get(
-        `/api/v1/ads?adStatus=${adStatus}&province=${province}&status=${status}&itemType=${itemType}&search=${search}&page=${page}`,
+        `/api/v1/ads?province=${province}&status=${status}&itemType=${itemType}&search=${search}&page=${page}`,
         {
           headers: {
             Cookie: document.i18next,
@@ -94,30 +94,6 @@ export function fetchAllAds(
     } catch (error) {
       toast.error(error.response.data.message);
       dispatch(adActions.clearAdLoading());
-    }
-  };
-}
-
-// /api/posts/user/:userId
-export function fetchUserPosts(userId) {
-  return async (dispatch, getState) => {
-    try {
-      dispatch(adActions.setPostLoading());
-      const { data } = await request.get(`/api/posts/user/${userId}`, {
-        headers: {
-          Cookie: document.i18next,
-        },
-        withCredentials: true,
-      });
-      const payload = data.map((post) => ({
-        ...post,
-        liked: post.likedBy.includes(getState().auth.user?.id),
-      }));
-      dispatch(adActions.setPosts(payload));
-      dispatch(adActions.clearPostLoading());
-    } catch (error) {
-      toast.error(error.response.data.message);
-      dispatch(adActions.clearPostLoading());
     }
   };
 }
@@ -151,6 +127,7 @@ export function deleteAd(adId) {
   return async (dispatch, getState) => {
     try {
       dispatch(adActions.setAdLoading());
+      dispatch(profileActions.setLoading());
       const { data } = await request.delete(`/api/v1/ads/${adId}`, {
         headers: {
           Authorization: "Bearer " + getState().auth.user.token,
@@ -159,12 +136,21 @@ export function deleteAd(adId) {
         withCredentials: true,
       });
       dispatch(adActions.removeAdFromAds(data.data._id));
+      dispatch(profileActions.removeUserAdFromAds(data.data._id));
       dispatch(adActions.clearAdLoading());
+      dispatch(profileActions.clearLoading());
       toast.success(data.message);
     } catch (error) {
-      console.log(error);
-      toast.error(error.response.data.message);
-      dispatch(adActions.clearAdLoading());
+      if (error?.response?.status === 401) {
+        await dispatch(refreshToken());
+        await dispatch(deleteAd(adId));
+        return;
+      } else {
+        console.log(error);
+        toast.error(error.response.data.message);
+        dispatch(adActions.clearAdLoading());
+        dispatch(profileActions.clearLoading());
+      }
     }
   };
 }

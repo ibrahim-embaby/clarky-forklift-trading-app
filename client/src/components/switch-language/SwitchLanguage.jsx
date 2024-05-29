@@ -5,9 +5,8 @@ import { useTranslation } from "react-i18next";
 import { useCookies } from "react-cookie";
 
 function SwitchLanguage() {
-  const initialLang = localStorage.getItem("lang") || "ar";
   const { i18n } = useTranslation();
-  const [toggle, setToggle] = useState(initialLang);
+  const [toggle, setToggle] = useState(i18n.language);
   const [cookies, setCookies] = useCookies(["i18next"]);
 
   const changeLanguage = (lang) => {
@@ -15,15 +14,15 @@ function SwitchLanguage() {
     i18next.changeLanguage(lang);
     setCookies("i18next", lang, { path: "/" });
     localStorage.setItem("lang", lang);
-    i18n.init({ lng: lang });
   };
 
   useEffect(() => {
-    // Initialize language on component mount
-    if (cookies.i18next !== toggle) {
-      changeLanguage(toggle);
+    if (cookies.i18next && cookies.i18next !== toggle) {
+      changeLanguage(cookies.i18next);
+    } else if (!cookies.i18next && i18n.language !== toggle) {
+      changeLanguage(i18n.language);
     }
-  }, [cookies, toggle]);
+  }, [cookies.i18next, toggle]);
 
   return (
     <div className="switch-language">
