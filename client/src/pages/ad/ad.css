@@ -579,10 +579,14 @@
   .edit-ad-select-wrapper {
     flex-direction: column;
   }
+  .ad-options {
+    justify-content: center;
+  }
 
   .ad-option {
     font-size: 12px;
     flex: none;
+    padding: 5px;
   }
 }
 
