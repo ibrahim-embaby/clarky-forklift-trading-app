@@ -160,7 +160,6 @@ module.exports.getSingleAdCtrl = asyncHandler(async (req, res, next) => {
  * @method PUT
  * @access private (only user himself)
  */
-// TODO: delete all photos of the ad from cloudinary
 module.exports.updateSingleAdCtrl = asyncHandler(async (req, res, next) => {
   try {
     const { error } = validateUpdateAd(req.body);
@@ -174,9 +173,36 @@ module.exports.updateSingleAdCtrl = asyncHandler(async (req, res, next) => {
     if (ad.userId.toString() !== req.user.id) {
       return next(new ErrorResponse(req.t("forbidden"), 301));
     }
-    if (req.body.status && req.user.role !== "admin")
-      return next(new ErrorResponse("forbidden", 403));
-    const updatedAd = await Ad.findByIdAndUpdate(adId, req.body, { new: true });
+
+    // Identify deleted photos
+    const newPhotos = req.body.photos || [];
+    const oldPhotos = ad.photos || [];
+
+    const photosToDelete = oldPhotos.filter(
+      (photo) => !newPhotos.includes(photo)
+    );
+
+    // Delete photos from S3
+    if (photosToDelete.length > 0) {
+      const deleteParams = {
+        Bucket: process.env.AWS_S3_BUCKET_NAME,
+        Delete: {
+          Objects: photosToDelete.map((url) => ({
+            Key: url.split(".com/")[1], // Extract the key from the URL
+          })),
+        },
+      };
+
+      await s3.deleteObjects(deleteParams).promise();
+    }
+
+    const pendingStatus = await AdStatus.findOne({ value: "pending" });
+
+    const updatedAd = await Ad.findByIdAndUpdate(
+      adId,
+      { ...req.body, adStatus: pendingStatus._id },
+      { new: true }
+    ).populate("userId province city status saleOrRent adStatus");
 
     res
       .status(200)

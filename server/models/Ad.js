@@ -107,18 +107,18 @@ function validateUpdateAd(object) {
   const schema = Joi.object({
     title: Joi.string(),
     description: Joi.string(),
-    address: Joi.string(),
-    photos: Joi.array().items(
-      Joi.object({
-        publicId: Joi.string(),
-        url: Joi.string(),
-      })
-    ),
+    province: Joi.string(),
+    city: Joi.string(),
+    photos: Joi.array().items(Joi.string()),
     tags: Joi.array().items(Joi.string()),
     price: Joi.string(),
+    quantity: Joi.string(),
     location: Joi.string(),
     refrenceFile: Joi.string(),
-    status: Joi.string().valid("private", "pending", "published", "blocked"),
+    phone: Joi.string(),
+    status: Joi.string(),
+    itemType: Joi.string(),
+    saleOrRent: Joi.string(),
   });
 
   return schema.validate(object);

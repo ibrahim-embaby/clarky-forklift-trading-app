@@ -461,7 +461,6 @@
 }
 
 /* edit add styles */
-
 .edit-ad-wrapper {
   background: white;
   border: 1px solid var(--gray-color);
@@ -603,7 +602,8 @@
   color: var(--primary-color);
 }
 
-.edit-ad-form-btn {
+.edit-ad-form-btn,
+.edit-ad-form-cancel-btn {
   background-color: var(--primary-color);
   font-family: var(--font-family);
   width: fit-content;
@@ -616,12 +616,26 @@
   transition: background-color 0.3s;
 }
 
-.edit-ad-form-btn:hover {
+.edit-ad-form-btn {
+  background-color: var(--green-color);
+}
+
+.edit-ad-form-cancel-btn:hover {
   background-color: #b30000;
+}
+.edit-ad-form-btn:hover {
+  background-color: #2ecc71;
 }
 
 .dropzone.hidden-dropzone {
   display: none;
+}
+
+.edit-ad-btns {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 
 @media (max-width: 610px) {

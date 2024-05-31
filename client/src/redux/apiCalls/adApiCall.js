@@ -119,26 +119,85 @@ export function fetchAllUserAds(userId) {
   };
 }
 
+async function uploadPhotos(files, uploadConfigs) {
+  // Upload each photo using its corresponding presigned URL
+  const uploadPromises = files.map((file, index) => {
+    return axios.put(uploadConfigs[index].url, file, {
+      headers: {
+        "Content-Type": file.type,
+      },
+    });
+  });
+
+  await Promise.all(uploadPromises);
+
+  // Collect the URLs of the uploaded photos
+  const photoUrls = uploadConfigs.map(
+    (config) => "https://arabity.s3.eu-north-1.amazonaws.com/" + config.key
+  );
+
+  return photoUrls;
+}
+
 // /api/v1/ads/:adId
-export function updateAd(adId, ad) {
+export function updateAd(adId, newAd) {
   return async (dispatch, getState) => {
     try {
-      // dispatch(adActions.setAdLoading());
-      const { data } = await request.put(`/api/v1/ads/${adId}`, ad, {
-        headers: {
-          Authorization: "Bearer " + getState().auth.user.token,
-          Cookie: document.cookie.i18next,
-        },
-        withCredentials: true,
-      });
-      // console.log(data);
+      dispatch(adActions.setAdLoading());
+      let newPhotoUrls = [];
+
+      if (newAd.newFiles.length >= 1) {
+        const { data: uploadConfigs } = await request.post(
+          "/api/v1/upload",
+          {
+            count: newAd.newFiles.length,
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + getState().auth.user.token,
+              Cookie: document.cookie.i18next,
+            },
+            withCredentials: true,
+          }
+        );
+        // Upload new photos to S3
+        newPhotoUrls = await uploadPhotos(newAd.newFiles, uploadConfigs);
+      }
+      const allPhotoUrls = [...newAd.existingFileUrls, ...newPhotoUrls];
+
+      // Prepare the final ad payload
+      const finalAdPayload = {
+        ...newAd,
+        photos: allPhotoUrls,
+      };
+      delete finalAdPayload.newFiles;
+      delete finalAdPayload.existingFileUrls;
+
+      const { data } = await request.put(
+        `/api/v1/ads/${adId}`,
+        finalAdPayload,
+        {
+          headers: {
+            Authorization: "Bearer " + getState().auth.user.token,
+            Cookie: document.cookie.i18next,
+          },
+          withCredentials: true,
+        }
+      );
+
       dispatch(adActions.updateAd(data.data));
-      // dispatch(adActions.clearAdLoading());
-      // toast.success(data.message);
+      dispatch(adActions.clearAdLoading());
+      toast.success(data.message);
     } catch (error) {
       console.log(error);
-      // toast.error(error.response.data.message);
-      // dispatch(adActions.clearAdLoading());
+      if (error?.response?.status === 401) {
+        await dispatch(refreshToken());
+        await dispatch(updateAd(adId, newAd));
+      } else {
+        console.log(error);
+        toast.error(error.response.data.message);
+        dispatch(adActions.clearAdLoading());
+      }
     }
   };
 }

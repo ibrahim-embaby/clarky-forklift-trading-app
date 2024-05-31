@@ -6,6 +6,7 @@ import { fetchMyAd } from "../../redux/apiCalls/profileApiCall";
 import { useDropzone } from "react-dropzone";
 import { fetchControls } from "../../redux/apiCalls/controlsApiCalls";
 import { Loading } from "../../components/loading/Loading";
+import { updateAd } from "../../redux/apiCalls/adApiCall";
 
 function EditAd() {
   const { id } = useParams();
@@ -28,8 +29,8 @@ function EditAd() {
   const [status, setStatus] = useState("");
   const [saleOrRent, setSaleOrRent] = useState("");
   const [quantity, setQuantity] = useState("1");
-  const [fileUrls, setFileUrls] = useState([]);
-  const [files, setFiles] = useState([]);
+  const [existingFileUrls, setExistingFileUrls] = useState([]);
+  const [newFiles, setNewFiles] = useState([]);
 
   useEffect(() => {
     dispatch(fetchControls());
@@ -50,55 +51,65 @@ function EditAd() {
       setStatus(ad.status._id);
       setSaleOrRent(ad.saleOrRent);
       setQuantity(ad.quantity);
-      setFileUrls(ad.photos);
-      setFiles(ad.photos.map((photo) => ({ url: photo, file: null })));
+      setExistingFileUrls(ad.photos);
     }
   }, [ad]);
 
-  const handleSubmitAdForm = (e) => {
+  const getChangedProperties = (original, updated) => {
+    const changed = {};
+    Object.keys(updated).forEach((key) => {
+      if (original[key] !== updated[key]) {
+        changed[key] = updated[key];
+      }
+    });
+    return changed;
+  };
+
+  const handleSubmitAdForm = async (e) => {
     e.preventDefault();
+
     const updatedAd = {
       title,
       description: desc,
       price,
+      phone,
+      itemType: category,
       province,
       city,
-      photos: files.filter((file) => file.file).map((file) => file.file),
       saleOrRent,
       status,
       quantity,
-      phone,
-      itemType: category,
+      existingFileUrls,
+      newFiles,
     };
-    console.log(updatedAd);
 
-    // dispatch(updateAd(id, updatedAd));
+    const changedProperties = getChangedProperties(ad, updatedAd);
+    if (newFiles.length > 0) {
+      changedProperties.newFiles = newFiles.map((file) => file.file);
+    }
+    if (existingFileUrls.length !== ad.photos.length) {
+      changedProperties.existingFileUrls = existingFileUrls;
+    }
+
+    dispatch(updateAd(id, changedProperties));
     navigate(`/ads/${id}`);
   };
 
   const onDrop = useCallback((acceptedFiles) => {
-    const readFiles = acceptedFiles.map((file) => {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve({ url: reader.result, file });
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
-    });
+    const newFilesWithUrls = acceptedFiles.map((file) => ({
+      url: URL.createObjectURL(file),
+      file,
+    }));
 
-    Promise.all(readFiles)
-      .then((fileData) => {
-        const urls = fileData.map((data) => data.url);
-        const fileObjs = fileData.map((data) => data.file);
-        setFileUrls((prevUrls) => [...prevUrls, ...urls]);
-        setFiles((prevFiles) => [...prevFiles, ...fileObjs]);
-      })
-      .catch((error) => console.error("Error reading files: ", error));
+    setNewFiles((prevFiles) => [...prevFiles, ...newFilesWithUrls]);
   }, []);
 
-  const handleRemoveImage = (index) => {
-    setFileUrls((prevUrls) => prevUrls.filter((_, i) => i !== index));
-    setFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
+  const handleRemoveImage = (index, isExisting) => {
+    if (isExisting) {
+      setExistingFileUrls((prevUrls) => prevUrls.filter((_, i) => i !== index));
+    } else {
+      setNewFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
+    }
   };
 
   const { getRootProps, getInputProps, open } = useDropzone({
@@ -111,6 +122,10 @@ function EditAd() {
   const handleProvinceChange = (e) => {
     setProvince(e.target.value);
     setCity("");
+  };
+
+  const handleCancelEdit = () => {
+    navigate(-1);
   };
 
   return (
@@ -271,7 +286,7 @@ function EditAd() {
               <div className="edit-ad-photos">
                 <label className="edit-ad-label">{t("photos")}</label>
                 <div className="edit-ad-photos-display">
-                  {fileUrls.map((url, index) => (
+                  {existingFileUrls.map((url, index) => (
                     <div key={index} className="preview-image-container">
                       <img
                         src={url}
@@ -281,7 +296,23 @@ function EditAd() {
                       <button
                         type="button"
                         className="remove-image-button"
-                        onClick={() => handleRemoveImage(index)}
+                        onClick={() => handleRemoveImage(index, true)}
+                      >
+                        &times;
+                      </button>
+                    </div>
+                  ))}
+                  {newFiles.map((file, index) => (
+                    <div key={index} className="preview-image-container">
+                      <img
+                        src={file.url}
+                        alt={`File preview ${index}`}
+                        className="preview-image"
+                      />
+                      <button
+                        type="button"
+                        className="remove-image-button"
+                        onClick={() => handleRemoveImage(index, false)}
                       >
                         &times;
                       </button>
@@ -297,10 +328,18 @@ function EditAd() {
                   <input {...getInputProps()} />
                 </div>
               </div>
-
-              <button type="submit" className="edit-ad-form-btn">
-                {t("submit_ad_for_review")}
-              </button>
+              <div className="edit-ad-btns">
+                <button type="submit" className="edit-ad-form-btn">
+                  {t("edit")}
+                </button>
+                <button
+                  type="button"
+                  className="edit-ad-form-cancel-btn"
+                  onClick={handleCancelEdit}
+                >
+                  {t("cancel")}
+                </button>
+              </div>
             </form>
           </div>
         )}
