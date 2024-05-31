@@ -70,7 +70,6 @@ function App() {
           element={user ? <UserProfileSettings /> : <Navigate to={"/login"} />}
         />
         <Route path="/search/ads" element={<SearchResults />} />
-
         <Route path="/about-us" element={<ContactUs />} />
         <Route
           path="/forgot-password"

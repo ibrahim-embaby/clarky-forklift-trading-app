@@ -6,6 +6,7 @@ const adSlice = createSlice({
     ads: [],
     currentAd: null,
     adLoading: false,
+    userAdsLoading: false,
     searchResultsCount: 0,
   },
   reducers: {
@@ -73,6 +74,13 @@ const adSlice = createSlice({
     },
     clearAdLoading(state) {
       state.adLoading = false;
+    },
+
+    setUserAdsLoading(state) {
+      state.userAdsLoading = true;
+    },
+    clearUserAdsLoading(state) {
+      state.userAdsLoading = false;
     },
   },
 });

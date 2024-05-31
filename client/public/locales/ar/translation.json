@@ -14,13 +14,13 @@
     "header_title": "كلاركي",
     "navbar_main": "الرئيسية",
     "navbar_contact": "عنّا",
+    "navbar_search": "صفحة البحث",
     "navbar_admin": "صفحة المسؤول",
     "navbar_sell": "إنشاء إعلان",
     "dropdown_account": "حسابي",
     "dropdown_conversations": "المحادثات",
     "dropdown_settings": "اعدادات",
     "footer_title": "كلاركي",
-   
     "title_rest": "كل ما يخص الكلاركات في مصر",
     "search_btn": "بحث",
     "search_placeholder": "بحث عن ...",
@@ -137,6 +137,7 @@
     "confirmation_success_title": "تم الحذف!",
     "confirmation_success_text": "لقد تم حذف الإعلان بنجاح.",
     "edit": "تعديل",
-    "delete": "حذف"
+    "delete": "حذف",
+    "all_ads_from_seller": "جميع الإعلانات من "
 
 }

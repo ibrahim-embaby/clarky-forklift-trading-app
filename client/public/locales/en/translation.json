@@ -15,6 +15,7 @@
     "navbar_main": "Home",
     "navbar_contact": "About Us",
     "navbar_admin": "Admin",
+    "navbar_search": "Search Page",
     "navbar_sell": "Create Ad",
     "dropdown_account": "my account",
     "dropdown_conversations": "conversations",
@@ -114,5 +115,6 @@
     "confirmation_btn_text": "Yes, delete it!",
     "confirmation_btn_cancel": "Cancel",
     "confirmation_success_title": "Deleted!",
-    "confirmation_success_text": "Your ad has been deleted."
+    "confirmation_success_text": "Your ad has been deleted.",
+    "all_ads_from_seller": "All ads from "
 }

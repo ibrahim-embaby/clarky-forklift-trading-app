@@ -15,7 +15,7 @@ function Navbar({ toggle, setToggle }) {
       case "/":
         setCurrentTab(1);
         break;
-      case "/about-us":
+      case "/search/ads":
         setCurrentTab(2);
         break;
       case "/admin":
@@ -55,7 +55,7 @@ function Navbar({ toggle, setToggle }) {
           {t("navbar_main")}
         </Link>
         <Link
-          to="/about-us"
+          to="/search/ads"
           onClick={() => {
             setCurrentTab(2);
             setToggle(false);
@@ -65,7 +65,7 @@ function Navbar({ toggle, setToggle }) {
             fontWeight: currentTab === 2 ? "bolder" : "",
           }}
         >
-          {t("navbar_contact")}
+          {t("navbar_search")}
         </Link>
 
         {user?.role === "admin" && (

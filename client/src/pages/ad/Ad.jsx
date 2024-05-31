@@ -8,8 +8,12 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import { deleteAd, getAd } from "../../redux/apiCalls/adApiCall";
+import { useEffect, useState } from "react";
+import {
+  deleteAd,
+  fetchAllUserAds,
+  getAd,
+} from "../../redux/apiCalls/adApiCall";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import formatTime from "../../utils/formatTime";
 import { Loading } from "../../components/loading/Loading";
@@ -19,19 +23,25 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import InfoIcon from "@mui/icons-material/Info";
 import PlaceIcon from "@mui/icons-material/Place";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import CloseIcon from "@mui/icons-material/Close";
 
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import SearchItem from "../search/SearchItem";
 
 const MySwal = withReactContent(Swal);
 
 function Ad() {
   const { i18n, t } = useTranslation();
   const { user } = useSelector((state) => state.auth);
-  const { currentAd, adLoading } = useSelector((state) => state.ad);
+  const { currentAd, adLoading, ads, userAdsLoading } = useSelector(
+    (state) => state.ad
+  );
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0 });
@@ -57,6 +67,25 @@ function Ad() {
         navigate(-1);
       }
     });
+  };
+
+  const toggleAdsModal = (e) => {
+    e.preventDefault(); // Prevent default behavior to avoid page reload
+    if (!showModal) {
+      dispatch(fetchAllUserAds(currentAd?.userId._id));
+    }
+    setShowModal(!showModal);
+  };
+
+  const handleCloseModal = (e) => {
+    if (e.target.className === "modal") {
+      setShowModal(false);
+    }
+  };
+
+  const handleAdClick = (adId) => {
+    navigate(`/ads/${adId}`);
+    setShowModal(false);
   };
 
   return adLoading ? (
@@ -155,7 +184,14 @@ function Ad() {
             </div>
             <div className="ad-description">
               <h3>{t("description")}</h3>
-              <p>{currentAd?.description}</p>
+              <p>
+                {currentAd?.description.split("\\n").map((line, index) => (
+                  <span key={index}>
+                    {line}
+                    <br />
+                  </span>
+                ))}
+              </p>
             </div>
           </div>
           <div className="contact-info-section">
@@ -163,10 +199,8 @@ function Ad() {
               <h3 className="contact-info-title">{t("seller_info")}</h3>
               <div className="contact-info">
                 <div className="seller-name">{currentAd?.userId?.username}</div>
-                <div className="seller-profile">
-                  {t("see_all_seller_ads")}
-                  {currentAd?.userId.username}
-                  {">"}
+                <div className="seller-profile" onClick={toggleAdsModal}>
+                  {t("see_all_seller_ads")} {currentAd?.userId.username} {">"}
                 </div>
                 <div className="seller-mobile">
                   {currentAd?.phone}
@@ -177,6 +211,37 @@ function Ad() {
           </div>
         </div>
       </div>
+      {showModal && (
+        <div
+          className="modal"
+          style={{
+            direction: i18n.language === "ar" ? "rtl" : "ltr",
+          }}
+          onClick={handleCloseModal}
+        >
+          {userAdsLoading ? (
+            <Loading />
+          ) : (
+            <div className="modal-content">
+              <div className="modal-header">
+                <h2>
+                  {t("all_ads_from_seller")} {currentAd?.userId.username}
+                </h2>
+                <CloseIcon className="close-icon" onClick={toggleAdsModal} />
+              </div>
+              <div className="modal-body">
+                <div className="modal-ads-wrapper">
+                  {ads.map((ad) => (
+                    <div key={ad._id} onClick={() => handleAdClick(ad._id)}>
+                      <SearchItem item={ad} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

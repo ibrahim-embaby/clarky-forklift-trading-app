@@ -13,7 +13,7 @@ const { verifyToken } = require("../middlewares/verifyToken");
 router.route("/").post(verifyToken, createAdCtrl).get(getAllAdsCtrl);
 
 // /api/v1/ads/user/:userId
-router.route("/user/:userId").get(getAllUserAdsCtrl);
+router.route("/users/:userId").get(getAllUserAdsCtrl);
 
 // /api/v1/ads/:adId
 router

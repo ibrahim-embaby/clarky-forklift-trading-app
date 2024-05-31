@@ -98,6 +98,27 @@ export function fetchAllAds(
   };
 }
 
+// /api/v1/ads/users/:userId
+export function fetchAllUserAds(userId) {
+  return async (dispatch) => {
+    try {
+      dispatch(adActions.setUserAdsLoading());
+      const { data } = await request.get(`/api/v1/ads/users/${userId}`, {
+        headers: {
+          Cookie: document.i18next,
+        },
+        withCredentials: true,
+      });
+
+      dispatch(adActions.setAds(data));
+      dispatch(adActions.clearUserAdsLoading());
+    } catch (error) {
+      toast.error(error.response.data.message);
+      dispatch(adActions.clearUserAdsLoading());
+    }
+  };
+}
+
 // /api/v1/ads/:adId
 export function updateAd(adId, ad) {
   return async (dispatch, getState) => {

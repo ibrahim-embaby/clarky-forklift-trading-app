@@ -81,14 +81,21 @@ module.exports.getAllAdsCtrl = asyncHandler(async (req, res, next) => {
 
 /**
  * @desc get all user ads
- * @route /api/ads/user/:userId
+ * @route /api/ads/users/:userId
  * @method GET
  * @access public
  */
 module.exports.getAllUserAdsCtrl = asyncHandler(async (req, res, next) => {
   try {
     const { userId } = req.params;
-    const ads = await Ad.find({ userId }).sort({ createdAt: -1 });
+    const publishedStatus = await AdStatus.findOne({ value: "published" });
+
+    const ads = await Ad.find({ userId, adStatus: publishedStatus })
+      .populate("userId", "username  _id")
+      .populate("province city")
+      .sort({
+        createdAt: -1,
+      });
 
     res.status(200).json(ads);
   } catch (error) {
