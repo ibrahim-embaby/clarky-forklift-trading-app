@@ -8,7 +8,7 @@ function Navbar({ toggle, setToggle }) {
   const { user } = useSelector((state) => state.auth);
   const [currentTab, setCurrentTab] = useState(1);
   const location = useLocation();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const selectedTabColor = "var(--primary-color)";
 
   useEffect(() => {
@@ -37,6 +37,7 @@ function Navbar({ toggle, setToggle }) {
     <nav
       style={{
         clipPath: toggle && "polygon(0 0, 100% 0, 100% 100%, 0 100%)",
+        direction: i18n.language === "ar" ? "rtl" : "ltr",
       }}
       className={`navbar ${toggle ? "open" : ""}`}
     >

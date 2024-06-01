@@ -84,8 +84,7 @@
 }
 
 .nav-auth-links {
-  display: flex;
-  gap: 10px;
+  display: none !important;
 }
 
 /* Header right styles */
@@ -205,7 +204,6 @@
 
   .navbar ul li a {
     width: 100%;
-    text-align: left;
     padding: 10px 0;
   }
 
@@ -220,13 +218,12 @@
   }
 
   .header-auth-links {
-    flex-direction: column;
-    gap: 10px;
+    display: none;
   }
 
   .nav-auth-links {
+    display: flex !important;
     flex-direction: column;
-    gap: 10px;
   }
 }
 

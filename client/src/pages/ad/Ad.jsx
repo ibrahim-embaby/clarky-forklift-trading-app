@@ -212,7 +212,7 @@ function Ad() {
               <div className="contact-info">
                 <div className="seller-info-wrapper">
                   <img
-                    src={currentAd?.userId?.profilePhoto.url || avatar}
+                    src={currentAd?.userId?.profilePhoto?.url || avatar}
                     className="seller-image"
                   />
                   <div className="seler-info">

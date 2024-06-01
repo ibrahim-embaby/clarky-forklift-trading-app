@@ -8,9 +8,7 @@ function AccountVerified() {
   const { token } = useParams();
   const dispatch = useDispatch();
   const { loading } = useSelector((state) => state.auth);
-  console.log(token);
   useEffect(() => {
-    console.log("1");
     dispatch(verifyEmail(token));
   }, [token]);
   return loading ? (

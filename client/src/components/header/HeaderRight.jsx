@@ -114,7 +114,7 @@ function HeaderRight({ toggle, setToggle }) {
       </div>
       {user && (
         <Link to={`/profile/${user.id}`} className="header-user-image">
-          <img src={user?.profilePhoto.url || avatar} alt="" />
+          <img src={user?.profilePhoto?.url || avatar} alt="" />
         </Link>
       )}
     </div>

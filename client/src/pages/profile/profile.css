@@ -141,7 +141,7 @@
 }
 
 .form-btn {
-  padding: 12px 20px;
+  padding: 7px;
   font-size: 16px;
   color: white;
   background-color: #27ae60;
@@ -149,6 +149,7 @@
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s;
+  font-family: var(--font-family);
 }
 
 .form-btn:hover {
@@ -172,20 +173,5 @@
 @media (max-width: 590px) {
   .user-ads {
     grid-template-columns: repeat(1, 1fr);
-  }
-}
-
-@media (max-width: 520px) {
-  .user-profile-settings-form-labels {
-    font-size: 10px;
-  }
-  .user-profile-settings-form-item-input {
-    padding: 5px;
-    font-size: 15px;
-    width: 100%;
-  }
-  .user-profile-settings-form-btn {
-    font-size: 15px;
-    padding: 5px;
   }
 }

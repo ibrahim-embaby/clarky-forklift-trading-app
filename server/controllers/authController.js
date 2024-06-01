@@ -118,6 +118,12 @@ module.exports.loginUserCtrl = asyncHandler(async (req, res, next) => {
   }
 });
 
+/**
+ * @desc refresh token
+ * @route /api/auth/refresh-token
+ * @method GET
+ * @access public
+ */
 module.exports.refreshTokenCtrl = asyncHandler(async (req, res, next) => {
   const cookies = req.cookies;
   if (!cookies?.refreshtoken)
