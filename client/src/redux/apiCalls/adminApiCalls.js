@@ -80,13 +80,14 @@ export function adminfetchAdsCount(adStatus) {
 }
 
 // api/v1/admin/ads/:adId
-export function adminAcceptRefuseAd(adId, adStatus) {
+export function adminAcceptRefuseAd(adId, adStatus, rejectionReason = "") {
   return async (dispatch, getState) => {
     try {
       const { data } = await request.put(
         `/api/v1/admin/ads/${adId}`,
         {
           adStatus,
+          rejectionReason,
         },
         {
           headers: {

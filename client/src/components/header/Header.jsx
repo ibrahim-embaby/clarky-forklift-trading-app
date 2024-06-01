@@ -13,11 +13,13 @@ function Header() {
     : "fixed-header";
 
   return (
-    <div className={headerClass}>
-      <HeaderLeft />
-      <Navbar toggle={toggle} setToggle={setToggle} />
-      <HeaderRight toggle={toggle} setToggle={setToggle} />
-    </div>
+    <header className={headerClass}>
+      <div className="header-container">
+        <HeaderLeft />
+        <Navbar toggle={toggle} setToggle={setToggle} />
+        <HeaderRight toggle={toggle} setToggle={setToggle} />
+      </div>
+    </header>
   );
 }
 

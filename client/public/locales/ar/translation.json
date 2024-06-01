@@ -138,6 +138,8 @@
     "confirmation_success_text": "لقد تم حذف الإعلان بنجاح.",
     "edit": "تعديل",
     "delete": "حذف",
-    "all_ads_from_seller": "جميع الإعلانات من "
-
+    "all_ads_from_seller": "جميع الإعلانات من ",
+    "rejection_reason": "سبب الرفض:",
+    "user_settings_title": "إعدادات الملف الشخصي",
+    "user_settings_bio": "أضف وصف"
 }

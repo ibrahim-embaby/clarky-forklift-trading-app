@@ -64,15 +64,14 @@ module.exports.adminAcceptRefuseAdCtrl = asyncHandler(
       const ad = await Ad.findById(adId);
       if (!ad) return next(new ErrorResponse(req.t("ad_not_found"), 404));
 
-      if (req.user.role !== "admin") {
-        return next(new ErrorResponse(req.t("forbidden"), 301));
-      }
-
       const adStatus = await AdStatus.findOne({ value: req.body.adStatus });
 
       const acceptedAd = await Ad.findByIdAndUpdate(
         adId,
-        { adStatus: adStatus._id.toString() },
+        {
+          adStatus: adStatus._id.toString(),
+          rejectionReason: req.body.rejectionReason,
+        },
         { new: true }
       );
 

@@ -77,6 +77,9 @@ const AdSchema = new mongoose.Schema(
       ref: "AdStatus",
       default: "66561ffef02664c8780482f7",
     },
+    rejectionReason: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

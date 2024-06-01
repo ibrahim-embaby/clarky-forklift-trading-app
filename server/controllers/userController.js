@@ -1,9 +1,17 @@
 const asyncHandler = require("express-async-handler");
-const { User } = require("../models/User");
+const { User, validateUpdateUser } = require("../models/User");
 const bcrypt = require("bcrypt");
 const { Ad } = require("../models/Ad");
 const ErrorResponse = require("../utils/ErrorResponse");
 const { AdStatus } = require("../models/AdStatus");
+const S3 = require("aws-sdk/clients/s3");
+const s3 = new S3({
+  region: process.env.AWS_S3_BUCKET_REGION,
+  credentials: {
+    accessKeyId: process.env.AWS_IAM_ACCESS_KEY,
+    secretAccessKey: process.env.AWS_IAM_SECRET_ACCESS_KEY,
+  },
+});
 
 /**
  * @desc get user profile
@@ -12,11 +20,15 @@ const { AdStatus } = require("../models/AdStatus");
  * @access private (logged user & admin)
  */
 module.exports.getUserCtrl = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id).select("-password");
-  if (!user) {
-    return res.status(404).json({ message: req.t("user_not_found") });
+  try {
+    const user = await User.findById(req.params.id).select("-password");
+    if (!user) {
+      return res.status(404).json({ message: req.t("user_not_found") });
+    }
+    res.status(200).json(user);
+  } catch (error) {
+    next(error);
   }
-  res.status(200).json(user);
 });
 
 /**
@@ -110,42 +122,47 @@ module.exports.deleteUserCtrl = asyncHandler(async (req, res) => {
  * @method PUT
  * @access private ( user himslef )
  */
-module.exports.updateUserCtrl = asyncHandler(async (req, res) => {
-  const userId = req.user.id;
-  const user = await User.findById(userId);
-  if (!user) {
-    return res.status(404).json({ message: req.t("user_not_found") });
-  }
-
-  const { username, password, mobile } = req.body;
-
-  let newPassword;
-  if (password) {
-    const salt = await bcrypt.genSalt(10);
-    newPassword = await bcrypt.hash(password, salt);
-  }
-  const updatedUser = await User.findByIdAndUpdate(
-    userId,
-    {
-      ...(username && { username }),
-      ...(newPassword && { password: newPassword }),
-      ...(mobile && { mobile }),
-    },
-    {
-      new: true,
+module.exports.updateUserCtrl = asyncHandler(async (req, res, next) => {
+  try {
+    const { error } = validateUpdateUser(req.body);
+    if (error) {
+      return next(new ErrorResponse(error.details[0].message, 400));
     }
-  );
-  const token = updatedUser.generateAuthToken();
-  res.status(200).json({
-    data: {
-      id: updatedUser._id,
-      token,
-      email: updatedUser.email,
-      isAdmin: updatedUser.isAdmin,
-      username: updatedUser.username,
-      mobile: updatedUser.mobile,
-      password: updatedUser.password,
-    },
-    message: req.t("data_updated"),
-  });
+    const userId = req.user.id;
+    const user = await User.findById(userId);
+    if (!user) {
+      return next(new ErrorResponse(req.t("user_not_found"), 404));
+    }
+
+    if (req.body.profilePhoto) {
+      await s3
+        .deleteObject({
+          Bucket: process.env.AWS_S3_BUCKET_NAME,
+          Key: user.profilePhoto.key,
+        })
+        .promise();
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(userId, req.body, {
+      new: true,
+    });
+
+    const { accessToken } = updatedUser.getSignedToken();
+    res.status(200).json({
+      data: {
+        id: updatedUser._id,
+        token: accessToken,
+        email: updatedUser.email,
+        isAdmin: updatedUser.role,
+        username: updatedUser.username,
+        mobile: updatedUser.mobile,
+        profilePhoto: updatedUser.profilePhoto,
+        bio: updatedUser.bio,
+        isAccountVerified: updatedUser.isAccountVerified,
+      },
+      message: req.t("data_updated"),
+    });
+  } catch (error) {
+    next(error);
+  }
 });

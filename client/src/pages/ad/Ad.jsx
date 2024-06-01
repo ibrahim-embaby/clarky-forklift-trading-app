@@ -2,7 +2,6 @@ import { useTranslation } from "react-i18next";
 import "./ad.css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
-
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -28,6 +27,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import SearchItem from "../search/SearchItem";
+import ErrorIcon from "@mui/icons-material/Error";
+import avatar from "../../assets/avatar.png";
 
 const MySwal = withReactContent(Swal);
 
@@ -140,6 +141,17 @@ function Ad() {
                 </div>
               </div>
             )}
+            {currentAd?.adStatus.value === "rejected" && (
+              <div className="rejection-message">
+                <ErrorIcon className="rejection-icon" />
+                <div className="rejection-text">
+                  <p className="rejection-text-title">
+                    {t("rejection_reason")}
+                  </p>
+                  <p>{currentAd?.rejectionReason}</p>
+                </div>
+              </div>
+            )}
             <div className="ad-details">
               <div className="ad-details-top">
                 <div className="ad-title">{currentAd?.title}</div>
@@ -198,9 +210,20 @@ function Ad() {
             <div className="contact-info-wrapper">
               <h3 className="contact-info-title">{t("seller_info")}</h3>
               <div className="contact-info">
-                <div className="seller-name">{currentAd?.userId?.username}</div>
+                <div className="seller-info-wrapper">
+                  <img
+                    src={currentAd?.userId?.profilePhoto.url || avatar}
+                    className="seller-image"
+                  />
+                  <div className="seler-info">
+                    <h1 className="seller-name">
+                      {currentAd?.userId?.username}
+                    </h1>
+                    <p className="seller-bio">{currentAd?.userId?.bio}</p>
+                  </div>
+                </div>
                 <div className="seller-profile" onClick={toggleAdsModal}>
-                  {t("see_all_seller_ads")} {currentAd?.userId.username} {">"}
+                  {t("see_all_seller_ads")} {currentAd?.userId?.username} {">"}
                 </div>
                 <div className="seller-mobile">
                   {currentAd?.phone}

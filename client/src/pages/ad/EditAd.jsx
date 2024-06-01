@@ -2,11 +2,10 @@ import React, { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { fetchMyAd } from "../../redux/apiCalls/profileApiCall";
 import { useDropzone } from "react-dropzone";
 import { fetchControls } from "../../redux/apiCalls/controlsApiCalls";
 import { Loading } from "../../components/loading/Loading";
-import { updateAd } from "../../redux/apiCalls/adApiCall";
+import { getAd, updateAd } from "../../redux/apiCalls/adApiCall";
 
 function EditAd() {
   const { id } = useParams();
@@ -17,10 +16,10 @@ function EditAd() {
   const { provinces, itemTypes, statuses, adTargets } = useSelector(
     (state) => state.controls
   );
-  const { ad, loading } = useSelector((state) => state.profile);
+  const { currentAd: ad, adLoading } = useSelector((state) => state.ad);
 
   const [category, setCategory] = useState("");
-  const [price, setPrice] = useState(0);
+  const [price, setPrice] = useState(1);
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [phone, setPhone] = useState("");
@@ -35,7 +34,7 @@ function EditAd() {
   useEffect(() => {
     dispatch(fetchControls());
     if (id) {
-      dispatch(fetchMyAd(id));
+      dispatch(getAd(id));
     }
   }, [dispatch, id]);
 
@@ -131,7 +130,7 @@ function EditAd() {
   return (
     <div className="edit-ad">
       <div className="container">
-        {loading ? (
+        {adLoading ? (
           <Loading />
         ) : (
           <div
@@ -213,9 +212,11 @@ function EditAd() {
                 <input
                   value={price}
                   onChange={(e) => setPrice(e.target.value)}
+                  onWheel={(e) => e.target.blur()}
                   type="number"
                   className="edit-ad-input"
                   required
+                  min={1}
                 />
               </div>
 

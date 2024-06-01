@@ -8,6 +8,8 @@ import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import limitText from "../../utils/limitText.js";
 import { useTranslation } from "react-i18next";
+import "./header.css";
+import avatar from "../../assets/avatar.png";
 
 function HeaderRight({ toggle, setToggle }) {
   const dispatch = useDispatch();
@@ -63,7 +65,6 @@ function HeaderRight({ toggle, setToggle }) {
             >
               {t("my_ads")}
             </Link>
-
             <Link
               to={`/profile/${user.id}/settings`}
               onClick={() => setToggleMenu(false)}
@@ -111,6 +112,11 @@ function HeaderRight({ toggle, setToggle }) {
           />
         )}
       </div>
+      {user && (
+        <Link to={`/profile/${user.id}`} className="header-user-image">
+          <img src={user?.profilePhoto.url || avatar} alt="" />
+        </Link>
+      )}
     </div>
   );
 }

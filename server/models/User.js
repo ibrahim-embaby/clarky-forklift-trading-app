@@ -23,6 +23,10 @@ const UserSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    bio: {
+      type: String,
+      default: "",
+    },
     mobile: {
       type: String,
       unique: true,
@@ -35,10 +39,6 @@ const UserSchema = new mongoose.Schema(
     },
     profilePhoto: {
       type: Object,
-      default: {
-        url: "https://res.cloudinary.com/dotcfrg0k/image/upload/v1698526360/df9ucku2gdjixyavkoul.png",
-        publicId: "df9ucku2gdjixyavkoul",
-      },
     },
     isAccountVerified: {
       type: Boolean,
@@ -107,6 +107,19 @@ function validateCreateUser(obj) {
   return schema.validate(obj);
 }
 
+function validateUpdateUser(obj) {
+  const schema = Joi.object({
+    username: Joi.string().trim().min(1).max(100),
+    mobile: Joi.string().trim().min(11).max(14),
+    bio: Joi.string().trim().max(1000),
+    profilePhoto: Joi.object({
+      key: Joi.string(),
+      url: Joi.string(),
+    }),
+  });
+  return schema.validate(obj);
+}
+
 // validate login user
 function validateLoginUser(obj) {
   const schema = Joi.object({
@@ -116,4 +129,9 @@ function validateLoginUser(obj) {
   return schema.validate(obj);
 }
 
-module.exports = { User, validateCreateUser, validateLoginUser };
+module.exports = {
+  User,
+  validateCreateUser,
+  validateLoginUser,
+  validateUpdateUser,
+};

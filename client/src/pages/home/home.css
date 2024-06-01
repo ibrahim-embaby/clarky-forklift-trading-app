@@ -121,6 +121,7 @@
   border: none;
   outline: none;
   font-family: var(--font-family);
+  cursor: pointer;
 }
 
 .search-bar-item-option {

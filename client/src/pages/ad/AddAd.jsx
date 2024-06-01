@@ -7,7 +7,7 @@ import { fetchControls } from "../../redux/apiCalls/controlsApiCalls";
 
 function AddAd() {
   const [category, setCategory] = useState("");
-  const [price, setPrice] = useState(0);
+  const [price, setPrice] = useState("1");
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [phone, setPhone] = useState("");
@@ -47,7 +47,7 @@ function AddAd() {
 
     dispatch(createAd(ad));
     setCategory("");
-    setPrice(0);
+    setPrice("1");
     setTitle("");
     setDesc("");
     setPhone("");
@@ -163,12 +163,6 @@ function AddAd() {
                 />
               </div>
             </div>
-            {/* {category === "قطع غيار" && (
-              <div className="add-ad-part-name">
-                <label className="add-ad-label">اسم القطعة</label>
-                <input type="text" className="add-ad-input" />
-              </div>
-            )} */}
             <div className="add-ad-title">
               <label className="add-ad-label">{t("ad_title")} </label>
               <input
@@ -185,9 +179,11 @@ function AddAd() {
               <input
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
+                onWheel={(e) => e.target.blur()}
                 type="number"
                 className="add-ad-input"
                 required
+                min={1}
               />
             </div>
 

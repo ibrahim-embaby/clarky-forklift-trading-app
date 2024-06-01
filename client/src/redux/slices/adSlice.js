@@ -28,6 +28,7 @@ const adSlice = createSlice({
       state.searchResultsCount = state.searchResultsCount - 1;
     },
     updateAd(state, action) {
+      state.currentAd = action.payload;
       const { _id: id } = action.payload;
       state.ads = state.ads.map((ad) => {
         if (ad._id === id) {
@@ -36,7 +37,6 @@ const adSlice = createSlice({
             ...action.payload,
           };
         }
-
         return ad;
       });
     },

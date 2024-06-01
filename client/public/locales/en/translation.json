@@ -116,5 +116,8 @@
     "confirmation_btn_cancel": "Cancel",
     "confirmation_success_title": "Deleted!",
     "confirmation_success_text": "Your ad has been deleted.",
-    "all_ads_from_seller": "All ads from "
+    "all_ads_from_seller": "All ads from ",
+    "rejection_reason": "Rejection Reason:",
+    "user_settings_title": "Profile Settings",
+    "user_settings_bio": "add bio"
 }

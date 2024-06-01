@@ -132,12 +132,12 @@ module.exports.getSingleAdCtrl = asyncHandler(async (req, res, next) => {
       ad = await Ad.findOne({
         _id: adId,
         $or: [{ userId: user.id }, { adStatus: publishedStatus }],
-      }).populate("userId province city status saleOrRent adStatus");
+      }).populate("userId province city status saleOrRent adStatus itemType");
     } else {
       ad = await Ad.findOne({
         _id: adId,
         adStatus: publishedStatus,
-      }).populate("userId province city status saleOrRent adStatus");
+      }).populate("userId province city status saleOrRent adStatus itemType");
     }
 
     if (!ad) {
@@ -218,7 +218,6 @@ module.exports.updateSingleAdCtrl = asyncHandler(async (req, res, next) => {
  * @method DELETE
  * @access private (only admin and user himself)
  */
-// TODO: delete all photos of the ad from S3
 module.exports.deleteSingleAdCtrl = asyncHandler(async (req, res, next) => {
   try {
     const { adId } = req.params;
@@ -226,7 +225,7 @@ module.exports.deleteSingleAdCtrl = asyncHandler(async (req, res, next) => {
     const ad = await Ad.findById(adId);
     if (!ad) return next(new ErrorResponse(req.t("ad_not_found"), 404));
 
-    if (ad.userId.toString() !== req.user.id || req.user.role !== "admin") {
+    if (ad.userId.toString() !== req.user.id && req.user.role !== "admin") {
       return next(new ErrorResponse(req.t("forbidden"), 301));
     }
     // Extract the S3 keys from the ad's photos

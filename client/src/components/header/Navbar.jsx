@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
+import "./header.css";
 
 function Navbar({ toggle, setToggle }) {
   const { user } = useSelector((state) => state.auth);
   const [currentTab, setCurrentTab] = useState(1);
   const location = useLocation();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const selectedTabColor = "var(--primary-color)";
 
   useEffect(() => {
@@ -34,57 +35,61 @@ function Navbar({ toggle, setToggle }) {
 
   return (
     <nav
-      className="navbar"
       style={{
         clipPath: toggle && "polygon(0 0, 100% 0, 100% 100%, 0 100%)",
-        direction: i18n.language === "en" ? "rtl" : "ltr",
       }}
+      className={`navbar ${toggle ? "open" : ""}`}
     >
       <ul>
-        <Link
-          to="/"
-          onClick={() => {
-            setCurrentTab(1);
-            setToggle(false);
-          }}
-          style={{
-            color: currentTab === 1 ? selectedTabColor : "",
-            fontWeight: currentTab === 1 ? "bolder" : "",
-          }}
-        >
-          {t("navbar_main")}
-        </Link>
-        <Link
-          to="/search/ads"
-          onClick={() => {
-            setCurrentTab(2);
-            setToggle(false);
-          }}
-          style={{
-            color: currentTab === 2 ? selectedTabColor : "",
-            fontWeight: currentTab === 2 ? "bolder" : "",
-          }}
-        >
-          {t("navbar_search")}
-        </Link>
-
-        {user?.role === "admin" && (
+        <li>
           <Link
-            to="/admin"
+            to="/"
             onClick={() => {
-              setCurrentTab(3);
+              setCurrentTab(1);
               setToggle(false);
             }}
             style={{
-              color: currentTab === 3 ? selectedTabColor : "",
-              fontWeight: currentTab === 3 ? "bolder" : "",
+              color: currentTab === 1 ? selectedTabColor : "",
+              fontWeight: currentTab === 1 ? "bolder" : "",
             }}
           >
-            {t("navbar_admin")}
+            {t("navbar_main")}
           </Link>
+        </li>
+        <li>
+          <Link
+            to="/search/ads"
+            onClick={() => {
+              setCurrentTab(2);
+              setToggle(false);
+            }}
+            style={{
+              color: currentTab === 2 ? selectedTabColor : "",
+              fontWeight: currentTab === 2 ? "bolder" : "",
+            }}
+          >
+            {t("navbar_search")}
+          </Link>
+        </li>
+        {user?.role === "admin" && (
+          <li>
+            <Link
+              to="/admin"
+              onClick={() => {
+                setCurrentTab(3);
+                setToggle(false);
+              }}
+              style={{
+                color: currentTab === 3 ? selectedTabColor : "",
+                fontWeight: currentTab === 3 ? "bolder" : "",
+              }}
+            >
+              {t("navbar_admin")}
+            </Link>
+          </li>
         )}
         {!user && (
-          <div className="nav-auth-links">
+          <li className="nav-auth-links">
             <Link
               to="/login"
               onClick={() => {
@@ -113,7 +118,7 @@ function Navbar({ toggle, setToggle }) {
             >
               {t("register")}
             </Link>
-          </div>
+          </li>
         )}
       </ul>
     </nav>

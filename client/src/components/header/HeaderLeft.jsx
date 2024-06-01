@@ -4,9 +4,10 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import CreateIcon from "@mui/icons-material/Create";
+import "./header.css";
 
 function HeaderLeft() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
 
@@ -17,23 +18,14 @@ function HeaderLeft() {
       toast.info(t("login_required"));
     }
   };
+
   return (
     <div className="header-left">
-      <Link to={"/"} className="site-name">
+      <Link to="/" className="site-name">
         {t("header_title")}
       </Link>
-      <div
-        className="navbar-sell"
-        onClick={handleCreateAd}
-        style={{
-          direction: i18n.language === "ar" ? "rtl" : "ltr",
-        }}
-      >
-        <CreateIcon
-          sx={{
-            fontSize: "20px",
-          }}
-        />
+      <div className="navbar-sell" onClick={handleCreateAd}>
+        <CreateIcon sx={{ fontSize: "20px" }} />
         {t("navbar_sell")}
       </div>
     </div>
