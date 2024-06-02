@@ -179,7 +179,6 @@ export function updateAd(adId, newAd) {
         {
           headers: {
             Authorization: "Bearer " + getState().auth.user.token,
-            Cookie: document.cookie.i18next,
           },
           withCredentials: true,
         }

@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchMyAds } from "../../redux/apiCalls/profileApiCall";
 import { useParams } from "react-router-dom";
 import "./profile.css";
-
 import { useTranslation } from "react-i18next";
 import SearchItem from "../search/SearchItem";
 import { Loading } from "../../components/loading/Loading";
@@ -41,15 +40,15 @@ function Profile() {
       );
       if (publishedStatus) {
         setCurrentFilter(publishedStatus);
-        dispatch(fetchMyAds(id, publishedStatus._id, page));
+        dispatch(fetchMyAds(id, publishedStatus._id, 1));
       }
     }
-  }, [adStatuses, id, dispatch, page]);
+  }, [adStatuses, id]);
 
   const handleFilter = (adStatus) => {
     setPage(1);
     setCurrentFilter(adStatus);
-    dispatch(fetchMyAds(id, adStatus._id, 1));
+    dispatch(fetchMyAds(id, adStatus._id, page));
   };
 
   return (
@@ -82,9 +81,11 @@ function Profile() {
           ) : userAds.length >= 1 ? (
             <>
               <div className="user-ads">
-                {userAds.map((ad) => (
-                  <SearchItem key={ad._id} item={ad} />
-                ))}
+                {userAds.map((ad) => {
+                  if (ad.adStatus === currentFilter._id) {
+                    return <SearchItem key={ad._id} item={ad} />;
+                  }
+                })}
               </div>
               <Pagination
                 style={{

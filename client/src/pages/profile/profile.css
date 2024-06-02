@@ -101,12 +101,11 @@
   width: 100%;
   height: 100%;
   color: #888;
-  font-size: 48px;
 }
 
 .photo-icon {
-  font-size: 48px;
   color: #ccc;
+  line-height: 0;
 }
 
 .photo-upload-input {

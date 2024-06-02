@@ -46,8 +46,10 @@ module.exports.getMyAdsCtrl = asyncHandler(async (req, res, next) => {
     let count;
 
     const publishedStatus = await AdStatus.findOne({ value: "published" });
-
-    if (adStatus !== publishedStatus._id && req.user.id !== req.params.userId) {
+    if (
+      adStatus !== publishedStatus._id.toString() &&
+      req.user.id !== req.params.userId
+    ) {
       return next(new ErrorResponse(req.t("forbidden"), 400));
     }
 
@@ -113,6 +115,8 @@ module.exports.deleteUserCtrl = asyncHandler(async (req, res) => {
     return res.status(404).json({ message: req.t("user_not_found") });
   }
   await User.findByIdAndDelete(id);
+  await Ad.deleteMany({ userId: id });
+
   res.status(200).json({ message: req.t("user_deleted") });
 });
 

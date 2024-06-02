@@ -12,7 +12,7 @@ function SwitchLanguage() {
   const changeLanguage = (lang) => {
     setToggle(lang);
     i18next.changeLanguage(lang);
-    setCookies("i18next", lang, { path: "/" });
+    setCookies("i18next", lang, { path: "/", sameSite: "Lax" });
     localStorage.setItem("lang", lang);
   };
 

@@ -80,7 +80,7 @@ export function fetchMyAds(userId, adStatus, page) {
       console.log(error);
       if (error?.response?.status === 401) {
         await dispatch(refreshToken());
-        await dispatch(fetchMyAds(userId, adStatus));
+        await dispatch(fetchMyAds(userId, adStatus, page));
         return;
       } else {
         console.log(error);

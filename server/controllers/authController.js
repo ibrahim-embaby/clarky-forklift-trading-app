@@ -253,6 +253,7 @@ module.exports.verifyEmailCtrl = asyncHandler(async (req, res, next) => {
                 phone: user.phone,
                 isAccountVerified: user.isAccountVerified,
                 role: user.role,
+                mobile: user.mobile,
                 profilePhoto: user.profilePhoto,
               },
             });
@@ -358,7 +359,7 @@ module.exports.forgotPasswordCtrl = asyncHandler(async (req, res, next) => {
   }
   try {
     // get the user from db by email
-    await User.findOne({ email });
+    const user = await User.findOne({ email });
 
     if (!user) {
       return next(new ErrorResponse(req.t("user_not_found"), 404));

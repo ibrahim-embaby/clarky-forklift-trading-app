@@ -1,4 +1,5 @@
 const { createSlice } = require("@reduxjs/toolkit");
+const { withReduxStateSync } = require("redux-state-sync");
 
 const authSlice = createSlice({
   name: "auth",
@@ -16,16 +17,10 @@ const authSlice = createSlice({
       localStorage.setItem("userInfo", JSON.stringify(action.payload));
     },
     updateUser(state, action) {
-      const updatedUserData = {
-        id: state.user.id,
-        email: state.user.email,
-        token: state.user.token,
-        isAccountVerified: state.user.isAccountVerified,
-        profilePhoto: action.payload.profilePhoto,
-        username: action.payload.username,
-      };
-      localStorage.setItem("userInfo", JSON.stringify(updatedUserData));
-      state.user = updatedUserData;
+      if (state.user) {
+        state.user = { ...state.user, ...action.payload };
+        localStorage.setItem("userInfo", JSON.stringify(state.user));
+      }
     },
     verifyAccount(state, action) {
       if (state.user) {
@@ -35,15 +30,9 @@ const authSlice = createSlice({
       }
     },
     updateToken(state, action) {
-      let user =
-        localStorage.getItem("userInfo") &&
-        localStorage.getItem("userInfo") !== "undefined"
-          ? JSON.parse(localStorage.getItem("userInfo"))
-          : null;
-      if (user) {
-        user = { ...user, token: action.payload };
-        localStorage.setItem("userInfo", JSON.stringify(user));
-        state.user = JSON.parse(localStorage.getItem("userInfo"));
+      if (state.user) {
+        state.user.token = action.payload;
+        localStorage.setItem("userInfo", JSON.stringify(state.user));
       }
     },
     logout(state) {
@@ -60,6 +49,6 @@ const authSlice = createSlice({
 });
 
 const authActions = authSlice.actions;
-const authReducer = authSlice.reducer;
+const authReducer = withReduxStateSync(authSlice.reducer);
 
 export { authActions, authReducer };

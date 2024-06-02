@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { updateUserProfile } from "../../redux/apiCalls/profileApiCall"; // Ensure you have this action defined
+import { updateUserProfile } from "../../redux/apiCalls/profileApiCall";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
+import CameraAltIcon from "@mui/icons-material/CameraAlt";
 
 function UserProfileSettings() {
   const currentUser = useSelector((state) => state.auth.user);
@@ -94,7 +95,13 @@ function UserProfileSettings() {
                   />
                 ) : (
                   <div className="photo-placeholder">
-                    <span className="photo-icon">+</span>
+                    <span className="photo-icon">
+                      <CameraAltIcon
+                        sx={{
+                          fontSize: "48px",
+                        }}
+                      />
+                    </span>
                   </div>
                 )}
               </label>
