@@ -90,6 +90,7 @@
   border: none;
   cursor: pointer;
   font-family: var(--font-family);
+  background-color: white;
 }
 
 .search-results-form-btn {
