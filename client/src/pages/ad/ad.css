@@ -740,7 +740,7 @@
   }
 }
 
-@media (max-width: 610px) {
+@media (max-width: 500px) {
   .modal-content {
     width: 90%;
   }
