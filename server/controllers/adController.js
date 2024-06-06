@@ -132,12 +132,16 @@ module.exports.getSingleAdCtrl = asyncHandler(async (req, res, next) => {
       ad = await Ad.findOne({
         _id: adId,
         $or: [{ userId: user.id }, { adStatus: publishedStatus }],
-      }).populate("userId province city status saleOrRent adStatus itemType");
+      })
+        .populate("userId", "username  _id bio profilePhoto")
+        .populate("province city status saleOrRent adStatus itemType");
     } else {
       ad = await Ad.findOne({
         _id: adId,
         adStatus: publishedStatus,
-      }).populate("userId province city status saleOrRent adStatus itemType");
+      })
+        .populate("userId", "username  _id bio profilePhoto")
+        .populate("province city status saleOrRent adStatus itemType");
     }
 
     if (!ad) {
@@ -202,7 +206,9 @@ module.exports.updateSingleAdCtrl = asyncHandler(async (req, res, next) => {
       adId,
       { ...req.body, adStatus: pendingStatus._id },
       { new: true }
-    ).populate("userId province city status saleOrRent adStatus");
+    )
+      .populate("userId", "username  _id")
+      .populate("province city status saleOrRent adStatus");
 
     res
       .status(200)

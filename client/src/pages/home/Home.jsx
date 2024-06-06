@@ -6,6 +6,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchControls } from "../../redux/apiCalls/controlsApiCalls";
 import { Loading } from "../../components/loading/Loading";
 import SearchIcon from "@mui/icons-material/Search";
+import charger from "../../assets/charger.png";
+import forklift from "../../assets/forklift.png";
+import battery from "../../assets/battery.png";
+import parts from "../../assets/spare-parts.png";
 
 function Home() {
   const navigate = useNavigate();
@@ -57,6 +61,36 @@ function Home() {
     });
   };
 
+  const categories = [
+    { key: "equipment", label: "equipments", image: forklift },
+    { key: "charger", label: "chargers", image: charger },
+    { key: "battery", label: "batteries", image: battery },
+    { key: "parts", label: "parts", image: parts },
+  ];
+
+  const getCategoryObject = (key) => {
+    return (
+      itemTypes.find((item) => item.value === key) || { value: key, _id: "" }
+    );
+  };
+
+  const selectCategory = (category) => {
+    const queryParams = new URLSearchParams();
+    queryParams.append("province", "");
+    queryParams.append("status", "");
+    queryParams.append("itemType", category?.value);
+    queryParams.append("search", "");
+
+    navigate(`/search/ads?${queryParams.toString()}`, {
+      state: {
+        province: { value: "", _id: "" },
+        status: { value: "", _id: "" },
+        itemType: { value: category?.value, _id: category?._id },
+        search: "",
+      },
+    });
+  };
+
   return (
     <>
       {loading ? (
@@ -66,7 +100,7 @@ function Home() {
           className="home"
           style={{ direction: i18n.language === "en" ? "ltr" : "rtl" }}
         >
-          <section className="home-top">
+          <section className="home-search">
             <div className="home-top-wrapper">
               <div className="home-top-title-wrapper">
                 <h1 className="home-top-title">
@@ -244,6 +278,22 @@ function Home() {
               </form>
             </div>
           </section>
+          <section className="home-categories">
+            {categories.map((category) => (
+              <div
+                key={category.key}
+                className={"home-category"}
+                onClick={() => selectCategory(getCategoryObject(category.key))}
+              >
+                <img src={category.image} alt="" />
+                <p className={"home-category-title"}>{t(category.label)}</p>
+              </div>
+            ))}
+          </section>
+          <section className="equipments-recently-added"></section>
+          <section className="chargers-recently-added"></section>
+          <section className="batteries-recently-added"></section>
+          <section className="parts-recently-added"></section>
         </div>
       )}
     </>

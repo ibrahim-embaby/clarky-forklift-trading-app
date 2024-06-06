@@ -18,6 +18,7 @@ function AddAd() {
   const [quantity, setQuantity] = useState("1");
   const [fileUrls, setFileUrls] = useState([]);
   const [files, setFiles] = useState([]);
+  const [errors, setErrors] = useState({});
   const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
 
@@ -27,10 +28,34 @@ function AddAd() {
 
   useEffect(() => {
     dispatch(fetchControls());
-  }, []);
+  }, [dispatch]);
+
+  const validateForm = () => {
+    const errors = {};
+
+    if (!category) errors.category = t("required");
+    if (!price || price <= 0) errors.price = t("required");
+    if (!title || title.length < 3 || title.length > 200)
+      errors.title = t("title_validation");
+    if (!desc || desc.length < 3 || desc.length > 5000)
+      errors.desc = t("desc_validation");
+    if (!phone || !/^(010|011|012|015)\d{8}$/.test(phone))
+      errors.phone = t("phone_validation");
+    if (!province) errors.province = t("required");
+    if (!city) errors.city = t("required");
+    if (!status) errors.status = t("required");
+    if (!saleOrRent) errors.saleOrRent = t("required");
+    if (files.length < 1 || files.length > 10)
+      errors.photos = t("photos_validation");
+
+    setErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
 
   const handleSubmitAdForm = (e) => {
     e.preventDefault();
+    if (!validateForm()) return;
+
     const ad = {
       title,
       description: desc,
@@ -58,6 +83,7 @@ function AddAd() {
     setQuantity("1");
     setFileUrls([]);
     setFiles([]);
+    setErrors({});
   };
 
   const onDrop = useCallback((acceptedFiles) => {
@@ -110,6 +136,7 @@ function AddAd() {
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
                 className="select-ad-category"
+                required
               >
                 <option value="" disabled>
                   {t("item_type_select")}
@@ -121,11 +148,15 @@ function AddAd() {
                   </option>
                 ))}
               </select>
+              {errors.category && (
+                <span className="error">{errors.category}</span>
+              )}
 
               <select
                 className="select-ad-sell-type"
                 value={saleOrRent}
                 onChange={(e) => setSaleOrRent(e.target.value)}
+                required
               >
                 <option value="" disabled>
                   {t("purpose")}
@@ -136,11 +167,15 @@ function AddAd() {
                   </option>
                 ))}
               </select>
+              {errors.saleOrRent && (
+                <span className="error">{errors.saleOrRent}</span>
+              )}
 
               <select
                 className="select-ad-status"
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
+                required
               >
                 <option value="" disabled>
                   {t("condition")}
@@ -151,6 +186,8 @@ function AddAd() {
                   </option>
                 ))}
               </select>
+              {errors.status && <span className="error">{errors.status}</span>}
+
               <div className="quantity-wrapper">
                 <label htmlFor="quantity"> {t("quantity")}:</label>
                 <input
@@ -160,9 +197,11 @@ function AddAd() {
                   required
                   value={quantity}
                   onChange={(e) => setQuantity(e.target.value)}
+                  onWheel={(e) => e.target.blur()}
                 />
               </div>
             </div>
+
             <div className="add-ad-title">
               <label className="add-ad-label">{t("ad_title")} </label>
               <input
@@ -172,6 +211,7 @@ function AddAd() {
                 className="add-ad-input"
                 required
               />
+              {errors.title && <span className="error">{errors.title}</span>}
             </div>
 
             <div className="add-ad-price">
@@ -185,6 +225,7 @@ function AddAd() {
                 required
                 min={1}
               />
+              {errors.price && <span className="error">{errors.price}</span>}
             </div>
 
             <div className="add-ad-desc">
@@ -197,6 +238,7 @@ function AddAd() {
                 rows="6"
                 required
               ></textarea>
+              {errors.desc && <span className="error">{errors.desc}</span>}
             </div>
 
             <div className="add-ad-mobile">
@@ -208,6 +250,7 @@ function AddAd() {
                 className="add-ad-input"
                 required
               />
+              {errors.phone && <span className="error">{errors.phone}</span>}
             </div>
 
             <div className="add-ad-address">
@@ -229,6 +272,9 @@ function AddAd() {
                     </option>
                   ))}
                 </select>
+                {errors.province && (
+                  <span className="error">{errors.province}</span>
+                )}
 
                 <select
                   className="select-ad-city"
@@ -247,6 +293,7 @@ function AddAd() {
                       </option>
                     ))}
                 </select>
+                {errors.city && <span className="error">{errors.city}</span>}
               </div>
             </div>
 
@@ -273,6 +320,7 @@ function AddAd() {
                   <div className="add-image-plus">+</div>
                 </div>
               </div>
+              {errors.photos && <span className="error">{errors.photos}</span>}
               <div {...getRootProps({ className: "dropzone hidden-dropzone" })}>
                 <input {...getInputProps()} />
               </div>

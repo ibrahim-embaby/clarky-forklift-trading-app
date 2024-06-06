@@ -387,8 +387,7 @@ module.exports.forgotPasswordCtrl = asyncHandler(async (req, res, next) => {
     // response to the client
     res.status(200).json({
       success: true,
-      message:
-        "password reset link sent to your email, please check your inbox",
+      message: req.t("password_link_sent"),
     });
   } catch (error) {
     next(error);
@@ -408,7 +407,7 @@ module.exports.resetPasswordCtrl = asyncHandler(async (req, res, next) => {
       process.env.RESET_PASSWORD_SECRET_KEY,
       async (err, decode) => {
         if (err) {
-          next(new ErrorResponse("Invalid Token", 401));
+          next(new ErrorResponse(req.t("invalid_token"), 401));
         } else {
           const verificationToken = await VerificationToken.findOne({
             userId: decode.id,
@@ -418,12 +417,8 @@ module.exports.resetPasswordCtrl = asyncHandler(async (req, res, next) => {
             const { password } = req.body;
             if (password) {
               if (password.length < 8)
-                return next(
-                  new ErrorResponse(
-                    "password can't be less than 8 characters",
-                    400
-                  )
-                );
+                return next(new ErrorResponse(req.t("password_limit"), 400));
+
               const user = await User.findById(decode.id);
               user.password = password;
               user.markModified("password");
@@ -434,13 +429,13 @@ module.exports.resetPasswordCtrl = asyncHandler(async (req, res, next) => {
               });
               res.status(200).json({
                 success: true,
-                message: "password reseted successfully, please login",
+                message: req.t("password_reseted"),
               });
             } else {
-              next(new ErrorResponse("please provide a password", 400));
+              next(new ErrorResponse(req.t("enter_password"), 400));
             }
           } else {
-            next(new ErrorResponse("invalid token, please try again", 404));
+            next(new ErrorResponse(req.t("invalid_token"), 404));
           }
         }
       }

@@ -7,33 +7,6 @@
   margin: 0 5px;
 }
 
-.add-ad-component-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 5px;
-  padding-bottom: 5px;
-}
-
-.add-ad-text {
-  padding: 15px 10px;
-  width: 100%;
-  border: 1px solid var(--primary-color);
-  font-size: 20px;
-}
-
-.add-ad-btn {
-  padding: 3px 20px;
-  color: var(--white-color);
-  background-color: var(--primary-color);
-  margin: 10px 0;
-  font-size: 18px;
-  outline: none;
-  border: none;
-  cursor: pointer;
-  font-family: var(--font-family);
-}
-
 .ad-item {
   padding: 15px;
   background-color: var(--white-color);
@@ -82,12 +55,4 @@
   background-color: antiquewhite;
   align-items: center;
   justify-content: space-between;
-}
-
-.workshop-name-ad-wrapper {
-  display: flex;
-  gap: 5px;
-  font-size: 16px;
-  flex-wrap: wrap;
-  align-items: center;
 }

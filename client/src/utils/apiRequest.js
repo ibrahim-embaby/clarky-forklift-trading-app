@@ -5,7 +5,6 @@ import store from "../redux/store";
 export const apiRequest = async (url, method, data = null, headers = {}) => {
   const state = store.getState();
   let token = state.auth.user.token;
-
   try {
     const response = await axios({
       url: process.env.REACT_APP_SERVER_URL + url,
@@ -26,7 +25,7 @@ export const apiRequest = async (url, method, data = null, headers = {}) => {
 
       // Retry the request with the new token
       const retryResponse = await axios({
-        url,
+        url: process.env.REACT_APP_SERVER_URL + url,
         method,
         data,
         headers: {
@@ -37,6 +36,7 @@ export const apiRequest = async (url, method, data = null, headers = {}) => {
       });
       return retryResponse;
     } else {
+      console.log(error);
       throw error;
     }
   }

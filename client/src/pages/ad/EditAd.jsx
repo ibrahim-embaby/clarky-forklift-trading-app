@@ -31,6 +31,8 @@ function EditAd() {
   const [existingFileUrls, setExistingFileUrls] = useState([]);
   const [newFiles, setNewFiles] = useState([]);
 
+  const [errors, setErrors] = useState({});
+
   useEffect(() => {
     dispatch(fetchControls());
     if (id) {
@@ -64,8 +66,31 @@ function EditAd() {
     return changed;
   };
 
+  const validateForm = () => {
+    const newErrors = {};
+    if (!category) newErrors.category = t("required");
+    if (!price || price <= 0) newErrors.price = t("required");
+    if (!title || title.split(" ").length < 3 || title.split(" ").length > 200)
+      newErrors.title = t("title_validation");
+    if (!desc || desc.split(" ").length < 3 || desc.split(" ").length > 5000)
+      newErrors.desc = t("desc_validation");
+    if (!phone || !/^(010|011|012|015)\d{8}$/.test(phone))
+      newErrors.phone = t("phone_validation");
+    if (!province) newErrors.province = t("required");
+    if (!city) newErrors.city = t("required");
+    if (
+      !existingFileUrls.length + newFiles.length ||
+      existingFileUrls.length + newFiles.length > 10
+    )
+      newErrors.photos = t("photos_validation");
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmitAdForm = async (e) => {
     e.preventDefault();
+    if (!validateForm()) return;
 
     const updatedAd = {
       title,
@@ -144,6 +169,7 @@ function EditAd() {
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
                   className="select-ad-category"
+                  required
                 >
                   <option value="" disabled>
                     {t("item_type_select")}
@@ -154,11 +180,15 @@ function EditAd() {
                     </option>
                   ))}
                 </select>
+                {errors.category && (
+                  <span className="error">{errors.category}</span>
+                )}
 
                 <select
                   className="select-ad-sell-type"
                   value={saleOrRent}
                   onChange={(e) => setSaleOrRent(e.target.value)}
+                  required
                 >
                   <option value="" disabled>
                     {t("purpose")}
@@ -169,11 +199,15 @@ function EditAd() {
                     </option>
                   ))}
                 </select>
+                {errors.saleOrRent && (
+                  <span className="error">{errors.saleOrRent}</span>
+                )}
 
                 <select
                   className="select-ad-status"
                   value={status}
                   onChange={(e) => setStatus(e.target.value)}
+                  required
                 >
                   <option value="" disabled>
                     {t("condition")}
@@ -184,6 +218,10 @@ function EditAd() {
                     </option>
                   ))}
                 </select>
+                {errors.status && (
+                  <span className="error">{errors.status}</span>
+                )}
+
                 <div className="quantity-wrapper">
                   <label htmlFor="quantity">{t("quantity")}:</label>
                   <input
@@ -193,9 +231,14 @@ function EditAd() {
                     required
                     value={quantity}
                     onChange={(e) => setQuantity(e.target.value)}
+                    onWheel={(e) => e.target.blur()}
                   />
                 </div>
               </div>
+              {errors.quantity && (
+                <span className="error">{errors.quantity}</span>
+              )}
+
               <div className="edit-ad-title">
                 <label className="edit-ad-label">{t("ad_title")}</label>
                 <input
@@ -206,6 +249,7 @@ function EditAd() {
                   required
                 />
               </div>
+              {errors.title && <span className="error">{errors.title}</span>}
 
               <div className="edit-ad-price">
                 <label className="edit-ad-label">{t("price")}</label>
@@ -219,6 +263,7 @@ function EditAd() {
                   min={1}
                 />
               </div>
+              {errors.price && <span className="error">{errors.price}</span>}
 
               <div className="edit-ad-desc">
                 <label className="edit-ad-label">{t("description")}</label>
@@ -231,6 +276,7 @@ function EditAd() {
                   required
                 ></textarea>
               </div>
+              {errors.desc && <span className="error">{errors.desc}</span>}
 
               <div className="edit-ad-mobile">
                 <label className="edit-ad-label">{t("phone")}</label>
@@ -242,6 +288,7 @@ function EditAd() {
                   required
                 />
               </div>
+              {errors.phone && <span className="error">{errors.phone}</span>}
 
               <div className="edit-ad-address">
                 <label className="edit-ad-label">{t("address")}</label>
@@ -261,6 +308,9 @@ function EditAd() {
                       </option>
                     ))}
                   </select>
+                  {errors.province && (
+                    <span className="error">{errors.province}</span>
+                  )}
 
                   <select
                     className="select-ad-city"
@@ -281,6 +331,7 @@ function EditAd() {
                         </option>
                       ))}
                   </select>
+                  {errors.city && <span className="error">{errors.city}</span>}
                 </div>
               </div>
 
@@ -328,7 +379,11 @@ function EditAd() {
                 >
                   <input {...getInputProps()} />
                 </div>
+                {errors.photos && (
+                  <span className="error">{errors.photos}</span>
+                )}
               </div>
+
               <div className="edit-ad-btns">
                 <button type="submit" className="edit-ad-form-btn">
                   {t("edit")}

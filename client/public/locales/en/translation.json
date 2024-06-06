@@ -119,5 +119,13 @@
     "all_ads_from_seller": "All ads from ",
     "rejection_reason": "Rejection Reason:",
     "user_settings_title": "Profile Settings",
-    "user_settings_bio": "add bio"
+    "user_settings_bio": "add bio",
+    "title_validation": "Title must be between 3 and 200 words.",
+    "desc_validation": "Description must be between 3 and 5000 words.",
+    "phone_validation": "Please enter a valid Egyptian phone number (starting with 010, 011, 012, or 015).",
+    "photos_validation": "Please upload between 1 and 10 photos.",
+    "equipments": "Equipments",
+    "chargers": "Chargers",
+    "batteries": "Batteries",
+    "parts": "Parts"
 }

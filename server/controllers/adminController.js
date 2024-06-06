@@ -42,7 +42,7 @@ module.exports.getAdminAdsCountCtrl = asyncHandler(async (req, res, next) => {
   try {
     const adStatus = await AdStatus.findOne({ value: req.query.adStatus });
 
-    const adsCount = await Ad.find({ adStatus }).count();
+    const adsCount = await Ad.find({ adStatus: adStatus._id }).count();
 
     res.status(200).json({ count: adsCount });
   } catch (error) {

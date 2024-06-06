@@ -1,22 +1,15 @@
 import { toast } from "sonner";
 import { adminActions } from "../slices/adminSlice";
-import request from "../../utils/request";
-import { refreshToken } from "./authApiCall";
+import { apiRequest } from "../../utils/apiRequest";
 
 // api/v1/admin/ads
 export function adminFetchAds(adStatus) {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
     try {
       dispatch(adminActions.setLoading());
-      const { data } = await request.get(
+      const { data } = await apiRequest(
         `/api/v1/admin/ads?adStatus=${adStatus}`,
-        {
-          headers: {
-            Authorization: "Bearer " + getState().auth.user.token,
-            Cookie: document.i18next,
-          },
-          withCredentials: true,
-        }
+        "GET"
       );
 
       if (adStatus === "published") {
@@ -32,31 +25,19 @@ export function adminFetchAds(adStatus) {
       dispatch(adminActions.clearLoading());
     } catch (error) {
       console.log(error);
-      if (error?.response?.status === 401) {
-        await dispatch(refreshToken());
-        await dispatch(adminFetchAds(adStatus));
-        return;
-      } else {
-        toast.error(error.response.data.message);
-        dispatch(adminActions.clearLoading());
-      }
+      toast.error(error.response.data.message);
+      dispatch(adminActions.clearLoading());
     }
   };
 }
 
 // api/v1/admin/ads/count
 export function adminfetchAdsCount(adStatus) {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
     try {
-      const { data } = await request.get(
+      const { data } = await apiRequest(
         `/api/v1/admin/ads/count?adStatus=${adStatus}`,
-        {
-          headers: {
-            Authorization: "Bearer " + getState().auth.user.token,
-            Cookie: document.i18next,
-          },
-          withCredentials: true,
-        }
+        "GET"
       );
 
       if (adStatus === "published") {
@@ -68,45 +49,24 @@ export function adminfetchAdsCount(adStatus) {
       }
     } catch (error) {
       console.log(error);
-      if (error?.response?.status === 401) {
-        await dispatch(refreshToken());
-        await dispatch(adminfetchAdsCount(adStatus));
-        return;
-      } else {
-        toast.error(error.response.data.message);
-      }
+      toast.error(error.response.data.message);
     }
   };
 }
 
 // api/v1/admin/ads/:adId
 export function adminAcceptRefuseAd(adId, adStatus, rejectionReason = "") {
-  return async (dispatch, getState) => {
+  return async () => {
     try {
-      const { data } = await request.put(
-        `/api/v1/admin/ads/${adId}`,
-        {
-          adStatus,
-          rejectionReason,
-        },
-        {
-          headers: {
-            Authorization: "Bearer " + getState().auth.user.token,
-            Cookie: document.i18next,
-          },
-          withCredentials: true,
-        }
-      );
+      const { data } = await apiRequest(`/api/v1/admin/ads/${adId}`, "PUT", {
+        adStatus,
+        rejectionReason,
+      });
+
       toast.success(data.message);
     } catch (error) {
       console.log(error);
-      if (error?.response?.status === 401) {
-        await dispatch(refreshToken());
-        await dispatch(adminAcceptRefuseAd(adId, adStatus));
-        return;
-      } else {
-        toast.error(error.response.data.message);
-      }
+      toast.error(error.response.data.message);
     }
   };
 }

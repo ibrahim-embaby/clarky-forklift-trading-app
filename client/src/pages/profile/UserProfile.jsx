@@ -43,7 +43,7 @@ function Profile() {
         dispatch(fetchMyAds(id, publishedStatus._id, 1));
       }
     }
-  }, [adStatuses, id]);
+  }, [adStatuses.length, id]);
 
   const handleFilter = (adStatus) => {
     setPage(1);

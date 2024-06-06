@@ -1,76 +1,45 @@
 import { toast } from "sonner";
-import request from "../../utils/request";
 import { profileActions } from "../slices/profileSlice";
-import { refreshToken } from "./authApiCall";
 import axios from "axios";
 import { authActions } from "../slices/authSlice";
+import { apiRequest } from "../../utils/apiRequest";
 
 // get user profile
 export function fetchUserProfile(id) {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
     try {
-      const { data } = await request.get(`/api/v1/user/profile/${id}`, {
-        headers: {
-          Authorization: "Bearer " + getState().auth.user.token,
-          Cookie: document.cookie.i18next,
-        },
-        withCredentials: true,
-      });
+      const { data } = await apiRequest(`/api/v1/user/profile/${id}`, "GET");
+
       dispatch(profileActions.setProfile(data));
     } catch (error) {
       console.log(error);
-      if (error?.response?.status === 401) {
-        await dispatch(refreshToken());
-        await dispatch(fetchUserProfile(id));
-        return;
-      } else {
-        console.log(error);
-        toast.error(error.response.data.message);
-      }
+      toast.error(error.response.data.message);
     }
   };
 }
 
 // fetch all users
 export function fetchAllUsers() {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
     try {
-      const { data } = await request.get("api/v1/user/", {
-        headers: {
-          Authorization: "Bearer " + getState().auth.user.token,
-          Cookie: document.cookie.i18next,
-        },
-        withCredentials: true,
-      });
+      const { data } = await apiRequest("/api/v1/user/", "GET");
+
       dispatch(profileActions.setUsers(data));
     } catch (error) {
       console.log(error);
-      if (error?.response?.status === 401) {
-        await dispatch(refreshToken());
-        await dispatch(fetchAllUsers());
-        return;
-      } else {
-        console.log(error);
-        toast.error(error.response.data.message);
-      }
+      toast.error(error.response.data.message);
     }
   };
 }
 
 // /api/v1/user/:useId/ads/
 export function fetchMyAds(userId, adStatus, page) {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
     try {
       dispatch(profileActions.setLoading());
-      const { data } = await request.get(
+      const { data } = await apiRequest(
         `/api/v1/user/${userId}/profile/ads?adStatus=${adStatus}&page=${page}`,
-        {
-          headers: {
-            Authorization: "Bearer " + getState().auth.user.token,
-            Cookie: document.i18next,
-          },
-          withCredentials: true,
-        }
+        "GET"
       );
 
       dispatch(profileActions.setUserAds(data.ads));
@@ -78,15 +47,7 @@ export function fetchMyAds(userId, adStatus, page) {
       dispatch(profileActions.clearLoading());
     } catch (error) {
       console.log(error);
-      if (error?.response?.status === 401) {
-        await dispatch(refreshToken());
-        await dispatch(fetchMyAds(userId, adStatus, page));
-        return;
-      } else {
-        console.log(error);
-        toast.error(error.response.data.message);
-        dispatch(profileActions.clearLoading());
-      }
+      toast.error("some error happend");
     }
   };
 }
@@ -96,78 +57,46 @@ export function fetchMyAd(adId) {
   return async (dispatch, getState) => {
     try {
       dispatch(profileActions.setLoading());
-      const { data } = await request.get(
+      const { data } = await apiRequest(
         `/api/v1/user/${getState().auth.user.id}/profile/ads/${adId}`,
-        {
-          headers: {
-            Authorization: "Bearer " + getState().auth.user.token,
-            Cookie: document.i18next,
-          },
-          withCredentials: true,
-        }
+        "GET"
       );
 
       dispatch(profileActions.setUserAd(data.data));
       dispatch(profileActions.clearLoading());
     } catch (error) {
       console.log(error);
-      if (error?.response?.status === 401) {
-        await dispatch(refreshToken());
-        await dispatch(fetchMyAd(adId));
-        return;
-      } else {
-        console.log(error);
-        toast.error(error.response.data.message);
-        dispatch(profileActions.clearLoading());
-      }
+      toast.error(error.response.data.message);
+      dispatch(profileActions.clearLoading());
     }
   };
 }
 
 // delete single user
 export function deleteUser(id) {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
     try {
-      const { data } = await request.delete(`/api/v1/user/profile/${id}`, {
-        headers: {
-          Authorization: "Bearer " + getState().auth.user.token,
-          Cookie: document.cookie.i18next,
-        },
-        withCredentials: true,
-      });
+      const { data } = await apiRequest(`/api/v1/user/profile/${id}`, "DELETE");
 
       dispatch(profileActions.clearUser(id));
       toast.success(data.message);
     } catch (error) {
       console.log(error);
-      if (error?.response?.status === 401) {
-        await dispatch(refreshToken());
-        await dispatch(deleteUser(id));
-        return;
-      } else {
-        console.log(error);
-        toast.error(error.response.data.message);
-      }
+      toast.error(error.response.data.message);
     }
   };
 }
 
 // update user profile
 export function updateUserProfile(userInfo, profilePhotoData = new FormData()) {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
     try {
       if (profilePhotoData.get("profilePhoto")) {
-        const { data: uploadConfig } = await request.post(
+        const { data: uploadConfig } = await apiRequest(
           "/api/v1/upload",
+          "POST",
           {
             count: 1,
-          },
-          {
-            headers: {
-              Authorization: "Bearer " + getState().auth.user.token,
-              Cookie: document.cookie.i18next,
-            },
-            withCredentials: true,
           }
         );
 
@@ -187,26 +116,19 @@ export function updateUserProfile(userInfo, profilePhotoData = new FormData()) {
             uploadConfig[0].key,
         };
       }
-      const { data } = await request.put("/api/v1/user/profile/", userInfo, {
-        headers: {
-          Authorization: "Bearer " + getState().auth.user.token,
-          Cookie: document.cookie.i18next,
-        },
-        withCredentials: true,
-      });
+
+      const { data } = await apiRequest(
+        "/api/v1/user/profile/",
+        "PUT",
+        userInfo
+      );
+
       dispatch(profileActions.setProfile(data.data));
       dispatch(authActions.setUser(data.data));
       toast.success(data.message);
     } catch (error) {
       console.log(error);
-      if (error?.response?.status === 401) {
-        await dispatch(refreshToken());
-        await dispatch(updateUserProfile(userInfo, profilePhotoData));
-        return;
-      } else {
-        console.log(error);
-        toast.error(error.response.data.message);
-      }
+      toast.error(error.response.data.message);
     }
   };
 }

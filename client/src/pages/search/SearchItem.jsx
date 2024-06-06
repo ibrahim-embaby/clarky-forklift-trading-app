@@ -1,35 +1,29 @@
 import { Link } from "react-router-dom";
 import formatTime from "../../utils/formatTime";
 import { useTranslation } from "react-i18next";
-// import limitText from "../../utils/limitText";
-// import PersonIcon from "@mui/icons-material/Person";
-// import CarRepairIcon from "@mui/icons-material/CarRepair";
-// import LocationOnIcon from "@mui/icons-material/LocationOn";
+import limitText from "../../utils/limitText";
 
 function SearchItem({ item }) {
   const { t, i18n } = useTranslation();
   return (
     <Link to={`/ads/${item?._id}`} className="search-item">
       <div
-        className="info-wrapper"
+        className="search-item-card"
         style={{ direction: i18n.language === "ar" ? "rtl" : "ltr" }}
       >
         <div className="search-item-img-wrapper">
-          <img src={item?.photos[0]} alt="" className="search-item-img" />
+          <img
+            src={item?.photos[0]}
+            alt={item.title}
+            className="search-item-img"
+          />
         </div>
-
-        <div className="info-items">
-          {/* <div className="info-item-wrapper">
-            <PersonIcon sx={{ color: "#aaa" }} />
-            {limitText(item.username, 10)}
-          </div> */}
+        <div className="search-item-info">
           <p className="search-item-price">
             {item.price} {t("price_sign")}
           </p>
-          <div className="search-item-title">
-            <span>{item.title}</span>
-          </div>
-          <div className="search-item-bottm">
+          <h3 className="search-item-title">{limitText(item.title, 30)}</h3>
+          <div className="search-item-bottom">
             <p className="search-item-address">
               {item.province.label[i18n.language]} -{" "}
               {item.city.label[i18n.language]}

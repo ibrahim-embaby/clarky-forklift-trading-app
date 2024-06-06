@@ -2,7 +2,6 @@
   --main-color: #efefef;
   --lighted-primary-color: #fd0000;
   --primary-color: #fd0000; /*#1b1c1f*/ /*# fe5e50*/
-  /* --primary-color: #2181ef; */
   --primary-color-light: #fe4d4d;
   --secondary-color: #495e74;
   --gray-color: #778697;
@@ -52,6 +51,10 @@ code {
   padding: 20px;
 }
 
+.error {
+  font-size: 11px;
+  color: var(--red-color);
+}
 /* Scrollbar Classes For Google Chrome */
 /* html::-webkit-scrollbar {
   width: 10px;

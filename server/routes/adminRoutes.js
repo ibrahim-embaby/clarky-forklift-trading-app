@@ -7,10 +7,7 @@ const {
 const { verifyTokenAndAdmin } = require("../middlewares/verifyToken");
 
 // /api/v1/admin/ads
-router
-  .route("/ads")
-  .get(verifyTokenAndAdmin, getAdminAdsCtrl)
-  .put(verifyTokenAndAdmin, adminAcceptRefuseAdCtrl);
+router.route("/ads").get(verifyTokenAndAdmin, getAdminAdsCtrl);
 
 // /api/v1/admin/ads/count
 router.route("/ads/count").get(verifyTokenAndAdmin, getAdminAdsCountCtrl);

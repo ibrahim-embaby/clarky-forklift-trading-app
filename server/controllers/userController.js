@@ -138,7 +138,7 @@ module.exports.updateUserCtrl = asyncHandler(async (req, res, next) => {
       return next(new ErrorResponse(req.t("user_not_found"), 404));
     }
 
-    if (req.body.profilePhoto) {
+    if (req.body.profilePhoto && user?.profilePhoto?.key) {
       await s3
         .deleteObject({
           Bucket: process.env.AWS_S3_BUCKET_NAME,

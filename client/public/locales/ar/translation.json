@@ -141,5 +141,13 @@
     "all_ads_from_seller": "جميع الإعلانات من ",
     "rejection_reason": "سبب الرفض:",
     "user_settings_title": "إعدادات الملف الشخصي",
-    "user_settings_bio": "أضف وصف"
+    "user_settings_bio": "أضف وصف",
+    "title_validation": "يجب أن يكون العنوان بين 3 و 200 كلمة.",
+    "desc_validation": "يجب أن يكون الوصف بين 3 و 5000 كلمة.",
+    "phone_validation": "يرجى إدخال رقم هاتف مصري صالح (يبدأ بـ 010 أو 011 أو 012 أو 015).",
+    "photos_validation": "يرجى تحميل ما بين 1 و 10 صور.",
+    "equipments": "المعدات",
+    "chargers": "الشواحن",
+    "batteries": "البطاريات",
+    "parts": "قطع الغيار"
 }

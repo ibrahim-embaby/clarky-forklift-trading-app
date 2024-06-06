@@ -4,25 +4,20 @@ import { adActions } from "../slices/adSlice";
 import axios from "axios";
 import { refreshToken } from "./authApiCall";
 import { profileActions } from "../slices/profileSlice";
+import { apiRequest } from "../../utils/apiRequest";
 
 // /api/v1/posts/
 export function createAd(ad) {
-  return async (dispatch, getState) => {
+  return async () => {
     try {
       const { photos } = ad;
 
       // Request presigned URLs for multiple photos
-      const { data: uploadConfigs } = await request.post(
+      const { data: uploadConfigs } = await apiRequest(
         "/api/v1/upload",
+        "POST",
         {
           count: photos.length,
-        },
-        {
-          headers: {
-            Authorization: "Bearer " + getState().auth.user.token,
-            Cookie: document.cookie.i18next,
-          },
-          withCredentials: true,
         }
       );
 
@@ -44,25 +39,12 @@ export function createAd(ad) {
       const adWithImages = { ...ad, photos: photoUrls };
 
       // Assuming you have an API endpoint to create an ad
-      const { data } = await request.post("/api/v1/ads", adWithImages, {
-        headers: {
-          Authorization: "Bearer " + getState().auth.user.token,
-          Cookie: document.cookie.i18next,
-        },
-        withCredentials: true,
-      });
+      const { data } = await apiRequest("/api/v1/ads", "POST", adWithImages);
 
       toast.success(data.message);
     } catch (error) {
       console.log(error);
-      if (error?.response?.status === 401) {
-        await dispatch(refreshToken());
-        await dispatch(createAd(ad));
-        return;
-      } else {
-        console.log(error);
-        toast.error(error.response.data.message);
-      }
+      toast.error(error.response.data.message);
     }
   };
 }
@@ -141,25 +123,20 @@ async function uploadPhotos(files, uploadConfigs) {
 
 // /api/v1/ads/:adId
 export function updateAd(adId, newAd) {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
     try {
       dispatch(adActions.setAdLoading());
       let newPhotoUrls = [];
 
       if (newAd.newFiles.length >= 1) {
-        const { data: uploadConfigs } = await request.post(
+        const { data: uploadConfigs } = await apiRequest(
           "/api/v1/upload",
+          "POST",
           {
             count: newAd.newFiles.length,
-          },
-          {
-            headers: {
-              Authorization: "Bearer " + getState().auth.user.token,
-              Cookie: document.cookie.i18next,
-            },
-            withCredentials: true,
           }
         );
+
         // Upload new photos to S3
         newPhotoUrls = await uploadPhotos(newAd.newFiles, uploadConfigs);
       }
@@ -173,15 +150,10 @@ export function updateAd(adId, newAd) {
       delete finalAdPayload.newFiles;
       delete finalAdPayload.existingFileUrls;
 
-      const { data } = await request.put(
+      const { data } = await apiRequest(
         `/api/v1/ads/${adId}`,
-        finalAdPayload,
-        {
-          headers: {
-            Authorization: "Bearer " + getState().auth.user.token,
-          },
-          withCredentials: true,
-        }
+        "PUT",
+        finalAdPayload
       );
 
       dispatch(adActions.updateAd(data.data));
@@ -189,47 +161,30 @@ export function updateAd(adId, newAd) {
       toast.success(data.message);
     } catch (error) {
       console.log(error);
-      if (error?.response?.status === 401) {
-        await dispatch(refreshToken());
-        await dispatch(updateAd(adId, newAd));
-      } else {
-        console.log(error);
-        toast.error(error.response.data.message);
-        dispatch(adActions.clearAdLoading());
-      }
+      toast.error(error.response.data.message);
+      dispatch(adActions.clearAdLoading());
     }
   };
 }
 
-// /api/posts/:postId
+// /api/v1/ads/:adId
 export function deleteAd(adId) {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
     try {
       dispatch(adActions.setAdLoading());
       dispatch(profileActions.setLoading());
-      const { data } = await request.delete(`/api/v1/ads/${adId}`, {
-        headers: {
-          Authorization: "Bearer " + getState().auth.user.token,
-          Cookie: document.i18next,
-        },
-        withCredentials: true,
-      });
+      const { data } = await apiRequest(`/api/v1/ads/${adId}`, "DELETE");
+
       dispatch(adActions.removeAdFromAds(data.data._id));
       dispatch(profileActions.removeUserAdFromAds(data.data._id));
       dispatch(adActions.clearAdLoading());
       dispatch(profileActions.clearLoading());
       toast.success(data.message);
     } catch (error) {
-      if (error?.response?.status === 401) {
-        await dispatch(refreshToken());
-        await dispatch(deleteAd(adId));
-        return;
-      } else {
-        console.log(error);
-        toast.error(error.response.data.message);
-        dispatch(adActions.clearAdLoading());
-        dispatch(profileActions.clearLoading());
-      }
+      console.log(error);
+      toast.error(error.response.data.message);
+      dispatch(adActions.clearAdLoading());
+      dispatch(profileActions.clearLoading());
     }
   };
 }
@@ -255,7 +210,7 @@ export function getAd(adId) {
       console.log(error);
       if (user) {
         if (error?.response?.status === 401) {
-          await dispatch(refreshToken()); // Refresh token if necessary
+          await dispatch(refreshToken());
           await dispatch(getAd(adId));
           return;
         } else {
@@ -265,83 +220,6 @@ export function getAd(adId) {
         toast.error("يرجي اعادة المحاولة لاحقا");
       }
       dispatch(adActions.clearAdLoading());
-    }
-  };
-}
-
-// /api/posts/:postId/like
-export function likePost(postId) {
-  return async (dispatch, getState) => {
-    try {
-      const { data } = await request.put(`/api/posts/${postId}/like`, null, {
-        headers: {
-          Authorization: "Bearer " + getState().auth.user.token,
-          Cookie: document.i18next,
-        },
-        withCredentials: true,
-      });
-      dispatch(adActions.likePost(data.data));
-    } catch (error) {
-      console.log(error);
-      toast.error(error.response.data.message);
-    }
-  };
-}
-
-// /api/posts/:postId/like
-export function unlikePost(postId) {
-  return async (dispatch, getState) => {
-    try {
-      const { data } = await request.put(`/api/posts/${postId}/unlike`, null, {
-        headers: {
-          Authorization: "Bearer " + getState().auth.user.token,
-          Cookie: document.i18next,
-        },
-        withCredentials: true,
-      });
-      dispatch(adActions.unlikePost(data.data));
-    } catch (error) {
-      toast.error(error.response.data.message);
-    }
-  };
-}
-
-// /api/mechanic/:id/photo
-export function uploadAdPhotos(id, photos) {
-  return async (dispatch, getState) => {
-    try {
-      const uploadConfig = await request.get("/api/v1/upload", {
-        headers: {
-          Authorization: "Bearer " + getState().auth.user.token,
-          Cookie: document.cookie.i18next,
-        },
-        withCredentials: true,
-      });
-
-      const uploadPromises = photos.map((photo) => {
-        return axios.put(uploadConfig.data.url, photo, {
-          headers: {
-            "Content-Type": photo.type,
-          },
-        });
-      });
-
-      await Promise.all(uploadPromises);
-
-      const photoUrls = photos.map(
-        (photo) => `${uploadConfig.data.url}/${photo.name}`
-      );
-
-      return photoUrls;
-    } catch (error) {
-      if (error.response.status === 401) {
-        await dispatch(refreshToken());
-        await dispatch(uploadAdPhotos(photos));
-        return;
-      } else {
-        console.log(error);
-        toast.error(error.response.data.message);
-      }
     }
   };
 }
