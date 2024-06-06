@@ -143,6 +143,11 @@
   gap: 10px;
 }
 
+.register-form-group-input-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
 .form-input {
   padding: 12px;
   border-radius: 4px;

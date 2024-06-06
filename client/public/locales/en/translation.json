@@ -127,5 +127,8 @@
     "equipments": "Equipments",
     "chargers": "Chargers",
     "batteries": "Batteries",
-    "parts": "Parts"
+    "parts": "Parts",
+    "username_required": "username required",
+    "email_required": "email required",
+    "password_required" :"password required"
 }

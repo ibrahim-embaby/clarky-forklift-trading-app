@@ -1,7 +1,6 @@
 import { useDispatch } from "react-redux";
 import { registerUser } from "../../redux/apiCalls/authApiCall";
 import { useState } from "react";
-import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import "./forms.css";
 
@@ -15,15 +14,24 @@ function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [mobile, setMobile] = useState("");
+  const [errors, setErrors] = useState({});
+
+  const validateForm = () => {
+    const errors = {};
+
+    if (!username.trim()) errors.username = t("username_required");
+    if (!email.trim()) errors.email = t("email_required");
+    if (!mobile || !/^(010|011|012|015)\d{8}$/.test(mobile))
+      errors.mobile = t("phone_validation");
+    if (!password.trim()) errors.password = t("password_required");
+
+    setErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
 
   const registerFormHandler = (e) => {
     e.preventDefault();
-    if (username.trim() === "") return toast.error("username is empty");
-    if (email.trim() === "") return toast.error("email is empty");
-    if (mobile.trim() === "") return toast.error("mobile is empty");
-    if (mobile.length < 11)
-      return toast.error("mobile should be at least 11 characters");
-    if (password.trim() === "") return toast.error("password is empty");
+    if (!validateForm()) return;
 
     dispatch(registerUser({ email, mobile, password, username }));
 
@@ -31,6 +39,7 @@ function Register() {
     setEmail("");
     setMobile("");
     setPassword("");
+    setErrors({});
   };
 
   return (
@@ -43,41 +52,61 @@ function Register() {
           <form className="register-form" onSubmit={registerFormHandler}>
             <div className="form-group">
               <div className="form-group-inputs">
-                <label htmlFor="username">{t("register_name")}</label>
-                <input
-                  type="text"
-                  id="username"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  className="form-input"
-                />
+                <div className="register-form-group-input-wrapper">
+                  <label htmlFor="username">{t("register_name")}</label>
+                  <input
+                    type="text"
+                    id="username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    className="form-input"
+                  />
+                  {errors.username && (
+                    <span className="error">{errors.username}</span>
+                  )}
+                </div>
 
-                <label htmlFor="email">{t("email")}</label>
-                <input
-                  type="email"
-                  id="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="form-input"
-                />
+                <div className="register-form-group-input-wrapper">
+                  <label htmlFor="email">{t("email")}</label>
+                  <input
+                    type="email"
+                    id="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="form-input"
+                  />
+                  {errors.email && (
+                    <span className="error">{errors.email}</span>
+                  )}
+                </div>
 
-                <label htmlFor="mobile">{t("register_mobile")}</label>
-                <input
-                  type="text"
-                  id="mobile"
-                  value={mobile}
-                  onChange={(e) => setMobile(e.target.value)}
-                  className="form-input"
-                />
+                <div className="register-form-group-input-wrapper">
+                  <label htmlFor="mobile">{t("register_mobile")}</label>
+                  <input
+                    type="text"
+                    id="mobile"
+                    value={mobile}
+                    onChange={(e) => setMobile(e.target.value)}
+                    className="form-input"
+                  />
+                  {errors.mobile && (
+                    <span className="error">{errors.mobile}</span>
+                  )}
+                </div>
 
-                <label htmlFor="password">{t("password")}</label>
-                <input
-                  type="password"
-                  id="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="form-input"
-                />
+                <div className="register-form-group-input-wrapper">
+                  <label htmlFor="password">{t("password")}</label>
+                  <input
+                    type="password"
+                    id="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="form-input"
+                  />
+                  {errors.password && (
+                    <span className="error">{errors.password}</span>
+                  )}
+                </div>
               </div>
             </div>
 

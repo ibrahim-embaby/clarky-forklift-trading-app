@@ -149,5 +149,8 @@
     "equipments": "المعدات",
     "chargers": "الشواحن",
     "batteries": "البطاريات",
-    "parts": "قطع الغيار"
+    "parts": "قطع الغيار",
+    "username_required": "برجاء كتابة الاسم",
+    "email_required": "برجاء كتابة البريد الإلكتروني",
+    "password_required" :"برجاء كتابة كلمة المرور"
 }

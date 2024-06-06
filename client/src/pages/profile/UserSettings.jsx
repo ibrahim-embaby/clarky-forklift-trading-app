@@ -122,7 +122,7 @@ function UserProfileSettings() {
               name="bio"
               value={formData.bio}
               onChange={handleInputChange}
-              className="form-input"
+              className="form-input form-bio"
             />
           </div>
 
