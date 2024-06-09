@@ -10,7 +10,7 @@ Clarky is an app for forklift trading.
 
 ![reactjs](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)&nbsp;
 ![react-router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white)&nbsp;
-![redux-toolkit](https://img.shields.io/badge/Redux-593D88?style=for-the-badge&logo=redux&logoColor=white)&nbsp;
+![redux-toolkit](https://img.shields.io/badge/Redux_Toolkit-593D88?style=for-the-badge&logo=redux&logoColor=white)&nbsp;
 ![mui](https://img.shields.io/badge/Material--Icons-0081CB?style=for-the-badge&logo=material-ui&logoColor=white)&nbsp;
 
 **Backend:**
@@ -19,6 +19,7 @@ Clarky is an app for forklift trading.
 ![expressjs](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)&nbsp;
 ![mongodb](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)&nbsp;
 ![jwt](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=JSON%20web%20tokens&logoColor=white)&nbsp;
+![S3](https://img.shields.io/badge/Amazon_S3-569a31?style=for-the-badge&logo=amazons3&logoColor=white)&nbsp;
 
 <!-- **Deployed On:**
 
