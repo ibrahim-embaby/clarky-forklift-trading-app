@@ -31,13 +31,13 @@ Clarky is an app for forklift trading.
 - ✅ Search Results Pagination
 - ✅ View ad details
 - ✅ Create ad and send it for review
+- ✅ Update ad
+- ✅ Update profile/password
 - ✅ Multilingual (Arabic/English)
 
 ## ⌛ Upcoming Features
 
 - 🚧 User notfications
-- 🚧 Update ad
-- 🚧 Update profile/password
 - 🚧 Sorting search results
 - 🚧 Admin dashboard
 
@@ -47,11 +47,13 @@ Clarky is an app for forklift trading.
 
 <table>
   <tr>
-    <td><img src="images/img-3.png" alt="mockups" /></td>
+    <td><img src="images/img-2.png" alt="mockups" /></td>
+    <td><img src="images/img-3.png" alt="mockup" /></td>
     <td><img src="images/img-4.png" alt="mockup" /></td>
   </tr>
    <tr>
-    <td><img src="images/img-2.png" alt="mockup" /></td>
+    <td><img src="images/img-5.png" alt="mockup" /></td>
+    <td><img src="images/img-6.png" alt="mockup" /></td>
   </tr>
 </table>
 
