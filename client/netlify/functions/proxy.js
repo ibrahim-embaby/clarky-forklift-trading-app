@@ -6,7 +6,9 @@ exports.handler = async function (event, context) {
     // Build the complete URL for the backend request
     const backendUrl = `http://clarky.eu-north-1.elasticbeanstalk.com${backendPath}`;
 
-    console.log("backendUrl", backendUrl);
+    // Log the constructed backend URL for debugging
+    console.log("Backend URL:", backendUrl);
+
     // Prepare headers for the request to the backend
     const headers = {
       ...event.headers,
@@ -26,22 +28,25 @@ exports.handler = async function (event, context) {
     });
 
     // Extract cookies from the backend response
-    const responseCookies = response.headers.raw()["set-cookie"];
-    const responseData = await response.text(); // Use text() if the response is not JSON
+    const responseHeaders = Object.fromEntries(response.headers.entries());
+    const responseCookies = responseHeaders["set-cookie"] || [];
 
     // Prepare headers for the response from the Netlify function
-    const responseHeaders = {
+    const netlifyResponseHeaders = {
       "Content-Type": "application/json",
     };
 
     // Include cookies in the response headers if they exist
-    if (responseCookies) {
-      responseHeaders["set-cookie"] = responseCookies;
+    if (responseCookies.length > 0) {
+      netlifyResponseHeaders["Set-Cookie"] = responseCookies;
     }
+
+    // Extract the response data
+    const responseData = await response.text(); // Use text() if the response is not JSON
 
     return {
       statusCode: response.status,
-      headers: responseHeaders,
+      headers: netlifyResponseHeaders,
       body: responseData,
     };
   } catch (error) {
