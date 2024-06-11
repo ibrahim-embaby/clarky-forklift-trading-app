@@ -6,6 +6,7 @@ exports.handler = async function (event, context) {
     // Build the complete URL for the backend request
     const backendUrl = `http://clarky.eu-north-1.elasticbeanstalk.com${backendPath}`;
 
+    console.log("backendUrl", backendUrl);
     // Prepare headers for the request to the backend
     const headers = {
       ...event.headers,
