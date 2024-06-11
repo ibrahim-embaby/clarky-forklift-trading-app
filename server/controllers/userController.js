@@ -45,20 +45,12 @@ module.exports.getMyAdsCtrl = asyncHandler(async (req, res, next) => {
     const skip = (currentPage - 1) * pageSize;
     let count;
 
-    const publishedStatus = await AdStatus.findOne({ value: "published" });
-    if (
-      adStatus !== publishedStatus._id.toString() &&
-      req.user.id !== req.params.userId
-    ) {
-      return next(new ErrorResponse(req.t("forbidden"), 400));
-    }
-
-    const ads = await Ad.find({ userId: req.params.userId, adStatus })
+    const ads = await Ad.find({ userId: req.user.id, adStatus })
       .populate("province city")
       .skip(skip)
       .limit(pageSize);
 
-    count = await Ad.countDocuments({ userId: req.params.userId, adStatus });
+    count = await Ad.countDocuments({ userId: req.user.id, adStatus });
     res.status(200).json({ ads, count });
   } catch (error) {
     next(error);
