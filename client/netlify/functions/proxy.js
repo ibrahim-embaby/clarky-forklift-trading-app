@@ -1,5 +1,3 @@
-const fetch = require("node-fetch");
-
 exports.handler = async function (event, context) {
   const response = await fetch(
     "http://clarky.eu-north-1.elasticbeanstalk.com" + event.path,
