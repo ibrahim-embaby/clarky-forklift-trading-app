@@ -2,7 +2,7 @@ exports.handler = async function (event, context) {
   try {
     // Extract the path that should be forwarded to the backend
     const backendPath = event.path.replace("/.netlify/functions/proxy", "");
-
+    console.log("event === ", event);
     // Build the complete URL for the backend request
     const backendUrl = `http://clarky.eu-north-1.elasticbeanstalk.com${backendPath}`;
 
