@@ -6,3 +6,8 @@
   path = "/ads/*"
   function = "ad-preview"
   
+[[redirects]]
+  from = "/api/*"
+  to = "http://clarky.eu-north-1.elasticbeanstalk.com/:splat"
+  status = 200
+  force = true
