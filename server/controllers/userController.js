@@ -1,9 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const { User, validateUpdateUser } = require("../models/User");
-const bcrypt = require("bcrypt");
 const { Ad } = require("../models/Ad");
 const ErrorResponse = require("../utils/ErrorResponse");
-const { AdStatus } = require("../models/AdStatus");
 const S3 = require("aws-sdk/clients/s3");
 const s3 = new S3({
   region: process.env.AWS_S3_BUCKET_REGION,
@@ -102,14 +100,53 @@ module.exports.getUsersCtrl = asyncHandler(async (req, res) => {
  */
 module.exports.deleteUserCtrl = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const user = await User.findById(id);
-  if (!user) {
-    return res.status(404).json({ message: req.t("user_not_found") });
-  }
-  await User.findByIdAndDelete(id);
-  await Ad.deleteMany({ userId: id });
 
-  res.status(200).json({ message: req.t("user_deleted") });
+  try {
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: req.t("user_not_found") });
+    }
+
+    // Collect keys to delete from S3
+    const objectsToDelete = [];
+
+    if (user.profilePhoto?.key) {
+      objectsToDelete.push({ Key: user.profilePhoto.key });
+    }
+
+    const userAds = await Ad.find({ userId: id });
+    userAds.forEach((ad) => {
+      const adPhotoKeys = ad.photos.map((photoUrl) => {
+        const key = photoUrl.split(".com/")[1];
+        return { Key: key };
+      });
+      objectsToDelete.push(...adPhotoKeys);
+    });
+
+    // Delete S3 objects if there are any
+    if (objectsToDelete.length > 0) {
+      await s3
+        .deleteObjects({
+          Bucket: process.env.AWS_S3_BUCKET_NAME,
+          Delete: {
+            Objects: objectsToDelete,
+            Quiet: false,
+          },
+        })
+        .promise();
+    }
+
+    // Delete ads
+    await Ad.deleteMany({ userId: id });
+
+    // Delete user
+    await User.findByIdAndDelete(id);
+
+    res.status(200).json({ message: req.t("user_deleted") });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: req.t("server_error") });
+  }
 });
 
 /**
@@ -130,7 +167,7 @@ module.exports.updateUserCtrl = asyncHandler(async (req, res, next) => {
       return next(new ErrorResponse(req.t("user_not_found"), 404));
     }
 
-    if (req.body.profilePhoto && user?.profilePhoto?.key) {
+    if (req.body.profilePhoto && user.profilePhoto?.key) {
       await s3
         .deleteObject({
           Bucket: process.env.AWS_S3_BUCKET_NAME,
