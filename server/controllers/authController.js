@@ -451,7 +451,7 @@ module.exports.resetPasswordCtrl = asyncHandler(async (req, res, next) => {
  * @method GET
  * @access private (only user him self)
  */
-module.exports.getCurrentUser = asyncHandler(async (req, res, next) => {
+module.exports.getCurrentUserCtrl = asyncHandler(async (req, res, next) => {
   try {
     const user = await User.findById(req.user.id);
     if (!user) {

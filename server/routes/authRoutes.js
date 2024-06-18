@@ -10,7 +10,7 @@ const {
   signoutCtrl,
   createOtpCtrl,
   verifyOtpCtrl,
-  getCurrentUser,
+  getCurrentUserCtrl,
 } = require("../controllers/authController");
 
 // /api/auth/register
@@ -44,6 +44,6 @@ router.post("/otp", createOtpCtrl);
 router.post("/verify-otp", verifyOtpCtrl);
 
 // /api/auth/me
-router.get("/me", getCurrentUser);
+router.get("/me", getCurrentUserCtrl);
 
 module.exports = router;
