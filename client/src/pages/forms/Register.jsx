@@ -53,7 +53,7 @@ function Register() {
             <div className="form-group">
               <div className="form-group-inputs">
                 <div className="register-form-group-input-wrapper">
-                  <label htmlFor="username">{t("register_name")}</label>
+                  <label htmlFor="username">{t("register_name")}*</label>
                   <input
                     type="text"
                     id="username"
@@ -67,7 +67,7 @@ function Register() {
                 </div>
 
                 <div className="register-form-group-input-wrapper">
-                  <label htmlFor="email">{t("email")}</label>
+                  <label htmlFor="email">{t("email")}*</label>
                   <input
                     type="email"
                     id="email"
@@ -81,7 +81,7 @@ function Register() {
                 </div>
 
                 <div className="register-form-group-input-wrapper">
-                  <label htmlFor="mobile">{t("register_mobile")}</label>
+                  <label htmlFor="mobile">{t("register_mobile")}*</label>
                   <input
                     type="text"
                     id="mobile"
@@ -95,7 +95,7 @@ function Register() {
                 </div>
 
                 <div className="register-form-group-input-wrapper">
-                  <label htmlFor="password">{t("password")}</label>
+                  <label htmlFor="password">{t("password")}*</label>
                   <input
                     type="password"
                     id="password"
