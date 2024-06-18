@@ -15,8 +15,8 @@ function configI18n() {
         order: ["querystring", "cookie"],
         caches: ["cookie"],
       },
-      fallbackLng: "en",
-      preload: ["en", "ar"],
+      fallbackLng: "ar",
+      preload: ["ar", "en"],
     });
 }
 
