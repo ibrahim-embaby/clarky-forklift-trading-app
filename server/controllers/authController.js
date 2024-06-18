@@ -466,8 +466,10 @@ module.exports.getCurrentUser = asyncHandler(async (req, res, next) => {
       username: user.username,
       email: user.email,
       isAccountVerified: user.isAccountVerified,
-      isAdmin: user.isAdmin,
+      role: user.role,
+      mobile: user.mobile,
       profilePhoto: user.profilePhoto,
+      bio: user.bio,
     });
   } catch (error) {
     next(error);
