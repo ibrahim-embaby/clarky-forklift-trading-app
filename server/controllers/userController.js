@@ -149,7 +149,7 @@ module.exports.updateUserCtrl = asyncHandler(async (req, res, next) => {
         id: updatedUser._id,
         token: accessToken,
         email: updatedUser.email,
-        isAdmin: updatedUser.role,
+        role: updatedUser.role,
         username: updatedUser.username,
         mobile: updatedUser.mobile,
         profilePhoto: updatedUser.profilePhoto,
