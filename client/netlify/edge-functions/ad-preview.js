@@ -14,12 +14,14 @@ export default async (request, context) => {
     }
 
     const adId = match[1];
+    console.log("ad id ==== ", adId);
 
     // Fetch the ad details from your backend
     const response = await fetch(
       `https://clarky-eg.netlify.app/.netlify/functions/proxy/api/v1/ads/${adId}`
     );
     const { data: ad } = await response.json();
+    console.log("data ====", ad);
 
     const updatedPage = page
       .replace("__META_TITLE__", ad.title)
