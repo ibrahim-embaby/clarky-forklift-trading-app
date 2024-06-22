@@ -19,6 +19,7 @@ function AddAd() {
   const [fileUrls, setFileUrls] = useState([]);
   const [files, setFiles] = useState([]);
   const [errors, setErrors] = useState({});
+  const [fileError, setFileError] = useState("");
   const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
 
@@ -84,27 +85,48 @@ function AddAd() {
     setFileUrls([]);
     setFiles([]);
     setErrors({});
+    setFileError("");
   };
 
-  const onDrop = useCallback((acceptedFiles) => {
-    const readFiles = acceptedFiles.map((file) => {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve({ url: reader.result, file });
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
-    });
+  const onDrop = useCallback(
+    (acceptedFiles) => {
+      const validFiles = [];
+      const invalidFiles = [];
 
-    Promise.all(readFiles)
-      .then((fileData) => {
-        const urls = fileData.map((data) => data.url);
-        const fileObjs = fileData.map((data) => data.file);
-        setFileUrls((prevUrls) => [...prevUrls, ...urls]);
-        setFiles((prevFiles) => [...prevFiles, ...fileObjs]);
-      })
-      .catch((error) => console.error("Error reading files: ", error));
-  }, []);
+      acceptedFiles.forEach((file) => {
+        if (file.size <= 2 * 1024 * 1024) {
+          validFiles.push(file);
+        } else {
+          invalidFiles.push(file);
+        }
+      });
+
+      if (invalidFiles.length > 0) {
+        setFileError(t("file_size_error"));
+      } else {
+        setFileError("");
+      }
+
+      const readFiles = validFiles.map((file) => {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve({ url: reader.result, file });
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
+      });
+
+      Promise.all(readFiles)
+        .then((fileData) => {
+          const urls = fileData.map((data) => data.url);
+          const fileObjs = fileData.map((data) => data.file);
+          setFileUrls((prevUrls) => [...prevUrls, ...urls]);
+          setFiles((prevFiles) => [...prevFiles, ...fileObjs]);
+        })
+        .catch((error) => console.error("Error reading files: ", error));
+    },
+    [t]
+  );
 
   const handleRemoveImage = (index) => {
     setFileUrls((prevUrls) => prevUrls.filter((_, i) => i !== index));
@@ -321,6 +343,7 @@ function AddAd() {
                 </div>
               </div>
               {errors.photos && <span className="error">{errors.photos}</span>}
+              {fileError && <span className="error">{fileError}</span>}
               <div {...getRootProps({ className: "dropzone hidden-dropzone" })}>
                 <input {...getInputProps()} />
               </div>

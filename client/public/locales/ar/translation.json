@@ -154,5 +154,6 @@
     "email_required": "برجاء كتابة البريد الإلكتروني",
     "password_required" :"برجاء كتابة كلمة المرور",
     "load_more": "...تحميل المزيد",
-    "no_notifications": "لا توجد اشعارات"
+    "no_notifications": "لا توجد اشعارات",
+    "file_size_error": "يجب أن يكون حجم الملف أقل من 2 ميجابايت"
 }

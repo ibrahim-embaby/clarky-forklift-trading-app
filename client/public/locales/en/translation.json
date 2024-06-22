@@ -132,5 +132,6 @@
     "email_required": "email required",
     "password_required" :"password required",
     "load_more": "load more...",
-    "no_notifications": "no notifications"
+    "no_notifications": "no notifications",
+    "file_size_error": "File size must be less than 2MB"
 }
