@@ -1,6 +1,5 @@
 const {
   getUserCtrl,
-  getUsersCtrl,
   deleteUserCtrl,
   updateUserCtrl,
   getMyAdsCtrl,

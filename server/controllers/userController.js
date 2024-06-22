@@ -3,6 +3,7 @@ const { User, validateUpdateUser } = require("../models/User");
 const { Ad } = require("../models/Ad");
 const ErrorResponse = require("../utils/ErrorResponse");
 const S3 = require("aws-sdk/clients/s3");
+const { Notification } = require("../models/Notification");
 const s3 = new S3({
   region: process.env.AWS_S3_BUCKET_REGION,
   credentials: {
@@ -127,6 +128,9 @@ module.exports.deleteUserCtrl = asyncHandler(async (req, res) => {
 
     // Delete user
     await User.findByIdAndDelete(id);
+
+    // Delete User Notifications
+    await Notification.deleteMany({ receiverId: id });
 
     res.status(200).json({ message: req.t("user_deleted") });
   } catch (error) {
