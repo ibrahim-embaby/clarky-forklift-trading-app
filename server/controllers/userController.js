@@ -79,20 +79,6 @@ module.exports.getMyAdCtrl = asyncHandler(async (req, res, next) => {
 });
 
 /**
- * @desc get all user
- * @route /api/user/profile/:id
- * @method GET
- * @access private ( admin)
- */
-module.exports.getUsersCtrl = asyncHandler(async (req, res) => {
-  const users = await User.find();
-  if (!users) {
-    return res.status(404).json({ message: req.t("no_users") });
-  }
-  res.status(200).json(users);
-});
-
-/**
  * @desc delete single user
  * @route /api/user/profile/:id
  * @method DELETE

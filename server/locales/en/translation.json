@@ -31,7 +31,7 @@
     "cloudinary_error": "internal server error (cloudinary)",
     "success":"succeeded",
     "ad_accepted":"ad accepted",
-    "ad_refused": "ad refused",
+    "ad_refused": "ad rejected",
     "ad_deleted": "ad deleted successfully",
     "ad_edit": "Your ad is currently under review by our team.",
     "account_verified": "Account successfully verified.",

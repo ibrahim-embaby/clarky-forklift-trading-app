@@ -20,6 +20,7 @@
   background-color: #ffd1d1da;
 }
 
+/* STATISTICS */
 .admin-dashboard {
   flex: 10;
 }
@@ -46,7 +47,6 @@
   text-align: center;
 }
 
-.users-panel,
 .workshops-panel {
   height: 100%;
   display: flex;
@@ -55,18 +55,15 @@
   padding: 20px;
 }
 
-.users-table,
 .workshops-table {
   border: 1px solid #000;
 }
 
-.users-table-body-item,
 .workshops-table-body-item {
   padding: 10px;
   border: 1px solid #000;
 }
 
-.users-delete-button,
 .workshops-delete-button {
   padding: 10px;
   color: var(--white-color);
@@ -87,6 +84,7 @@
   height: 100%;
   flex-wrap: wrap;
   align-content: flex-start;
+  flex-direction: column;
 }
 .admin-ad-wrapper {
   border: 1px solid #000;
@@ -107,8 +105,10 @@
   color: var(--white-color);
   border-radius: 3px;
   cursor: pointer;
-  padding: 5px;
+  padding: 8px 5px;
   text-align: center;
+  line-height: 1;
+  font-size: 14px;
 }
 
 .admin-delete-ad-btn {
@@ -116,4 +116,83 @@
 }
 .admin-accept-ad-btn {
   background-color: var(--green-color);
+}
+
+/* USERS */
+.users-panel {
+  margin: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.table th,
+.table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.table tr:hover {
+  background-color: #f1f1f1;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.pagination .pagination-btn {
+  padding: 5px 10px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.pagination .pagination-btn:disabled {
+  cursor: not-allowed;
+  background-color: #f9f9f9;
+}
+
+.pagination .pagination-btn:hover:not(:disabled) {
+  background-color: #e2e2e2;
+}
+
+.pagination .pagination-input {
+  width: 50px;
+  padding: 5px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+.pagination .pagination-select {
+  padding: 5px;
+  border: 1px solid #ddd;
+}
+
+.admin-ads-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+}
+
+.admin-ads-filter {
+  display: flex;
+  gap: 10px;
 }

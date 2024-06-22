@@ -1,30 +1,22 @@
 import "./admin.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Users from "./Users";
 import Manage from "./Manage";
 import Statistics from "./Statistics";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchAllUsers } from "../../redux/apiCalls/profileApiCall";
 import Ads from "./Ads";
 import { useTranslation } from "react-i18next";
-import { adminfetchAdsCount } from "../../redux/apiCalls/adminApiCalls";
 
-function Admin() {
+function Admin({ socket }) {
   const [currentComponent, setCurrentComponent] = useState(1);
 
-  const dispatch = useDispatch();
-  const { users } = useSelector((state) => state.profile);
-  const { publishedAdsCount } = useSelector((state) => state.admin);
   const { i18n, t } = useTranslation();
   document.title = t("admin_page_title");
 
-  useEffect(() => {
-    dispatch(fetchAllUsers());
-    dispatch(adminfetchAdsCount("published"));
-  }, [dispatch]);
-
   return (
-    <div className="admin">
+    <div
+      className="admin"
+      style={{ direction: i18n.language === "en" ? "ltr" : "rtl" }}
+    >
       <div className="admin-sidebar">
         <div
           onClick={() => setCurrentComponent(1)}
@@ -58,16 +50,13 @@ function Admin() {
           <p className="admin-sidebar-text">ادارة</p>
         </div>
       </div>
-      <div
-        className="admin-dashboard"
-        style={{ direction: i18n.language === "en" ? "ltr" : "rtl" }}
-      >
+      <div className="admin-dashboard">
         {currentComponent === 1 ? (
-          <Statistics usersNumber={users.length} adsCount={publishedAdsCount} />
+          <Statistics />
         ) : currentComponent === 2 ? (
-          <Users users={users} />
+          <Users />
         ) : currentComponent === 3 ? (
-          <Ads />
+          <Ads socket={socket} />
         ) : (
           <Manage />
         )}

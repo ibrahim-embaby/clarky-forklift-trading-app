@@ -4,7 +4,6 @@ const profileSlice = createSlice({
   name: "profile",
   initialState: {
     profile: null,
-    users: [],
     userAds: [],
     userAdsCount: 0,
     ad: null,
@@ -34,12 +33,7 @@ const profileSlice = createSlice({
     clearProfile(state) {
       state.profile = null;
     },
-    setUsers(state, action) {
-      state.users = action.payload;
-    },
-    clearUser(state, action) {
-      state.users = state.users.filter((user) => user._id !== action.payload);
-    },
+
     setLoading(state) {
       state.loading = true;
     },

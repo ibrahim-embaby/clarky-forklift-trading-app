@@ -18,41 +18,41 @@ const router = require("express").Router();
 
 // PROVINCE ROUTES
 
-// /api/controls/provinces
+// /api/v1/controls/provinces
 router
   .route("/provinces")
   .post(verifyTokenAndAdmin, addProvinceCtrl)
   .get(getProvincesCtrl);
 
-// /api/controls/provinces/:id
+// /api/v1/controls/provinces/:id
 router.route("/province/:id").get(getSingleProvinceCtrl);
 
-// /api/controls/cities
+// /api/v1/controls/cities
 router.route("/cities").post(verifyTokenAndAdmin, addCityCtrl);
 
 // STATUS ROUTES
-// /api/controls/statuses
+// /api/v1/controls/statuses
 router
   .route("/statuses")
   .post(verifyTokenAndAdmin, addStatusCtrl)
   .get(getStatusCtrl);
 
 // ITEM TYPE ROUTES
-// /api/controls/item-types
+// /api/v1/controls/item-types
 router
   .route("/item-types")
   .post(verifyTokenAndAdmin, addItemTypeCtrl)
   .get(getItemTypeCtrl);
 
 // AD TARGET ROUTES
-// /api/controls/ad-targets
+// /api/v1/controls/ad-targets
 router
   .route("/ad-targets")
   .post(verifyTokenAndAdmin, addAdTargetCtrl)
   .get(getAdTargetCtrl);
 
 // AD STATUS ROUTES
-// /api/controls/ad-statuses
+// /api/v1/controls/ad-statuses
 router
   .route("/ad-statuses")
   .post(verifyTokenAndAdmin, addAdStatusCtrl)

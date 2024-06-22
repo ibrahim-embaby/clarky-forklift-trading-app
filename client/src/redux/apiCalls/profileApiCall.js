@@ -18,20 +18,6 @@ export function fetchUserProfile(id) {
   };
 }
 
-// fetch all users
-export function fetchAllUsers() {
-  return async (dispatch) => {
-    try {
-      const { data } = await apiRequest("/api/v1/user/", "GET");
-
-      dispatch(profileActions.setUsers(data));
-    } catch (error) {
-      console.log(error);
-      toast.error(error.response.data.message);
-    }
-  };
-}
-
 // /api/v1/user/:useId/ads/
 export function fetchMyAds(userId, adStatus, page) {
   return async (dispatch) => {

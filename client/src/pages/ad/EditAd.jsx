@@ -70,9 +70,9 @@ function EditAd() {
     const newErrors = {};
     if (!category) newErrors.category = t("required");
     if (!price || price <= 0) newErrors.price = t("required");
-    if (!title || title.split(" ").length < 3 || title.split(" ").length > 200)
+    if (!title || title.length < 3 || title.length > 200)
       newErrors.title = t("title_validation");
-    if (!desc || desc.split(" ").length < 3 || desc.split(" ").length > 5000)
+    if (!desc || desc.length < 3 || desc.length > 5000)
       newErrors.desc = t("desc_validation");
     if (!phone || !/^(010|011|012|015)\d{8}$/.test(phone))
       newErrors.phone = t("phone_validation");

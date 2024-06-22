@@ -14,9 +14,6 @@ const {
 
 const router = require("express").Router();
 
-// /api/v1/user/
-router.get("/", verifyTokenAndAdmin, getUsersCtrl);
-
 // /api/user/profile/:id
 router
   .route("/profile/:id")

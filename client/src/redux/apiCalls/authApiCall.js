@@ -2,6 +2,7 @@ import { toast } from "react-toastify";
 import request from "../../utils/request";
 import { authActions } from "../slices/authSlice";
 import { profileActions } from "../slices/profileSlice";
+import { notificationActions } from "../slices/notificationSlice";
 
 // /api/v1/auth/register
 export function registerUser(user) {
@@ -64,6 +65,7 @@ export function fetchMe() {
 export function logoutUser() {
   return async (dispatch) => {
     dispatch(profileActions.clearProfile());
+    dispatch(notificationActions.clearNotifications());
     await request.get("/api/v1/auth/signout", { withCredentials: true });
     dispatch(authActions.logout());
   };

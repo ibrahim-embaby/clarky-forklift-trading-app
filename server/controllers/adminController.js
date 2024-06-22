@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const ErrorResponse = require("../utils/ErrorResponse");
 const { Ad } = require("../models/Ad");
 const { AdStatus } = require("../models/AdStatus");
+const { User } = require("../models/User");
 
 /**
  * @desc get ads
@@ -9,23 +10,18 @@ const { AdStatus } = require("../models/AdStatus");
  * @method GET
  * @access public
  */
-module.exports.getAdminAdsCtrl = asyncHandler(async (req, res, next) => {
+module.exports.adminGetAdsCtrl = asyncHandler(async (req, res, next) => {
   try {
-    const { page } = req.query;
-    const pageSize = 10;
-    const currentPage = parseInt(page, 10) || 1;
-    const skip = (currentPage - 1) * pageSize;
-    let count;
+    const page = parseInt(req.query.page) || 0;
+    const pageSize = parseInt(req.query.pageSize) || 10;
 
-    const adStatus = await AdStatus.findOne({ value: req.query.adStatus });
-
-    const ads = await Ad.find({ adStatus: adStatus._id })
+    const ads = await Ad.find({ adStatus: req.query.adStatus })
       .populate("userId", "username  _id")
       .sort({ createdAt: -1 })
-      .skip(skip)
+      .skip(page * pageSize)
       .limit(pageSize);
 
-    count = await Ad.countDocuments({ adStatus: adStatus._id });
+    count = await Ad.countDocuments({ adStatus: req.query.adStatus });
     res.status(200).json({ ads, count });
   } catch (error) {
     next(error);
@@ -38,7 +34,7 @@ module.exports.getAdminAdsCtrl = asyncHandler(async (req, res, next) => {
  * @method GET
  * @access public
  */
-module.exports.getAdminAdsCountCtrl = asyncHandler(async (req, res, next) => {
+module.exports.adminGetAdsCountCtrl = asyncHandler(async (req, res, next) => {
   try {
     const adStatus = await AdStatus.findOne({ value: req.query.adStatus });
 
@@ -88,3 +84,65 @@ module.exports.adminAcceptRefuseAdCtrl = asyncHandler(
     }
   }
 );
+
+/**
+ * @desc get all user
+ * @route /api/v1/admin/users
+ * @method GET
+ * @access private ( admin)
+ */
+module.exports.adminGetUsersCtrl = asyncHandler(async (req, res, next) => {
+  try {
+    const page = parseInt(req.query.page) || 0;
+    const pageSize = parseInt(req.query.pageSize) || 10;
+
+    const totalUsers = await User.countDocuments();
+    const users = await User.find()
+      .skip(page * pageSize)
+      .limit(pageSize);
+
+    if (!users) {
+      return res.status(404).json({ message: req.t("no_users") });
+    }
+
+    res.status(200).json({ users, totalUsers });
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * @desc get all statistics
+ * @route /api/v1/admin/statistics
+ * @method GET
+ * @access private ( admin)
+ */
+module.exports.adminGetStatisticsCtrl = asyncHandler(async (req, res, next) => {
+  try {
+    const usersCount = await User.countDocuments();
+
+    const puplishedStatus = await AdStatus.findOne({ value: "published" });
+    const publsihedAdsCount = await Ad.countDocuments({
+      adStatus: puplishedStatus._id,
+    });
+
+    const pendingStatus = await AdStatus.findOne({ value: "pending" });
+    const pendingAdsCount = await Ad.countDocuments({
+      adStatus: pendingStatus._id,
+    });
+
+    const rejectedStatus = await AdStatus.findOne({ value: "rejected" });
+    const rejectedAdsCount = await Ad.countDocuments({
+      adStatus: rejectedStatus._id,
+    });
+
+    res.status(200).json({
+      usersCount,
+      pendingAdsCount,
+      publsihedAdsCount,
+      rejectedAdsCount,
+    });
+  } catch (error) {
+    next(error);
+  }
+});

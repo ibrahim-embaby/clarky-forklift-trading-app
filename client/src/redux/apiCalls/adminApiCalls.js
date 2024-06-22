@@ -3,53 +3,22 @@ import { adminActions } from "../slices/adminSlice";
 import { apiRequest } from "../../utils/apiRequest";
 
 // api/v1/admin/ads
-export function adminFetchAds(adStatus) {
+export function adminFetchAds(params) {
   return async (dispatch) => {
     try {
       dispatch(adminActions.setLoading());
       const { data } = await apiRequest(
-        `/api/v1/admin/ads?adStatus=${adStatus}`,
+        `/api/v1/admin/ads?adStatus=${params.adStatus}&page=${params.page}&pageSize=${params.pageSize}`,
         "GET"
       );
 
-      if (adStatus === "published") {
-        dispatch(adminActions.setPublishedAds(data.ads));
-        dispatch(adminActions.setPublishedAdsCount(data.count));
-      } else if (adStatus === "pending") {
-        dispatch(adminActions.setPendingAds(data.ads));
-        dispatch(adminActions.setPendingAdsCount(data.count));
-      } else if (adStatus === "reported") {
-        dispatch(adminActions.setReportedAds(data.ads));
-        dispatch(adminActions.setReportedAdsCount(data.count));
-      }
+      dispatch(adminActions.setAds(data.ads));
+      dispatch(adminActions.setAdsCount(data.count));
       dispatch(adminActions.clearLoading());
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.message);
       dispatch(adminActions.clearLoading());
-    }
-  };
-}
-
-// api/v1/admin/ads/count
-export function adminfetchAdsCount(adStatus) {
-  return async (dispatch) => {
-    try {
-      const { data } = await apiRequest(
-        `/api/v1/admin/ads/count?adStatus=${adStatus}`,
-        "GET"
-      );
-
-      if (adStatus === "published") {
-        dispatch(adminActions.setPublishedAdsCount(data.count));
-      } else if (adStatus === "pending") {
-        dispatch(adminActions.setPendingAdsCount(data.count));
-      } else if (adStatus === "reported") {
-        dispatch(adminActions.setReportedAdsCount(data.count));
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error(error.response.data.message);
     }
   };
 }
@@ -64,6 +33,36 @@ export function adminAcceptRefuseAd(adId, adStatus, rejectionReason = "") {
       });
 
       toast.success(data.message);
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message);
+    }
+  };
+}
+
+// /api/v1/admin/users
+export function fetchAllUsers(params) {
+  return async (dispatch) => {
+    try {
+      const { data } = await apiRequest(
+        `/api/v1/admin/users?page=${params.page}&pageSize=${params.pageSize}`,
+        "GET"
+      );
+      dispatch(adminActions.setUsers(data.users));
+      dispatch(adminActions.setUsersCount(data.totalUsers));
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message);
+    }
+  };
+}
+
+// /api/v1/admin/statistics
+export function fetchStatistics() {
+  return async (dispatch) => {
+    try {
+      const { data } = await apiRequest("/api/v1/admin/statistics", "GET");
+      dispatch(adminActions.setStatistics(data));
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.message);

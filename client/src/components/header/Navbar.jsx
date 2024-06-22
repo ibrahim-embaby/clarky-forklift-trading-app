@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import "./header.css";
 
-function Navbar({ toggle, setToggle }) {
-  const { user } = useSelector((state) => state.auth);
+function Navbar({ toggle, setToggle, user }) {
   const [currentTab, setCurrentTab] = useState(1);
   const location = useLocation();
   const { t, i18n } = useTranslation();

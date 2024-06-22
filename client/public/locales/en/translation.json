@@ -130,5 +130,6 @@
     "parts": "Parts",
     "username_required": "username required",
     "email_required": "email required",
-    "password_required" :"password required"
+    "password_required" :"password required",
+    "load_more": "load more..."
 }

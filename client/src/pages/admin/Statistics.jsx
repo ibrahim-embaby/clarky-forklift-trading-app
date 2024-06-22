@@ -1,13 +1,32 @@
-function Statistics({ usersNumber, adsCount }) {
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchStatistics } from "../../redux/apiCalls/adminApiCalls";
+
+function Statistics() {
+  const dispatch = useDispatch();
+  const { statistics } = useSelector((state) => state.admin);
+  useEffect(() => {
+    dispatch(fetchStatistics());
+  }, []);
   return (
     <div className=" statistics">
       <div className="statistics-item">
         <h4 className="number-title">عدد المستخدمين</h4>
-        <p>{usersNumber}</p>
+        <p>{statistics?.usersCount}</p>
       </div>
       <div className="statistics-item">
         <h4 className="number-title">عدد الإعلانات المنشورة</h4>
-        <p>{adsCount}</p>
+        <p>{statistics?.publsihedAdsCount}</p>
+      </div>
+
+      <div className="statistics-item">
+        <h4 className="number-title">عدد الإعلانات المعلقة</h4>
+        <p>{statistics?.pendingAdsCount}</p>
+      </div>
+
+      <div className="statistics-item">
+        <h4 className="number-title">عدد الإعلانات المرفوضة</h4>
+        <p>{statistics?.rejectedAdsCount}</p>
       </div>
     </div>
   );

@@ -12,6 +12,7 @@ import { profileReducer } from "./slices/profileSlice";
 import { adReducer } from "./slices/adSlice";
 import { controlsReducer } from "./slices/controlsSlice";
 import { adminReducer } from "./slices/adminSlice";
+import { notificationReducer } from "./slices/notificationSlice";
 
 const authPersistConfig = {
   key: "auth",
@@ -27,6 +28,7 @@ const rootReducer = combineReducers({
   ad: adReducer,
   controls: controlsReducer,
   admin: adminReducer,
+  notification: notificationReducer,
 });
 
 // Create state sync config

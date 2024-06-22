@@ -1,15 +1,13 @@
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import CreateIcon from "@mui/icons-material/Create";
 import "./header.css";
 
-function HeaderLeft() {
+function HeaderLeft({ user }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { user } = useSelector((state) => state.auth);
 
   const handleCreateAd = () => {
     if (user) {

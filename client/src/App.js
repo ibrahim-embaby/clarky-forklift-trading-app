@@ -1,4 +1,4 @@
-import { Suspense } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Home from "./pages/home/Home";
 import Header from "./components/header/Header";
@@ -23,6 +23,7 @@ import AddAd from "./pages/ad/AddAd";
 import { Toaster } from "sonner";
 import { useTranslation } from "react-i18next";
 import EditAd from "./pages/ad/EditAd";
+import { io } from "socket.io-client";
 
 function Toast() {
   const { i18n } = useTranslation();
@@ -38,12 +39,30 @@ function Toast() {
 }
 function App() {
   const { user } = useSelector((state) => state.auth);
+  const socket = useRef(null);
 
+  useEffect(() => {
+    if (user) {
+      socket.current = io(process.env.REACT_APP_SERVER_URL, {
+        reconnection: true,
+        reconnectionDelay: 200,
+        reconnectionAttempts: 5,
+      });
+      socket.current.on("connect", () => {
+        console.log("Connected to socket.io server");
+        socket.current.emit("addUser", user.id);
+      });
+
+      socket.current.on("connect_error", (err) => {
+        console.error("Socket connection error:", err);
+      });
+    }
+  }, [user]);
   return (
     <Suspense fallback={null}>
       <Toast />
       <ToastContainer theme="colored" position="top-center" />
-      <Header />
+      <Header socket={socket} />
       <Routes>
         <Route path="/account/activate/:token" element={<AccountVerified />} />
 
@@ -86,7 +105,7 @@ function App() {
           path="/admin"
           element={
             user?.role === "admin" ? (
-              <Admin />
+              <Admin socket={socket} />
             ) : user ? (
               <Navigate to={"/"} />
             ) : (

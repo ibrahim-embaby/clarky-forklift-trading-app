@@ -236,9 +236,7 @@ module.exports.deleteSingleAdCtrl = asyncHandler(async (req, res, next) => {
     }
     // Extract the S3 keys from the ad's photos
     const objectsToDelete = ad.photos.map((photoUrl) => {
-      // Extract the key from the photo URL
-      const urlParts = photoUrl.split("/");
-      const key = urlParts.slice(3).join("/");
+      const key = photoUrl.split(".com/")[1];
       return { Key: key };
     });
 
