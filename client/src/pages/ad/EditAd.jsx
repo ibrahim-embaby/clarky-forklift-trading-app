@@ -119,14 +119,28 @@ function EditAd() {
     navigate(`/ads/${id}`);
   };
 
-  const onDrop = useCallback((acceptedFiles) => {
-    const newFilesWithUrls = acceptedFiles.map((file) => ({
-      url: URL.createObjectURL(file),
-      file,
-    }));
+  const onDrop = useCallback(
+    (acceptedFiles) => {
+      const maxSize = 2 * 1024 * 1024; // 2MB
+      const validFiles = [];
+      const fileErrors = {};
 
-    setNewFiles((prevFiles) => [...prevFiles, ...newFilesWithUrls]);
-  }, []);
+      acceptedFiles.forEach((file, index) => {
+        if (file.size > maxSize) {
+          fileErrors[`file_${index}`] = t("file_size_error");
+        } else {
+          validFiles.push({
+            url: URL.createObjectURL(file),
+            file,
+          });
+        }
+      });
+
+      setErrors((prevErrors) => ({ ...prevErrors, ...fileErrors }));
+      setNewFiles((prevFiles) => [...prevFiles, ...validFiles]);
+    },
+    [t]
+  );
 
   const handleRemoveImage = (index, isExisting) => {
     if (isExisting) {
@@ -382,6 +396,13 @@ function EditAd() {
                 {errors.photos && (
                   <span className="error">{errors.photos}</span>
                 )}
+                {Object.keys(errors)
+                  .filter((key) => key.startsWith("file_"))
+                  .map((key) => (
+                    <span key={key} className="error">
+                      {errors[key]}
+                    </span>
+                  ))}
               </div>
 
               <div className="edit-ad-btns">
