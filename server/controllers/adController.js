@@ -4,6 +4,7 @@ const ErrorResponse = require("../utils/ErrorResponse");
 const { AdStatus } = require("../models/AdStatus");
 const jwt = require("jsonwebtoken");
 const S3 = require("aws-sdk/clients/s3");
+const { Notification } = require("../models/Notification");
 const s3 = new S3({
   region: process.env.AWS_S3_BUCKET_REGION,
   credentials: {
@@ -253,6 +254,10 @@ module.exports.deleteSingleAdCtrl = asyncHandler(async (req, res, next) => {
         .promise();
     }
 
+    // Delete all notifications related to this ad
+    await Notification.deleteMany({ adId });
+
+    // Delete the ad
     const deletedAd = await Ad.findByIdAndDelete(adId);
 
     res
