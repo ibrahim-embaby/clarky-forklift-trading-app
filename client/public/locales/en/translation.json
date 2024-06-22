@@ -131,5 +131,6 @@
     "username_required": "username required",
     "email_required": "email required",
     "password_required" :"password required",
-    "load_more": "load more..."
+    "load_more": "load more...",
+    "no_notifications": "no notifications"
 }
