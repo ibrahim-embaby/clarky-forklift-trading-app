@@ -18,7 +18,10 @@ const setupSocket = (server, allowedOrigins) => {
   const io = socketio(server, {
     cors: {
       origin: allowedOrigins,
+      methods: ["GET", "POST"],
+      credentials: true,
     },
+    transports: ["websocket", "polling"],
   });
 
   io.on("connection", (socket) => {
