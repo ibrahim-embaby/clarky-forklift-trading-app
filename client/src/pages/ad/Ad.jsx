@@ -65,7 +65,7 @@ function Ad() {
     }).then((result) => {
       if (result.isConfirmed) {
         dispatch(deleteAd(id));
-        navigate(-1);
+        navigate(`/profile/${user.id}`);
       }
     });
   };
