@@ -1,11 +1,19 @@
-// netlify/functions/ad-meta-tags.js
 export default async (request, context) => {
   try {
     const responsepage = await context.next();
     const page = await responsepage.text();
 
     const url = new URL(request.url);
-    const adId = url.pathname.split("/").pop();
+    const pathname = url.pathname;
+
+    // Check if the path matches the pattern /ads/:id (and not /ads/:id/edit)
+    const match = pathname.match(/^\/ads\/([a-fA-F0-9]{24})$/);
+    if (!match) {
+      // If not matched, return the original response without modifications
+      return new Response(page, responsepage);
+    }
+
+    const adId = match[1];
 
     // Fetch the ad details from your backend
     const response = await fetch(
@@ -21,9 +29,6 @@ export default async (request, context) => {
     return new Response(updatedPage, responsepage);
   } catch (error) {
     console.error("Error in Edge Function:", error);
-    return {
-      statusCode: 500,
-      body: "Internal Server Error",
-    };
+    return new Response("Internal Server Error", { status: 500 });
   }
 };
