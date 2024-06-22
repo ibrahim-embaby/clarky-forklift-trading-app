@@ -151,11 +151,11 @@ function HeaderRight({ toggle, setToggle, user, socket }) {
           >
             {loading ? (
               <Loading />
-            ) : userNotifications.length > 0 ? (
+            ) : userNotifications?.length > 0 ? (
               <>
                 {userNotifications.map((notification) => (
                   <Link
-                    to={`ads/${notification.adId._id}`}
+                    to={`ads/${notification?.adId?._id}`}
                     key={notification._id || uuidv4()}
                     className="user-notifications-item"
                     style={{
@@ -182,7 +182,7 @@ function HeaderRight({ toggle, setToggle, user, socket }) {
                     </p>
                   </Link>
                 ))}
-                {userNotifications.length < notificationsCount && (
+                {userNotifications?.length < notificationsCount && (
                   <button onClick={handleLoadMore} className="load-more-button">
                     {t("load_more")}
                   </button>
