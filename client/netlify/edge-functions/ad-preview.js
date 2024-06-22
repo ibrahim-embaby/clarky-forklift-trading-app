@@ -14,7 +14,6 @@ export default async (request, context) => {
     }
 
     const adId = match[1];
-    console.log("ad id ==== ", adId);
 
     // Fetch the ad details from your backend
     const response = await fetch(
@@ -22,6 +21,10 @@ export default async (request, context) => {
     );
     const { data: ad } = await response.json();
     console.log("data ====", ad);
+
+    if (!ad) {
+      return new Response(page, responsepage);
+    }
 
     const updatedPage = page
       .replace("__META_TITLE__", ad.title)
