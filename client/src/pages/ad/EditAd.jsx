@@ -79,7 +79,7 @@ function EditAd() {
     if (!province) newErrors.province = t("required");
     if (!city) newErrors.city = t("required");
     if (
-      !existingFileUrls.length + newFiles.length ||
+      !(existingFileUrls.length + newFiles.length) ||
       existingFileUrls.length + newFiles.length > 10
     )
       newErrors.photos = t("photos_validation");
