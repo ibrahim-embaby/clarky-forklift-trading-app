@@ -60,11 +60,13 @@ export function fetchMyAd(adId) {
 
 // delete single user
 export function deleteUser(id) {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
     try {
       const { data } = await apiRequest(`/api/v1/user/profile/${id}`, "DELETE");
-
-      dispatch(profileActions.clearUser(id));
+      if (getState().auth.user.id === id) {
+        dispatch(profileActions.clearProfile());
+        dispatch(authActions.logout());
+      }
       toast.success(data.message);
     } catch (error) {
       console.log(error);
