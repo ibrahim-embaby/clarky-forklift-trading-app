@@ -28,6 +28,11 @@ function Users() {
       { Header: "الدور", accessor: "role" },
       { Header: "رقم الهاتف", accessor: "mobile" },
       {
+        Header: "التوثيق",
+        accessor: "isAccountVerified",
+        Cell: ({ value }) => (value ? "موثق" : "غير موثق"),
+      },
+      {
         Header: "الخيارات",
         accessor: "actions",
         Cell: ({ row }) => {
