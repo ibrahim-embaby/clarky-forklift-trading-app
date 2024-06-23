@@ -46,6 +46,7 @@ module.exports.getMyAdsCtrl = asyncHandler(async (req, res, next) => {
 
     const ads = await Ad.find({ userId: req.user.id, adStatus })
       .populate("province city")
+      .sort({ createdAt: -1 })
       .skip(skip)
       .limit(pageSize);
 
