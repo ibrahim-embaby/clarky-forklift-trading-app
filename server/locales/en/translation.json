@@ -39,5 +39,6 @@
     "password_reseted": "password reseted successfully, please login",
     "enter_password": "please enter the password",
     "invalid_token" : "invalid token, please try again",
-    "password_link_sent": "password reset link sent to your email, please check your inbox"
+    "password_link_sent": "password reset link sent to your email, please check your inbox",
+    "registration_message": "Thank you for registering with Clarky! Please check your email to verify your account."
 }

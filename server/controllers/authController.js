@@ -57,7 +57,7 @@ module.exports.registerUserCtrl = asyncHandler(async (req, res, next) => {
 
     res.status(201).json({
       success: true,
-      message: `We've sent you an email at ${user.email}`,
+      message: req.t("registration_message"),
     });
   } catch (error) {
     if (error.code === 11000)
