@@ -6,6 +6,7 @@ import { fetchAllUsers } from "../../redux/apiCalls/adminApiCalls";
 import { useTranslation } from "react-i18next";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import formatTime from "../../utils/formatTime";
 
 const MySwal = withReactContent(Swal);
 
@@ -27,6 +28,11 @@ function Users() {
       { Header: "البريد الإلكتروني", accessor: "email" },
       { Header: "الدور", accessor: "role" },
       { Header: "رقم الهاتف", accessor: "mobile" },
+      {
+        Header: "تاريخ التسجيل",
+        accessor: "createdAt",
+        Cell: ({ value }) => formatTime(value),
+      },
       {
         Header: "التوثيق",
         accessor: "isAccountVerified",
