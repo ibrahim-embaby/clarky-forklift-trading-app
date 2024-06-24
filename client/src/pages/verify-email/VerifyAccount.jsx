@@ -2,9 +2,11 @@ import "./account-verification.css";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 import { sendVerificationMail } from "../../redux/apiCalls/authApiCall";
+import { useTranslation } from "react-i18next";
 
 function VerifyAccount() {
   const { user } = useSelector((state) => state.auth);
+  const { t } = useTranslation();
 
   const dispatch = useDispatch();
 
@@ -17,12 +19,12 @@ function VerifyAccount() {
     <Navigate to={"/"} />
   ) : (
     <div className="verify-account">
-      <p>please check your email and verify your account</p>
+      <p>{t("verify_account")}</p>
       <p
         onClick={sendAnotherVerificationMail}
         style={{ textDecoration: "underline", color: "red", cursor: "pointer" }}
       >
-        send another verification link
+        {t("send_another_link")}
       </p>
     </div>
   );

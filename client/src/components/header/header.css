@@ -150,8 +150,7 @@
 }
 
 .user-menu .user-menu-item:hover {
-  background-color: #666;
-  color: var(--white-color);
+  background-color: #eee;
 }
 
 .header-menu {

@@ -133,5 +133,7 @@
     "password_required" :"password required",
     "load_more": "load more...",
     "no_notifications": "no notifications",
-    "file_size_error": "File size must be less than 2MB"
+    "file_size_error": "File size must be less than 2MB",
+    "verify_account": "please check your email and verify your account",
+    "send_another_link": "send another verification link"
 }
