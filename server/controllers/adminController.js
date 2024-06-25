@@ -99,6 +99,7 @@ module.exports.adminGetUsersCtrl = asyncHandler(async (req, res, next) => {
     const totalUsers = await User.countDocuments();
     const users = await User.find()
       .select("-password")
+      .sort({ createdAt: -1 })
       .skip(page * pageSize)
       .limit(pageSize);
 
