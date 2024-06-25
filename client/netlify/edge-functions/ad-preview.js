@@ -34,6 +34,9 @@ export default async (request, context) => {
       )
       .replace("%PUBLIC_URL%/logo512.png", ad.photos[0]);
 
+    console.log("updatedPage ==== ", updatedPage);
+    console.log("responsepage ==== ", responsepage);
+
     return new Response(updatedPage, responsepage);
   } catch (error) {
     console.error("Error in Edge Function:", error);
