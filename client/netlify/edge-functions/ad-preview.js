@@ -9,8 +9,18 @@ export default async (request, context) => {
     // Check if the path matches the pattern /ads/:id (and not /ads/:id/edit)
     const match = pathname.match(/^\/ads\/([a-fA-F0-9]{24})$/);
     if (!match) {
-      // If not matched, return the original response without modifications
-      return new Response(page, responsepage);
+      // Set default meta tags for non-ad pages
+      const defaultTitle = "Clarky | كلاركي";
+      const defaultDescription =
+        "كلاركي - الموقع الأول في مجال الكلاركات في مصر";
+      const defaultImage = "%PUBLIC_URL%/images/logo512.png";
+
+      const updatedPage = page
+        .replace("__META_TITLE__", defaultTitle)
+        .replace("__META_DESCRIPTION__", defaultDescription)
+        .replace("__META_IMAGE__", defaultImage);
+
+      return new Response(updatedPage, responsepage);
     }
 
     const adId = match[1];
