@@ -24,6 +24,7 @@ export default async (request, context) => {
     if (!ad) {
       return new Response(page, responsepage);
     }
+    console.log("Ad ===== ", ad);
 
     const updatedPage = page
       .replace("Clarky | كلاركي", ad.title)
