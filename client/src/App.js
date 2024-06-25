@@ -32,7 +32,7 @@ function Toast() {
     <Toaster
       position={i18n.language === "ar" ? "bottom-right" : "bottom-left"}
       richColors
-      duration={1500}
+      duration={2500}
       dir={i18n.language === "ar" ? "rtl" : "ltr"}
     />
   );
