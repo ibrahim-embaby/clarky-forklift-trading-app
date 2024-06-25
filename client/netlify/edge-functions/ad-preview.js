@@ -32,7 +32,7 @@ export default async (request, context) => {
         "كلاركي - أول موقع متخصص في مجال الكلاركات في مصر",
         ad.description
       )
-      .replace("%PUBLIC_URL%/logo512.png", ad.photos[0]);
+      .replace("/logo512.png", ad.photos[0]);
 
     console.log("updatedPage ==== ", updatedPage);
     console.log("responsepage ==== ", responsepage);
