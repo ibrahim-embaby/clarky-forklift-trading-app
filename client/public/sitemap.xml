@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset
-      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
-            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+    xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+          http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 
-<url>
-  <loc>https://clarky-eg.netlify.app/</loc>
-  <lastmod>2024-06-24T15:37:22+00:00</lastmod>
-</url>
+  <!-- Home Page -->
+  <url>
+    <loc>https://clarky-eg.netlify.app/</loc>
+    <lastmod>2024-06-24T15:37:22+00:00</lastmod>
+    <priority>1.0</priority>
+  </url>
 
+  <!-- Search Page -->
+  <url>
+    <loc>https://clarky-eg.netlify.app/search/ads</loc>
+    <lastmod>2024-06-24T15:37:22+00:00</lastmod>
+    <priority>0.8</priority>
+  </url>
 
 </urlset>
