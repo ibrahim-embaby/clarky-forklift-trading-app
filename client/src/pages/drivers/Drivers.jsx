@@ -157,7 +157,9 @@ function Drivers() {
             {showFilter ? "X" : "Show Filters"}
           </div>
           <div className="drivers-wrapper">
-            <aside className={`drivers-filters ${showFilter && "show-filter"}`}>
+            <aside
+              className={`drivers-filters ${showFilter && "show-filters"}`}
+            >
               <div className="filter-group">
                 <h3
                   className="province-filter-title"

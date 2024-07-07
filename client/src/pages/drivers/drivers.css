@@ -11,6 +11,10 @@
   gap: 20px;
 }
 
+.drivers-filters-mobile-icon {
+  display: none;
+}
+
 .drivers-filters {
   flex: 3;
   padding: 20px;
@@ -402,6 +406,7 @@
   }
 
   .drivers-filters-mobile-icon {
+    display: block;
     cursor: pointer;
     background-color: #ccc;
     width: max-content;
@@ -410,7 +415,7 @@
     font-weight: 700;
   }
 
-  .show-filter {
+  .show-filters {
     display: block;
   }
 
