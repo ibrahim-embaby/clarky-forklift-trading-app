@@ -42,6 +42,10 @@ Clarky is an app for forklift trading.
 - 🚧 Sorting search results
 - 🚧 Admin dashboard
 
+## 📋 Trello Board
+
+[Trello Board](https://trello.com/b/Cp7E47t7/clarky-website)
+
 ## Sneak Peek of Website Pages ✨:
 
 ![home](images/img-1.png)

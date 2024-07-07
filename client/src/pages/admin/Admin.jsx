@@ -5,6 +5,7 @@ import Manage from "./Manage";
 import Statistics from "./Statistics";
 import Ads from "./Ads";
 import { useTranslation } from "react-i18next";
+import Drivers from "./Drivers";
 
 function Admin({ socket }) {
   const [currentComponent, setCurrentComponent] = useState(1);
@@ -43,6 +44,14 @@ function Admin({ socket }) {
         </div>
 
         <div
+          onClick={() => setCurrentComponent(4)}
+          style={{ backgroundColor: currentComponent === 4 && "#ffd1d1da" }}
+          className="admin-sidebar-component"
+        >
+          <p className="admin-sidebar-text">السائقين</p>
+        </div>
+
+        <div
           onClick={() => setCurrentComponent(5)}
           style={{ backgroundColor: currentComponent === 5 && "#ffd1d1da" }}
           className="admin-sidebar-component"
@@ -57,6 +66,8 @@ function Admin({ socket }) {
           <Users />
         ) : currentComponent === 3 ? (
           <Ads socket={socket} />
+        ) : currentComponent === 4 ? (
+          <Drivers />
         ) : (
           <Manage />
         )}

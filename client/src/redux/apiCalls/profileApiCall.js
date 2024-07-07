@@ -97,6 +97,7 @@ export function updateUserProfile(userInfo, profilePhotoData = new FormData()) {
             },
           }
         );
+
         userInfo["profilePhoto"] = {
           key: uploadConfig[0].key,
           url:

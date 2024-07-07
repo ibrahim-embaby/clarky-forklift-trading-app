@@ -7,6 +7,8 @@ const adminSlice = createSlice({
     usersCount: 0,
     ads: [],
     adsCount: 0,
+    drivers: [],
+    driversCount: 0,
     statistics: null,
     loading: false,
   },
@@ -24,6 +26,14 @@ const adminSlice = createSlice({
     },
     setUsersCount(state, action) {
       state.usersCount = action.payload;
+    },
+
+    setDrivers(state, action) {
+      state.drivers = action.payload;
+    },
+
+    setDriversCount(state, action) {
+      state.driversCount = action.payload;
     },
 
     setStatistics(state, action) {

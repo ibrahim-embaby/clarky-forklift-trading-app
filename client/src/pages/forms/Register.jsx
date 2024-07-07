@@ -50,8 +50,8 @@ function Register() {
       <div className="register-container">
         <div className="form-wrapper">
           <form className="register-form" onSubmit={registerFormHandler}>
-            <div className="form-group">
-              <div className="form-group-inputs">
+            <div className="register-form-group">
+              <div className="register-form-group-inputs">
                 <div className="register-form-group-input-wrapper">
                   <label htmlFor="username">{t("register_name")}*</label>
                   <input

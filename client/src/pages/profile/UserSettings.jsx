@@ -115,18 +115,18 @@ function UserProfileSettings() {
             </div>
           </div>
 
-          <div className="form-group">
+          <div className="settings-form-group">
             <label htmlFor="bio">{t("user_settings_bio")}</label>
             <textarea
               id="bio"
               name="bio"
               value={formData.bio}
               onChange={handleInputChange}
-              className="form-input form-bio"
+              className="settings-form-input settings-form-bio"
             />
           </div>
 
-          <div className="form-group">
+          <div className="settings-form-group">
             <label htmlFor="username">{t("user_settings_name")}</label>
             <input
               id="username"
@@ -135,11 +135,11 @@ function UserProfileSettings() {
               onChange={handleInputChange}
               type="text"
               placeholder={t("user_settings_name_placeholder")}
-              className="form-input"
+              className="settings-form-input"
             />
           </div>
 
-          <div className="form-group">
+          <div className="settings-form-group">
             <label htmlFor="mobile">{t("user_settings_mobile")}</label>
             <input
               id="mobile"
@@ -148,11 +148,11 @@ function UserProfileSettings() {
               onChange={handleInputChange}
               type="text"
               placeholder={t("user_settings_mobile_placeholder")}
-              className="form-input"
+              className="settings-form-input"
             />
           </div>
 
-          <button type="submit" className="form-btn">
+          <button type="submit" className="settings-form-btn">
             {t("edit")}
           </button>
         </form>

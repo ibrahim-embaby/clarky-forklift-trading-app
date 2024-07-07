@@ -64,7 +64,7 @@ export function fetchControls() {
   };
 }
 
-// /api/controls/services
+// /api/v1/controls/services
 export function fetchServices() {
   return async (dispatch) => {
     try {
@@ -85,18 +85,15 @@ export function fetchServices() {
   };
 }
 
-// /api/controls/cars
-export function fetchCars() {
+// /api/v1/controls/provinces
+export function fetchProvinces() {
   return async (dispatch) => {
     try {
       dispatch(controlsActions.setLoading());
-      const { data } = await request.get("/api/controls/cars", {
-        headers: {
-          Cookie: document.cookie.i18next,
-        },
+      const { data } = await request.get("/api/v1/controls/provinces", {
         withCredentials: true,
       });
-      dispatch(controlsActions.setCars(data));
+      dispatch(controlsActions.setProvinces(data));
       dispatch(controlsActions.clearLoading());
     } catch (error) {
       console.log(error);

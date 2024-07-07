@@ -3,12 +3,13 @@ const ErrorResponse = require("../utils/ErrorResponse");
 const { Ad } = require("../models/Ad");
 const { AdStatus } = require("../models/AdStatus");
 const { User } = require("../models/User");
+const { Driver } = require("../models/Driver");
 
 /**
  * @desc get ads
  * @route /api/v1/admin/ads/
  * @method GET
- * @access public
+ * @access private (only admin)
  */
 module.exports.adminGetAdsCtrl = asyncHandler(async (req, res, next) => {
   try {
@@ -112,6 +113,69 @@ module.exports.adminGetUsersCtrl = asyncHandler(async (req, res, next) => {
     next(error);
   }
 });
+
+/**
+ * @desc get drivers
+ * @route /api/v1/admin/drivers/
+ * @method GET
+ * @access private (only admin)
+ */
+module.exports.adminGetDriversCtrl = asyncHandler(async (req, res, next) => {
+  try {
+    const page = parseInt(req.query.page) || 0;
+    const pageSize = parseInt(req.query.pageSize) || 10;
+    const isAccepted = JSON.parse(req.query.isAccepted);
+
+    const drivers = await Driver.find({ isAccepted })
+      .populate("userId", "username  _id")
+      .sort({ createdAt: -1 })
+      .skip(page * pageSize)
+      .limit(pageSize);
+
+    count = await Driver.countDocuments({ isAccepted });
+    res.status(200).json({ drivers, count });
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * @desc accept reject driver
+ * @route /api/v1/admin/drivers/:id
+ * @method PUT
+ * @access private (only admin)
+ */
+module.exports.adminAcceptRejectDriverCtrl = asyncHandler(
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+
+      const driver = await Driver.findById(id);
+      if (!driver)
+        return next(new ErrorResponse(req.t("driver_not_found"), 404));
+
+      const acceptedRejectedDriver = await Driver.findByIdAndUpdate(
+        id,
+        {
+          isAccepted: req.body.isAccepted,
+          rejectionReason: req.body.rejectionReason,
+        },
+        { new: true }
+      );
+
+      res.status(200).json({
+        success: true,
+        data: acceptedRejectedDriver,
+        message:
+          req.body.isAccepted === true
+            ? req.t("driver_accepted")
+            : req.t("driver_rejected"),
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 /**
  * @desc get all statistics

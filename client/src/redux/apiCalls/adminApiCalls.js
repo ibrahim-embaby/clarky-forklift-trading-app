@@ -69,3 +69,41 @@ export function fetchStatistics() {
     }
   };
 }
+
+// api/v1/admin/ads
+export function adminFetchDrivers(params) {
+  return async (dispatch) => {
+    try {
+      dispatch(adminActions.setLoading());
+      const { data } = await apiRequest(
+        `/api/v1/admin/drivers?isAccepted=${params.isAccepted}&page=${params.page}&pageSize=${params.pageSize}`,
+        "GET"
+      );
+
+      dispatch(adminActions.setDrivers(data.drivers));
+      dispatch(adminActions.setDriversCount(data.count));
+      dispatch(adminActions.clearLoading());
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message);
+      dispatch(adminActions.clearLoading());
+    }
+  };
+}
+
+// api/v1/admin/ads/:adId
+export function adminAcceptRejectDriver(id, isAccepted, rejectionReason = "") {
+  return async () => {
+    try {
+      const { data } = await apiRequest(`/api/v1/admin/drivers/${id}`, "PUT", {
+        isAccepted,
+        rejectionReason,
+      });
+
+      toast.success(data.message);
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message);
+    }
+  };
+}

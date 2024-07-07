@@ -12,7 +12,6 @@ import SearchResults from "./pages/search/SearchResults";
 import UserProfileSettings from "./pages/profile/UserSettings";
 import NotFound from "./pages/not-found/NotFound";
 import Admin from "./pages/admin/Admin";
-import ContactUs from "./pages/contact-us/ContactUs";
 import AccountVerified from "./pages/verify-email/AccountVerified";
 import VerifyAccount from "./pages/verify-email/VerifyAccount";
 import ForgotPassword from "./pages/forgot-password/ForgotPassword";
@@ -24,6 +23,8 @@ import { Toaster } from "sonner";
 import { useTranslation } from "react-i18next";
 import EditAd from "./pages/ad/EditAd";
 import { io } from "socket.io-client";
+import Drivers from "./pages/drivers/Drivers";
+import AddDriver from "./pages/drivers/AddDriver";
 
 function Toast() {
   const { i18n } = useTranslation();
@@ -87,12 +88,13 @@ function App() {
         <Route path="/ads/:id" element={<Ad />} />
         <Route path="/ads/:id/edit" element={user && <EditAd />} />
         <Route path="/sell" element={user && <AddAd />} />
+        <Route path="/add-driver" element={user && <AddDriver />} />
         <Route
           path="/profile/:id/settings"
           element={user ? <UserProfileSettings /> : <Navigate to={"/login"} />}
         />
         <Route path="/search/ads" element={<SearchResults />} />
-        <Route path="/about-us" element={<ContactUs />} />
+        <Route path="/drivers" element={<Drivers />} />
         <Route
           path="/forgot-password"
           element={user ? <Navigate to={"/"} /> : <ForgotPassword />}

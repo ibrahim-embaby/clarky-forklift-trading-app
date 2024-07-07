@@ -6,7 +6,7 @@ import { refreshToken } from "./authApiCall";
 import { profileActions } from "../slices/profileSlice";
 import { apiRequest } from "../../utils/apiRequest";
 
-// /api/v1/posts/
+// /api/v1/ads/
 export function createAd(ad) {
   return async () => {
     try {
@@ -38,7 +38,6 @@ export function createAd(ad) {
       );
       const adWithImages = { ...ad, photos: photoUrls };
 
-      // Assuming you have an API endpoint to create an ad
       const { data } = await apiRequest("/api/v1/ads", "POST", adWithImages);
 
       toast.success(data.message);

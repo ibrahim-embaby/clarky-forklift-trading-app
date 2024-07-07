@@ -40,5 +40,11 @@
     "enter_password": "please enter the password",
     "invalid_token" : "invalid token, please try again",
     "password_link_sent": "password reset link sent to your email, please check your inbox",
-    "registration_message": "Thank you for registering with Clarky! Please check your email to verify your account."
+    "registration_message": "Thank you for registering with Clarky! Please check your email to verify your account.",
+    "driver_created": "Your data will be approved after a review by the admin",
+    "driver_not_found": "driver not found",
+    "driver_deleted": "driver deleted successfully",
+    "driver_accepted": "driver accepted",
+    "driver_rejected": "driver rejected",
+    "driver_joined_already": "This user has already joined as a driver"
 }

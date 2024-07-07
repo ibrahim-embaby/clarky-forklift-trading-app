@@ -17,14 +17,17 @@ function Navbar({ toggle, setToggle, user }) {
       case "/search/ads":
         setCurrentTab(2);
         break;
-      case "/admin":
+      case "/drivers":
         setCurrentTab(3);
         break;
-      case "/login":
+      case "/admin":
         setCurrentTab(4);
         break;
-      case "/register":
+      case "/login":
         setCurrentTab(5);
+        break;
+      case "/register":
+        setCurrentTab(6);
         break;
       default:
         setCurrentTab(0);
@@ -70,17 +73,32 @@ function Navbar({ toggle, setToggle, user }) {
             {t("navbar_search")}
           </Link>
         </li>
+        <li>
+          <Link
+            to="/drivers"
+            onClick={() => {
+              setCurrentTab(3);
+              setToggle(false);
+            }}
+            style={{
+              color: currentTab === 3 ? selectedTabColor : "",
+              fontWeight: currentTab === 3 ? "bolder" : "",
+            }}
+          >
+            {t("navbar_drivers")}
+          </Link>
+        </li>
         {user?.role === "admin" && (
           <li>
             <Link
               to="/admin"
               onClick={() => {
-                setCurrentTab(3);
+                setCurrentTab(4);
                 setToggle(false);
               }}
               style={{
-                color: currentTab === 3 ? selectedTabColor : "",
-                fontWeight: currentTab === 3 ? "bolder" : "",
+                color: currentTab === 4 ? selectedTabColor : "",
+                fontWeight: currentTab === 4 ? "bolder" : "",
               }}
             >
               {t("navbar_admin")}
@@ -92,13 +110,13 @@ function Navbar({ toggle, setToggle, user }) {
             <Link
               to="/login"
               onClick={() => {
-                setCurrentTab(4);
+                setCurrentTab(5);
                 setToggle(false);
               }}
               className="login-button auth-link"
               style={{
-                color: currentTab === 4 ? selectedTabColor : "",
-                fontWeight: currentTab === 4 ? "bolder" : "",
+                color: currentTab === 5 ? selectedTabColor : "",
+                fontWeight: currentTab === 5 ? "bolder" : "",
               }}
             >
               {t("login")}
@@ -106,13 +124,13 @@ function Navbar({ toggle, setToggle, user }) {
             <Link
               to="/register"
               onClick={() => {
-                setCurrentTab(5);
+                setCurrentTab(6);
                 setToggle(false);
               }}
               className="register-button auth-link"
               style={{
-                color: currentTab === 5 ? selectedTabColor : "",
-                fontWeight: currentTab === 5 ? "bolder" : "",
+                color: currentTab === 6 ? selectedTabColor : "",
+                fontWeight: currentTab === 6 ? "bolder" : "",
               }}
             >
               {t("register")}
