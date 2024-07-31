@@ -2,15 +2,8 @@ const asyncHandler = require("express-async-handler");
 const { User, validateUpdateUser } = require("../models/User");
 const { Ad } = require("../models/Ad");
 const ErrorResponse = require("../utils/ErrorResponse");
-const S3 = require("aws-sdk/clients/s3");
 const { Notification } = require("../models/Notification");
-const s3 = new S3({
-  region: process.env.AWS_S3_BUCKET_REGION,
-  credentials: {
-    accessKeyId: process.env.AWS_IAM_ACCESS_KEY,
-    secretAccessKey: process.env.AWS_IAM_SECRET_ACCESS_KEY,
-  },
-});
+const cloudinary = require("cloudinary").v2;
 
 /**
  * @desc get user profile
@@ -95,33 +88,27 @@ module.exports.deleteUserCtrl = asyncHandler(async (req, res) => {
       return res.status(404).json({ message: req.t("user_not_found") });
     }
 
-    // Collect keys to delete from S3
-    const objectsToDelete = [];
+    // Collect public_ids to delete from Cloudinary
+    const publicIdsToDelete = [];
 
-    if (user.profilePhoto?.key) {
-      objectsToDelete.push({ Key: user.profilePhoto.key });
+    if (user.profilePhoto?.public_id) {
+      publicIdsToDelete.push(user.profilePhoto.public_id);
     }
 
     const userAds = await Ad.find({ userId: id });
     userAds.forEach((ad) => {
-      const adPhotoKeys = ad.photos.map((photoUrl) => {
-        const key = photoUrl.split(".com/")[1];
-        return { Key: key };
+      const adPhotoPublicIds = ad.photos.map((photoUrl) => {
+        return photoUrl.split("/").slice(-2).join("/").split(".")[0];
       });
-      objectsToDelete.push(...adPhotoKeys);
+      publicIdsToDelete.push(...adPhotoPublicIds);
     });
 
-    // Delete S3 objects if there are any
-    if (objectsToDelete.length > 0) {
-      await s3
-        .deleteObjects({
-          Bucket: process.env.AWS_S3_BUCKET_NAME,
-          Delete: {
-            Objects: objectsToDelete,
-            Quiet: false,
-          },
-        })
-        .promise();
+    // Delete Cloudinary objects if there are any
+    if (publicIdsToDelete.length > 0) {
+      const deletePromises = publicIdsToDelete.map((public_id) =>
+        cloudinary.uploader.destroy(public_id)
+      );
+      await Promise.all(deletePromises);
     }
 
     // Delete ads
@@ -158,13 +145,9 @@ module.exports.updateUserCtrl = asyncHandler(async (req, res, next) => {
       return next(new ErrorResponse(req.t("user_not_found"), 404));
     }
 
-    if (req.body.profilePhoto && user.profilePhoto?.key) {
-      await s3
-        .deleteObject({
-          Bucket: process.env.AWS_S3_BUCKET_NAME,
-          Key: user.profilePhoto.key,
-        })
-        .promise();
+    // Delete the old profile photo from Cloudinary if a new one is provided
+    if (req.body.profilePhoto && user.profilePhoto?.public_id) {
+      await cloudinary.uploader.destroy(user.profilePhoto.public_id);
     }
 
     const updatedUser = await User.findByIdAndUpdate(userId, req.body, {

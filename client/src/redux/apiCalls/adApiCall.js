@@ -12,7 +12,7 @@ export function createAd(ad) {
     try {
       const { photos } = ad;
 
-      // Request presigned URLs for multiple photos
+      // Request signed upload URLs for multiple photos
       const { data: uploadConfigs } = await apiRequest(
         "/api/v1/upload",
         "POST",
@@ -21,22 +21,30 @@ export function createAd(ad) {
         }
       );
 
-      // Upload each photo using its corresponding presigned URL
+      // Upload each photo using its corresponding signed upload URL
       const uploadPromises = photos.map((file, index) => {
-        return axios.put(uploadConfigs[index].url, file, {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("api_key", uploadConfigs[index].api_key);
+        formData.append("timestamp", uploadConfigs[index].timestamp);
+        formData.append("public_id", uploadConfigs[index].public_id);
+        formData.append("signature", uploadConfigs[index].signature);
+
+        return axios.post(uploadConfigs[index].url, formData, {
           headers: {
-            "Content-Type": file.type,
+            "Content-Type": "multipart/form-data",
           },
         });
       });
 
-      await Promise.all(uploadPromises);
+      const uploadResponses = await Promise.all(uploadPromises);
 
       // Collect the URLs of the uploaded photos
-      const photoUrls = uploadConfigs.map(
-        (config) => "https://arabity.s3.eu-north-1.amazonaws.com/" + config.key
+      const photoUrls = uploadResponses.map(
+        (response) => response.data.secure_url
       );
       const adWithImages = { ...ad, photos: photoUrls };
+      console.log(adWithImages);
 
       const { data } = await apiRequest("/api/v1/ads", "POST", adWithImages);
 
@@ -101,21 +109,26 @@ export function fetchAllUserAds(userId) {
 }
 
 async function uploadPhotos(files, uploadConfigs) {
-  // Upload each photo using its corresponding presigned URL
+  // Upload each photo using its corresponding signed URL
   const uploadPromises = files.map((file, index) => {
-    return axios.put(uploadConfigs[index].url, file, {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("api_key", uploadConfigs[index].api_key);
+    formData.append("timestamp", uploadConfigs[index].timestamp);
+    formData.append("public_id", uploadConfigs[index].public_id);
+    formData.append("signature", uploadConfigs[index].signature);
+
+    return axios.post(uploadConfigs[index].url, formData, {
       headers: {
-        "Content-Type": file.type,
+        "Content-Type": "multipart/form-data",
       },
     });
   });
 
-  await Promise.all(uploadPromises);
+  const uploadResponses = await Promise.all(uploadPromises);
 
   // Collect the URLs of the uploaded photos
-  const photoUrls = uploadConfigs.map(
-    (config) => "https://arabity.s3.eu-north-1.amazonaws.com/" + config.key
-  );
+  const photoUrls = uploadResponses.map((response) => response.data.secure_url);
 
   return photoUrls;
 }
@@ -136,7 +149,7 @@ export function updateAd(adId, newAd) {
           }
         );
 
-        // Upload new photos to S3
+        // Upload new photos to Cloudinary
         newPhotoUrls = await uploadPhotos(newAd.newFiles, uploadConfigs);
       }
       const allPhotoUrls = [...newAd.existingFileUrls, ...newPhotoUrls];

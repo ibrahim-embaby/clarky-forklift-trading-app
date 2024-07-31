@@ -1,19 +1,12 @@
 const asyncHandler = require("express-async-handler");
 const ErrorResponse = require("../utils/ErrorResponse");
 const jwt = require("jsonwebtoken");
-const S3 = require("aws-sdk/clients/s3");
 const {
   validateCreateDriver,
   Driver,
   validateUpdateDriver,
 } = require("../models/Driver");
-const s3 = new S3({
-  region: process.env.AWS_S3_BUCKET_REGION,
-  credentials: {
-    accessKeyId: process.env.AWS_IAM_ACCESS_KEY,
-    secretAccessKey: process.env.AWS_IAM_SECRET_ACCESS_KEY,
-  },
-});
+const cloudinary = require("cloudinary").v2;
 
 /**
  * @desc create driver
@@ -162,13 +155,9 @@ module.exports.updateDriverCtrl = asyncHandler(async (req, res, next) => {
       return next(new ErrorResponse(req.t("driver_not_found"), 404));
     }
 
-    if (req.body.photo && driver.photo?.key) {
-      await s3
-        .deleteObject({
-          Bucket: process.env.AWS_S3_BUCKET_NAME,
-          Key: driver.photo.key,
-        })
-        .promise();
+    // Delete the old photo from Cloudinary if a new photo is provided
+    if (req.body.photo && driver.photo?.public_id) {
+      await cloudinary.uploader.destroy(driver.photo.public_id);
     }
 
     const updatedDriver = await Driver.findByIdAndUpdate(
@@ -211,13 +200,9 @@ module.exports.deleteDriverCtrl = asyncHandler(async (req, res, next) => {
       return next(new ErrorResponse(req.t("forbidden"), 301));
     }
 
-    if (driver.photo?.key) {
-      await s3
-        .deleteObject({
-          Bucket: process.env.AWS_S3_BUCKET_NAME,
-          Key: driver.photo.key,
-        })
-        .promise();
+    // Delete the driver's photo from Cloudinary
+    if (driver.photo?.public_id) {
+      await cloudinary.uploader.destroy(driver.photo.public_id);
     }
 
     // Delete driver

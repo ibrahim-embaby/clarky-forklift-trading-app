@@ -80,6 +80,7 @@ export function updateUserProfile(userInfo, profilePhotoData = new FormData()) {
   return async (dispatch) => {
     try {
       if (profilePhotoData.get("profilePhoto")) {
+        // Request signed upload URL for the profile photo
         const { data: uploadConfig } = await apiRequest(
           "/api/v1/upload",
           "POST",
@@ -88,30 +89,35 @@ export function updateUserProfile(userInfo, profilePhotoData = new FormData()) {
           }
         );
 
-        await axios.put(
-          uploadConfig[0].url,
-          profilePhotoData.get("profilePhoto"),
-          {
-            headers: {
-              "Content-Type": profilePhotoData.get("profilePhoto").type,
-            },
-          }
-        );
+        // Upload the profile photo using the signed upload URL
+        const formData = new FormData();
+        formData.append("file", profilePhotoData.get("profilePhoto"));
+        formData.append("api_key", uploadConfig[0].api_key);
+        formData.append("timestamp", uploadConfig[0].timestamp);
+        formData.append("public_id", uploadConfig[0].public_id);
+        formData.append("signature", uploadConfig[0].signature);
 
+        const uploadResponse = await axios.post(uploadConfig[0].url, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+
+        // Update userInfo profilePhoto property with Cloudinary response
         userInfo["profilePhoto"] = {
-          key: uploadConfig[0].key,
-          url:
-            "https://arabity.s3.eu-north-1.amazonaws.com/" +
-            uploadConfig[0].key,
+          public_id: uploadResponse.data.public_id,
+          url: uploadResponse.data.secure_url,
         };
       }
 
+      // Update user profile with the new data
       const { data } = await apiRequest(
         "/api/v1/user/profile/",
         "PUT",
         userInfo
       );
 
+      // Update the Redux store with the new profile data
       dispatch(profileActions.setProfile(data.data));
       dispatch(authActions.setUser(data.data));
       toast.success(data.message);

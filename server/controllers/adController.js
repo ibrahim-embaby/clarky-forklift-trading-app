@@ -3,15 +3,8 @@ const { validateCreateAd, Ad, validateUpdateAd } = require("../models/Ad");
 const ErrorResponse = require("../utils/ErrorResponse");
 const { AdStatus } = require("../models/AdStatus");
 const jwt = require("jsonwebtoken");
-const S3 = require("aws-sdk/clients/s3");
 const { Notification } = require("../models/Notification");
-const s3 = new S3({
-  region: process.env.AWS_S3_BUCKET_REGION,
-  credentials: {
-    accessKeyId: process.env.AWS_IAM_ACCESS_KEY,
-    secretAccessKey: process.env.AWS_IAM_SECRET_ACCESS_KEY,
-  },
-});
+const cloudinary = require("cloudinary").v2;
 
 /**
  * @desc create ad
@@ -187,18 +180,13 @@ module.exports.updateSingleAdCtrl = asyncHandler(async (req, res, next) => {
       (photo) => !newPhotos.includes(photo)
     );
 
-    // Delete photos from S3
+    // Delete photos from Cloudinary
     if (photosToDelete.length > 0) {
-      const deleteParams = {
-        Bucket: process.env.AWS_S3_BUCKET_NAME,
-        Delete: {
-          Objects: photosToDelete.map((url) => ({
-            Key: url.split(".com/")[1], // Extract the key from the URL
-          })),
-        },
-      };
-
-      await s3.deleteObjects(deleteParams).promise();
+      const deletePromises = photosToDelete.map((url) => {
+        const public_id = url.split("/").slice(-2).join("/").split(".")[0];
+        return cloudinary.uploader.destroy(public_id);
+      });
+      await Promise.all(deletePromises);
     }
 
     const pendingStatus = await AdStatus.findOne({ value: "pending" });
@@ -235,23 +223,18 @@ module.exports.deleteSingleAdCtrl = asyncHandler(async (req, res, next) => {
     if (ad.userId.toString() !== req.user.id && req.user.role !== "admin") {
       return next(new ErrorResponse(req.t("forbidden"), 301));
     }
-    // Extract the S3 keys from the ad's photos
-    const objectsToDelete = ad.photos.map((photoUrl) => {
-      const key = photoUrl.split(".com/")[1];
-      return { Key: key };
+
+    // Extract the public IDs from the ad's photos for Cloudinary
+    const publicIdsToDelete = ad.photos.map((photoUrl) => {
+      return photoUrl.split("/").slice(-2).join("/").split(".")[0];
     });
 
-    // Delete the images from S3
-    if (objectsToDelete.length > 0) {
-      await s3
-        .deleteObjects({
-          Bucket: process.env.AWS_S3_BUCKET_NAME,
-          Delete: {
-            Objects: objectsToDelete,
-            Quiet: false, // If you want to receive info about each object deleted
-          },
-        })
-        .promise();
+    // Delete the images from Cloudinary
+    if (publicIdsToDelete.length > 0) {
+      const deletePromises = publicIdsToDelete.map((public_id) =>
+        cloudinary.uploader.destroy(public_id)
+      );
+      await Promise.all(deletePromises);
     }
 
     // Delete all notifications related to this ad

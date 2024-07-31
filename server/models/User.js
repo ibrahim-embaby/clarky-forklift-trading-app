@@ -113,7 +113,7 @@ function validateUpdateUser(obj) {
     mobile: Joi.string().trim().min(11).max(14),
     bio: Joi.string().trim().max(1000),
     profilePhoto: Joi.object({
-      key: Joi.string(),
+      public_id: Joi.string(),
       url: Joi.string(),
     }),
   });

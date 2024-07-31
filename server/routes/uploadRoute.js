@@ -1,14 +1,14 @@
-const router = require("express").Router();
+const express = require("express");
 const { v1: uuid } = require("uuid");
 const { verifyToken } = require("../middlewares/verifyToken");
+const cloudinary = require("cloudinary").v2;
 
-const S3 = require("aws-sdk/clients/s3");
-const s3 = new S3({
-  region: process.env.AWS_S3_BUCKET_REGION,
-  credentials: {
-    accessKeyId: process.env.AWS_IAM_ACCESS_KEY,
-    secretAccessKey: process.env.AWS_IAM_SECRET_ACCESS_KEY,
-  },
+const router = express.Router();
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
 router.post("/", verifyToken, async (req, res) => {
@@ -19,20 +19,30 @@ router.post("/", verifyToken, async (req, res) => {
   }
 
   try {
-    const urls = await Promise.all(
+    const uploadConfigs = await Promise.all(
       Array.from({ length: count }).map(() => {
-        const key = `${req.user.id}/${uuid()}.jpeg`;
-        return s3
-          .getSignedUrlPromise("putObject", {
-            Bucket: process.env.AWS_S3_BUCKET_NAME,
-            ContentType: "image/jpeg",
-            Key: key,
-          })
-          .then((url) => ({ key, url }));
+        const public_id = `${req.user.id}/${uuid()}`;
+        const timestamp = Math.round(new Date().getTime() / 1000);
+
+        const signature = cloudinary.utils.api_sign_request(
+          {
+            timestamp,
+            public_id,
+          },
+          process.env.CLOUDINARY_API_SECRET
+        );
+
+        return {
+          public_id,
+          url: `https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload`,
+          signature,
+          api_key: process.env.CLOUDINARY_API_KEY,
+          timestamp,
+        };
       })
     );
 
-    res.status(200).json(urls);
+    res.status(200).json(uploadConfigs);
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Internal server error" });

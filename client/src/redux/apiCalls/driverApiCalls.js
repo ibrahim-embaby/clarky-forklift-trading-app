@@ -9,28 +9,36 @@ import { driverActions } from "../slices/driverSlice";
 export function createDriver(driver, driverPhoto) {
   return async () => {
     try {
-      //   Request presigned URL for photo
-      const { data: uploadConfigs } = await apiRequest(
-        "/api/v1/upload",
-        "POST",
-        {
-          count: 1,
-        }
-      );
+      if (driverPhoto) {
+        // Request signed upload URL for the driver photo
+        const { data: uploadConfig } = await apiRequest(
+          "/api/v1/upload",
+          "POST",
+          {
+            count: 1,
+          }
+        );
 
-      //   Upload photo to S3
-      await axios.put(uploadConfigs[0].url, driverPhoto, {
-        headers: {
-          "Content-Type": driverPhoto.type,
-        },
-      });
+        // Upload the driver photo using the signed upload URL
+        const formData = new FormData();
+        formData.append("file", driverPhoto);
+        formData.append("api_key", uploadConfig[0].api_key);
+        formData.append("timestamp", uploadConfig[0].timestamp);
+        formData.append("public_id", uploadConfig[0].public_id);
+        formData.append("signature", uploadConfig[0].signature);
 
-      //   update driver photo property
-      driver["photo"] = {
-        key: uploadConfigs[0].key,
-        url:
-          "https://arabity.s3.eu-north-1.amazonaws.com/" + uploadConfigs[0].key,
-      };
+        const uploadResponse = await axios.post(uploadConfig[0].url, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+
+        // Update driver photo property with Cloudinary response
+        driver["photo"] = {
+          public_id: uploadResponse.data.public_id,
+          url: uploadResponse.data.secure_url,
+        };
+      }
 
       const { data } = await apiRequest("/api/v1/drivers", "POST", driver);
 
@@ -109,7 +117,8 @@ export function updateDriver(id, driver) {
       dispatch(driverActions.setLoading());
 
       if (driver.photo) {
-        const { data: uploadConfigs } = await apiRequest(
+        // Request signed upload URL for the new driver photo
+        const { data: uploadConfig } = await apiRequest(
           "/api/v1/upload",
           "POST",
           {
@@ -117,19 +126,24 @@ export function updateDriver(id, driver) {
           }
         );
 
-        //   Upload photo to S3
-        await axios.put(uploadConfigs[0].url, driver.photo, {
+        // Upload the new driver photo using the signed upload URL
+        const formData = new FormData();
+        formData.append("file", driver.photo);
+        formData.append("api_key", uploadConfig[0].api_key);
+        formData.append("timestamp", uploadConfig[0].timestamp);
+        formData.append("public_id", uploadConfig[0].public_id);
+        formData.append("signature", uploadConfig[0].signature);
+
+        const uploadResponse = await axios.post(uploadConfig[0].url, formData, {
           headers: {
-            "Content-Type": driver.photo.type,
+            "Content-Type": "multipart/form-data",
           },
         });
 
-        //   update driver photo property
+        // Update driver photo property with Cloudinary response
         driver["photo"] = {
-          key: uploadConfigs[0].key,
-          url:
-            "https://arabity.s3.eu-north-1.amazonaws.com/" +
-            uploadConfigs[0].key,
+          public_id: uploadResponse.data.public_id,
+          url: uploadResponse.data.secure_url,
         };
       }
 

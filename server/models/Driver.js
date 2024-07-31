@@ -66,7 +66,7 @@ function validateCreateDriver(object) {
     city: Joi.string().required(),
     age: Joi.number().min(18).max(90).required(),
     photo: Joi.object({
-      key: Joi.string(),
+      public_id: Joi.string(),
       url: Joi.string(),
     }).required(),
   });
@@ -84,7 +84,7 @@ function validateUpdateDriver(object) {
     city: Joi.string(),
     age: Joi.number().min(18).max(90),
     photo: Joi.object({
-      key: Joi.string(),
+      public_id: Joi.string(),
       url: Joi.string(),
     }),
   });

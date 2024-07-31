@@ -19,7 +19,6 @@ Clarky is an app for forklift trading.
 ![expressjs](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)&nbsp;
 ![mongodb](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)&nbsp;
 ![jwt](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=JSON%20web%20tokens&logoColor=white)&nbsp;
-![S3](https://img.shields.io/badge/Amazon_S3-569a31?style=for-the-badge&logo=amazons3&logoColor=white)&nbsp;
 
 <!-- **Deployed On:**
 
