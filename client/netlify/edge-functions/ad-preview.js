@@ -17,7 +17,7 @@ export default async (request, context) => {
 
     // Fetch the ad details from your backend
     const response = await fetch(
-      `https://clarky-eg.netlify.app/.netlify/functions/proxy/api/v1/ads/${adId}`
+      `https://clarky.onrender.com/api/v1/ads/${adId}`
     );
     const { data: ad } = await response.json();
 
