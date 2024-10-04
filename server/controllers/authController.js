@@ -162,7 +162,7 @@ module.exports.refreshTokenCtrl = asyncHandler(async (req, res, next) => {
 
 /**
  * @desc send verification email
- * @route /api/auth/send-verification-mail
+ * @route /api/v1/auth/send-verification-mail
  * @method post
  * @access public
  */

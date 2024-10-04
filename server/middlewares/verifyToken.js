@@ -1,13 +1,20 @@
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
+const { User } = require("../models/User");
+const ErrorResponse = require("../utils/ErrorResponse");
+
 dotenv.config();
 // verify token
-function verifyToken(req, res, next) {
+async function verifyToken(req, res, next) {
   const authToken = req.headers.authorization;
   if (authToken) {
     const token = authToken.split(" ")[1];
     try {
       const decodedPayload = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+      const user = await User.findById(decodedPayload.id);
+      if (!user) {
+        return next(new ErrorResponse("هذا المستخدم غير موجود", 404));
+      }
       req.user = decodedPayload;
       next();
     } catch (err) {
@@ -19,8 +26,8 @@ function verifyToken(req, res, next) {
 }
 
 // verify token and only user himself
-function verifyTokenAndOnlyUser(req, res, next) {
-  verifyToken(req, res, () => {
+async function verifyTokenAndOnlyUser(req, res, next) {
+  await verifyToken(req, res, () => {
     if (req.user.id === req.params.id) {
       next();
     } else {
@@ -29,8 +36,8 @@ function verifyTokenAndOnlyUser(req, res, next) {
   });
 }
 
-function verifyTokenAndAdmin(req, res, next) {
-  verifyToken(req, res, () => {
+async function verifyTokenAndAdmin(req, res, next) {
+  await verifyToken(req, res, () => {
     if (req.user.role === "admin") {
       next();
     } else {
@@ -39,8 +46,8 @@ function verifyTokenAndAdmin(req, res, next) {
   });
 }
 
-function verifyTokenAndAuthorization(req, res, next) {
-  verifyToken(req, res, () => {
+async function verifyTokenAndAuthorization(req, res, next) {
+  await verifyToken(req, res, () => {
     if (req.user.id === req.params.id || req.user.role === "admin") {
       next();
     } else {

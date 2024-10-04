@@ -90,7 +90,7 @@ function validateCreateAd(object) {
     description: Joi.string().required(),
     province: Joi.string().required(),
     city: Joi.string().required(),
-    photos: Joi.array().items(Joi.string()),
+    photos: Joi.array().items(Joi.string()).required(),
     tags: Joi.array().items(Joi.string()),
     price: Joi.string().required(),
     location: Joi.string(),

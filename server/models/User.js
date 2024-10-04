@@ -65,7 +65,7 @@ UserSchema.methods.getSignedToken = function () {
     { id: this._id, role: this.role },
     process.env.ACCESS_TOKEN_SECRET,
     {
-      expiresIn: "2min",
+      expiresIn: "60d",
     }
   );
   const refreshToken = jwt.sign(

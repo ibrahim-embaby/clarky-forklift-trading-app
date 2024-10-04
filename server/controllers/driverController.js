@@ -15,6 +15,7 @@ const cloudinary = require("cloudinary").v2;
  * @access private (logged user only)
  */
 module.exports.createDriverCtrl = asyncHandler(async (req, res, next) => {
+  const uploadedPhoto = req.body.photo ? req.body.photo.public_id : null;
   try {
     const { error } = validateCreateDriver(req.body);
     if (error) return next(new ErrorResponse(error.details[0].message, 400));
@@ -35,6 +36,16 @@ module.exports.createDriverCtrl = asyncHandler(async (req, res, next) => {
       message: req.t("driver_created"),
     });
   } catch (error) {
+    if (uploadedPhoto) {
+      try {
+        await cloudinary.uploader.destroy(uploadedPhoto);
+      } catch (deleteError) {
+        console.error("Failed to delete the image:", deleteError);
+      }
+    }
+    if (error.code === 11000) {
+      return next(new ErrorResponse(req.t("phone_duplication"), 400));
+    }
     next(error);
   }
 });
@@ -208,9 +219,11 @@ module.exports.deleteDriverCtrl = asyncHandler(async (req, res, next) => {
     // Delete driver
     const deletedDriver = await Driver.findByIdAndDelete(id);
 
-    res
-      .status(200)
-      .json({ data: deletedDriver, message: req.t("driver_deleted") });
+    res.status(200).json({
+      success: true,
+      data: deletedDriver,
+      message: req.t("driver_deleted"),
+    });
   } catch (error) {
     next(error);
   }

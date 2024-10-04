@@ -9,7 +9,7 @@ const { validateAdStatus, AdStatus } = require("../models/AdStatus");
 /* ============= PROVINCE CONTROLLERS ============= */
 /**
  * @desc create province
- * @route /api/controls/provinces
+ * @route /api/v1/controls/provinces
  * @method POST
  * @access private (admin only)
  */
@@ -31,7 +31,7 @@ module.exports.addProvinceCtrl = asyncHandler(async (req, res) => {
 
 /**
  * @desc get provinces
- * @route /api/controls/provinces
+ * @route /api/v1/controls/provinces
  * @method GET
  * @access public
  */
@@ -52,7 +52,7 @@ module.exports.getProvincesCtrl = asyncHandler(async (req, res) => {
 
 /**
  * @desc get single province
- * @route /api/controls/provinces/:id
+ * @route /api/v1/controls/provinces/:id
  * @method GET
  * @access public
  */
@@ -68,7 +68,7 @@ module.exports.getSingleProvinceCtrl = asyncHandler(async (req, res) => {
 
 /**
  * @desc create city
- * @route /api/controls/cities
+ * @route /api/v1/controls/cities
  * @method POST
  * @access private (admin only)
  */
@@ -91,7 +91,7 @@ module.exports.addCityCtrl = asyncHandler(async (req, res) => {
 /* ============= STATUS CONTROLLERS ============= */
 /**
  * @desc add new car
- * @route /api/controls/statuses
+ * @route /api/v1/controls/statuses
  * @method POST
  * @access private (only admin)
  */
@@ -111,7 +111,7 @@ module.exports.addStatusCtrl = asyncHandler(async (req, res) => {
 
 /**
  * @desc get statuses
- * @route /api/controls/statuses
+ * @route /api/v1/controls/statuses
  * @method GET
  * @access public
  */
@@ -131,7 +131,7 @@ module.exports.getStatusCtrl = asyncHandler(async (req, res) => {
 /* ============= ITEM TYPE CONTROLLERS ============= */
 /**
  * @desc add new item type
- * @route /api/controls/item-types
+ * @route /api/v1/controls/item-types
  * @method POST
  * @access private (only admin)
  */
@@ -151,7 +151,7 @@ module.exports.addItemTypeCtrl = asyncHandler(async (req, res) => {
 
 /**
  * @desc get itemTypes
- * @route /api/controls/itemTypes
+ * @route /api/v1/controls/itemTypes
  * @method GET
  * @access public
  */
@@ -170,7 +170,7 @@ module.exports.getItemTypeCtrl = asyncHandler(async (req, res) => {
 /* ============= AD TARGET CONTROLLERS ============= */
 /**
  * @desc add new ad target
- * @route /api/controls/ad-targets
+ * @route /api/v1/controls/ad-targets
  * @method POST
  * @access private (only admin)
  */
@@ -190,7 +190,7 @@ module.exports.addAdTargetCtrl = asyncHandler(async (req, res) => {
 
 /**
  * @desc get ad targets
- * @route /api/controls/ad-targets
+ * @route /api/v1/controls/ad-targets
  * @method GET
  * @access public
  */
@@ -210,7 +210,7 @@ module.exports.getAdTargetCtrl = asyncHandler(async (req, res) => {
 /* ============= AD STATUS CONTROLLERS ============= */
 /**
  * @desc add new ad status
- * @route /api/controls/ad-statuses
+ * @route /api/v1/controls/ad-statuses
  * @method POST
  * @access private (only admin)
  */
@@ -230,7 +230,7 @@ module.exports.addAdStatusCtrl = asyncHandler(async (req, res) => {
 
 /**
  * @desc get ad targets
- * @route /api/controls/ad-targets
+ * @route /api/v1/controls/ad-targets
  * @method GET
  * @access public
  */

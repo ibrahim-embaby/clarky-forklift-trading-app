@@ -3,6 +3,7 @@ const { User, validateUpdateUser } = require("../models/User");
 const { Ad } = require("../models/Ad");
 const ErrorResponse = require("../utils/ErrorResponse");
 const { Notification } = require("../models/Notification");
+const { Driver } = require("../models/Driver");
 const cloudinary = require("cloudinary").v2;
 
 /**
@@ -117,6 +118,13 @@ module.exports.deleteUserCtrl = asyncHandler(async (req, res) => {
     // Delete user
     await User.findByIdAndDelete(id);
 
+    // Delete driver data if found
+    const driver = await Driver.findOne({ userId: id });
+    if (driver?.photo?.public_id) {
+      await cloudinary.uploader.destroy(driver.photo.public_id);
+    }
+    await Driver.findOneAndDelete({ userId: id });
+
     // Delete User Notifications
     await Notification.deleteMany({ receiverId: id });
 
@@ -139,14 +147,19 @@ module.exports.updateUserCtrl = asyncHandler(async (req, res, next) => {
     if (error) {
       return next(new ErrorResponse(error.details[0].message, 400));
     }
+    console.log("req.body = =", req.body);
     const userId = req.user.id;
+    console.log("userId = ", userId);
     const user = await User.findById(userId);
     if (!user) {
       return next(new ErrorResponse(req.t("user_not_found"), 404));
     }
 
+    console.log("user = ", user);
+
     // Delete the old profile photo from Cloudinary if a new one is provided
     if (req.body.profilePhoto && user.profilePhoto?.public_id) {
+      console.log("deleted");
       await cloudinary.uploader.destroy(user.profilePhoto.public_id);
     }
 
@@ -156,6 +169,7 @@ module.exports.updateUserCtrl = asyncHandler(async (req, res, next) => {
 
     const { accessToken } = updatedUser.getSignedToken();
     res.status(200).json({
+      success: true,
       data: {
         id: updatedUser._id,
         token: accessToken,

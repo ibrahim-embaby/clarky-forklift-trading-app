@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const { validateCreateAd, Ad, validateUpdateAd } = require("../models/Ad");
 const ErrorResponse = require("../utils/ErrorResponse");
 const { AdStatus } = require("../models/AdStatus");
+const { User } = require("../models/User");
 const jwt = require("jsonwebtoken");
 const { Notification } = require("../models/Notification");
 const cloudinary = require("cloudinary").v2;
@@ -16,6 +17,22 @@ module.exports.createAdCtrl = asyncHandler(async (req, res, next) => {
   try {
     const { error } = validateCreateAd(req.body);
     if (error) return next(new ErrorResponse(error.details[0].message, 400));
+
+    const user = await User.findById(req.user.id);
+    if (!user.isAccountVerified) {
+      const publicIdsToDelete = req.body.photos.map((photoUrl) => {
+        return photoUrl.split("/").slice(-2).join("/").split(".")[0];
+      });
+
+      // Delete the images from Cloudinary
+      if (publicIdsToDelete.length > 0) {
+        const deletePromises = publicIdsToDelete.map((public_id) =>
+          cloudinary.uploader.destroy(public_id)
+        );
+        await Promise.all(deletePromises);
+      }
+      return next(new ErrorResponse("يرجي تفعيل حسابك أولًا", 400));
+    }
 
     const newAd = await Ad.create({
       userId: req.user.id,
@@ -123,12 +140,18 @@ module.exports.getSingleAdCtrl = asyncHandler(async (req, res, next) => {
     let ad;
 
     if (user) {
-      ad = await Ad.findOne({
-        _id: adId,
-        $or: [{ userId: user.id }, { adStatus: publishedStatus }],
-      })
-        .populate("userId", "username  _id bio profilePhoto")
-        .populate("province city status saleOrRent adStatus itemType");
+      if (user.role === "admin") {
+        ad = await Ad.findById(adId)
+          .populate("userId", "username  _id bio profilePhoto")
+          .populate("province city status saleOrRent adStatus itemType");
+      } else {
+        ad = await Ad.findOne({
+          _id: adId,
+          $or: [{ userId: user.id }, { adStatus: publishedStatus }],
+        })
+          .populate("userId", "username  _id bio profilePhoto")
+          .populate("province city status saleOrRent adStatus itemType");
+      }
     } else {
       ad = await Ad.findOne({
         _id: adId,
@@ -190,7 +213,6 @@ module.exports.updateSingleAdCtrl = asyncHandler(async (req, res, next) => {
     }
 
     const pendingStatus = await AdStatus.findOne({ value: "pending" });
-
     const updatedAd = await Ad.findByIdAndUpdate(
       adId,
       { ...req.body, adStatus: pendingStatus._id },

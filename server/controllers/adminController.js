@@ -57,7 +57,6 @@ module.exports.adminAcceptRefuseAdCtrl = asyncHandler(
   async (req, res, next) => {
     try {
       const { adId } = req.params;
-
       const ad = await Ad.findById(adId);
       if (!ad) return next(new ErrorResponse(req.t("ad_not_found"), 404));
 
