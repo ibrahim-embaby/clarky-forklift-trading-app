@@ -95,7 +95,7 @@ function Ad() {
     <div className="ad">
       <div className="container">
         <div
-          className="ad-wrapper"
+          className="ad-details-wrapper"
           style={{ direction: i18n.language === "en" ? "ltr" : "rtl" }}
         >
           <div className="ad-info-section">
