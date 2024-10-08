@@ -6,6 +6,7 @@ const {
   Driver,
   validateUpdateDriver,
 } = require("../models/Driver");
+const logger = require("../config/logger");
 const cloudinary = require("cloudinary").v2;
 
 /**
@@ -15,37 +16,52 @@ const cloudinary = require("cloudinary").v2;
  * @access private (logged user only)
  */
 module.exports.createDriverCtrl = asyncHandler(async (req, res, next) => {
-  const uploadedPhoto = req.body.photo ? req.body.photo.public_id : null;
-  try {
-    const { error } = validateCreateDriver(req.body);
-    if (error) return next(new ErrorResponse(error.details[0].message, 400));
+  logger.info("started createDriverCtrl");
 
-    const userJoinedAsDriver = await Driver.findOne({ userId: req.user.id });
-    if (userJoinedAsDriver) {
-      return next(new ErrorResponse(req.t("driver_joined_already"), 400));
+  const uploadedPhoto = req.body.photo ? req.body.photo.public_id : null;
+
+  try {
+    // Validation check
+    const { error } = validateCreateDriver(req.body);
+    if (error) {
+      throw new ErrorResponse(error.details[0].message, 400);
     }
 
+    // Check if the user has already joined as a driver
+    const userJoinedAsDriver = await Driver.findOne({ userId: req.user.id });
+    if (userJoinedAsDriver) {
+      throw new ErrorResponse(req.t("driver_joined_already"), 400);
+    }
+
+    // Create the new driver
     const newDriver = await Driver.create({
       userId: req.user.id,
       ...req.body,
     });
 
+    // If everything is successful, return response
     res.status(201).json({
       success: true,
       data: newDriver,
       message: req.t("driver_created"),
     });
+    logger.info("done createDriverCtrl");
   } catch (error) {
+    // Handle error cases, delete uploaded photo only if an error occurs
     if (uploadedPhoto) {
       try {
         await cloudinary.uploader.destroy(uploadedPhoto);
       } catch (deleteError) {
-        console.error("Failed to delete the image:", deleteError);
+        logger.error(`Failed to delete the image: ${deleteError}`);
       }
     }
+
+    // Handle duplicate phone number error
     if (error.code === 11000) {
       return next(new ErrorResponse(req.t("phone_duplication"), 400));
     }
+
+    // Pass the error to the next middleware
     next(error);
   }
 });
@@ -57,6 +73,8 @@ module.exports.createDriverCtrl = asyncHandler(async (req, res, next) => {
  * @access public
  */
 module.exports.getDriversCtrl = asyncHandler(async (req, res, next) => {
+  logger.info("started getDriversCtrl");
+
   try {
     let { page, experienceYears, province, cities } = req.query;
     page = parseInt(page) || 1;
@@ -92,6 +110,7 @@ module.exports.getDriversCtrl = asyncHandler(async (req, res, next) => {
 
     const count = await Driver.countDocuments(query);
     res.status(200).json({ drivers, count });
+    logger.info("done getDriversCtrl");
   } catch (error) {
     next(error);
   }
@@ -104,6 +123,8 @@ module.exports.getDriversCtrl = asyncHandler(async (req, res, next) => {
  * @access public
  */
 module.exports.getSingleDriverCtrl = asyncHandler(async (req, res, next) => {
+  logger.info("started getSingleDriverCtrl");
+
   try {
     const { id } = req.params;
     const token = req.headers?.authorization?.split(" ")[1];
@@ -141,6 +162,7 @@ module.exports.getSingleDriverCtrl = asyncHandler(async (req, res, next) => {
       data: driver,
       message: "Success",
     });
+    logger.info("done getSingleDriverCtrl");
   } catch (error) {
     next(error);
   }
@@ -153,6 +175,8 @@ module.exports.getSingleDriverCtrl = asyncHandler(async (req, res, next) => {
  * @access private (only user himself)
  */
 module.exports.updateDriverCtrl = asyncHandler(async (req, res, next) => {
+  logger.info("started updateDriverCtrl");
+
   try {
     const { error } = validateUpdateDriver(req.body);
     if (error) {
@@ -187,6 +211,7 @@ module.exports.updateDriverCtrl = asyncHandler(async (req, res, next) => {
       data: updatedDriver._id,
       message: req.t("data_updated"),
     });
+    logger.info("done updateDriverCtrl");
   } catch (error) {
     next(error);
   }
@@ -199,6 +224,8 @@ module.exports.updateDriverCtrl = asyncHandler(async (req, res, next) => {
  * @access private (only admin and user himself)
  */
 module.exports.deleteDriverCtrl = asyncHandler(async (req, res, next) => {
+  logger.info("started deleteDriverCtrl");
+
   const { id } = req.params;
 
   try {
@@ -224,6 +251,7 @@ module.exports.deleteDriverCtrl = asyncHandler(async (req, res, next) => {
       data: deletedDriver,
       message: req.t("driver_deleted"),
     });
+    logger.info("done deleteDriverCtrl");
   } catch (error) {
     next(error);
   }

@@ -28,6 +28,16 @@ function Statistics() {
         <h4 className="number-title">عدد الإعلانات المرفوضة</h4>
         <p>{statistics?.rejectedAdsCount}</p>
       </div>
+
+      <div className="statistics-item">
+        <h4 className="number-title">عدد السائقين</h4>
+        <p>{statistics?.driversCount}</p>
+      </div>
+
+      <div className="statistics-item">
+        <h4 className="number-title">عدد السائقين المعلقين</h4>
+        <p>{statistics?.rejectedDriversCount}</p>
+      </div>
     </div>
   );
 }

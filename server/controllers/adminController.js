@@ -201,11 +201,21 @@ module.exports.adminGetStatisticsCtrl = asyncHandler(async (req, res, next) => {
       adStatus: rejectedStatus._id,
     });
 
+    const driversCount = await Driver.count({
+      isAccepted: true,
+    });
+
+    const rejectedDriversCount = await Driver.count({
+      isAccepted: false,
+    });
+
     res.status(200).json({
       usersCount,
       pendingAdsCount,
       publsihedAdsCount,
       rejectedAdsCount,
+      driversCount,
+      rejectedDriversCount,
     });
   } catch (error) {
     next(error);

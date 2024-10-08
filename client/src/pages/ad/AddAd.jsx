@@ -26,6 +26,7 @@ function AddAd() {
   const { provinces, itemTypes, statuses, adTargets } = useSelector(
     (state) => state.controls
   );
+  console.log(files);
 
   useEffect(() => {
     dispatch(fetchControls());

@@ -60,7 +60,7 @@ function validateCreateDriver(object) {
   const schema = Joi.object({
     name: Joi.string().required(),
     experienceYears: Joi.number().required(),
-    description: Joi.string(),
+    description: Joi.string().allow(""),
     mobile: Joi.string().trim().min(11).max(14).required(),
     province: Joi.string().required(),
     city: Joi.string().required(),

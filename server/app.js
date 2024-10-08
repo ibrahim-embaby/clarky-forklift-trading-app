@@ -3,6 +3,7 @@ const helmet = require("helmet");
 const cors = require("cors");
 const connectToDb = require("./config/connectToDb");
 const cookieParser = require("cookie-parser");
+const logger = require("./config/logger");
 
 const app = express();
 require("dotenv").config();
@@ -52,6 +53,8 @@ app.use(notFound);
 app.use(errorHandler);
 
 PORT = process.env.PORT || 8000;
-const server = app.listen(PORT, console.log(`server is running on ${PORT}`));
+const server = app.listen(PORT, () => {
+  logger.info(`Server is running on ${PORT}`);
+});
 
 setupSocket(server, allowedOrigins);

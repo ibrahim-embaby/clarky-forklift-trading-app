@@ -5,6 +5,7 @@ const { AdStatus } = require("../models/AdStatus");
 const { User } = require("../models/User");
 const jwt = require("jsonwebtoken");
 const { Notification } = require("../models/Notification");
+const logger = require("../config/logger");
 const cloudinary = require("cloudinary").v2;
 
 /**
@@ -14,6 +15,8 @@ const cloudinary = require("cloudinary").v2;
  * @access private (logged user only)
  */
 module.exports.createAdCtrl = asyncHandler(async (req, res, next) => {
+  logger.info("started createAdCtrl");
+
   try {
     const { error } = validateCreateAd(req.body);
     if (error) return next(new ErrorResponse(error.details[0].message, 400));
@@ -44,6 +47,7 @@ module.exports.createAdCtrl = asyncHandler(async (req, res, next) => {
       data: newAd,
       message: req.t("ad_created"),
     });
+    logger.info("done createAdCtrl");
   } catch (error) {
     next(error);
   }
@@ -56,6 +60,8 @@ module.exports.createAdCtrl = asyncHandler(async (req, res, next) => {
  * @access public
  */
 module.exports.getAllAdsCtrl = asyncHandler(async (req, res, next) => {
+  logger.info("started getAllAdsCtrl");
+
   try {
     const { province, status, itemType, search, page } = req.query;
     const pageSize = 12;
@@ -85,6 +91,7 @@ module.exports.getAllAdsCtrl = asyncHandler(async (req, res, next) => {
 
     count = await Ad.countDocuments(query);
     res.status(200).json({ ads, count });
+    logger.info("done getAllAdsCtrl");
   } catch (error) {
     next(error);
   }
@@ -97,6 +104,8 @@ module.exports.getAllAdsCtrl = asyncHandler(async (req, res, next) => {
  * @access public
  */
 module.exports.getAllUserAdsCtrl = asyncHandler(async (req, res, next) => {
+  logger.info("started getAllUserAdsCtrl");
+
   try {
     const { userId } = req.params;
     const publishedStatus = await AdStatus.findOne({ value: "published" });
@@ -109,6 +118,7 @@ module.exports.getAllUserAdsCtrl = asyncHandler(async (req, res, next) => {
       });
 
     res.status(200).json(ads);
+    logger.info("done getAllUserAdsCtrl");
   } catch (error) {
     next(error);
   }
@@ -121,6 +131,8 @@ module.exports.getAllUserAdsCtrl = asyncHandler(async (req, res, next) => {
  * @access public
  */
 module.exports.getSingleAdCtrl = asyncHandler(async (req, res, next) => {
+  logger.info("started getSingleAdCtrl");
+
   try {
     const { adId } = req.params;
     const publishedStatus = await AdStatus.findOne({ value: "published" });
@@ -170,6 +182,7 @@ module.exports.getSingleAdCtrl = asyncHandler(async (req, res, next) => {
       data: ad,
       message: "Success",
     });
+    logger.info("done getSingleAdCtrl");
   } catch (error) {
     next(error);
   }
@@ -182,6 +195,8 @@ module.exports.getSingleAdCtrl = asyncHandler(async (req, res, next) => {
  * @access private (only user himself)
  */
 module.exports.updateSingleAdCtrl = asyncHandler(async (req, res, next) => {
+  logger.info("started updateSingleAdCtrl");
+
   try {
     const { error } = validateUpdateAd(req.body);
     if (error) return next(new ErrorResponse(error.details[0].message, 400));
@@ -224,6 +239,7 @@ module.exports.updateSingleAdCtrl = asyncHandler(async (req, res, next) => {
     res
       .status(200)
       .json({ success: true, data: updatedAd, message: req.t("ad_edit") });
+    logger.info("done updateSingleAdCtrl");
   } catch (error) {
     next(error);
   }
@@ -236,6 +252,8 @@ module.exports.updateSingleAdCtrl = asyncHandler(async (req, res, next) => {
  * @access private (only admin and user himself)
  */
 module.exports.deleteSingleAdCtrl = asyncHandler(async (req, res, next) => {
+  logger.info("started deleteSingleAdCtrl");
+
   try {
     const { adId } = req.params;
 
@@ -268,6 +286,7 @@ module.exports.deleteSingleAdCtrl = asyncHandler(async (req, res, next) => {
     res
       .status(200)
       .json({ success: true, data: deletedAd, message: req.t("ad_deleted") });
+    logger.info("done deleteSingleAdCtrl");
   } catch (error) {
     next(error);
   }

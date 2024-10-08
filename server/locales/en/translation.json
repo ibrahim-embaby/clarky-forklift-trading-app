@@ -36,5 +36,6 @@
     "driver_accepted": "driver accepted",
     "driver_rejected": "driver rejected",
     "driver_joined_already": "This user has already joined as a driver",
-    "phone_duplication": "Sorry, the phone number you entered is already in use by another user. Please use a different phone number."
+    "phone_duplication": "Sorry, the phone number you entered is already in use by another user. Please use a different phone number.",
+    "invalid_verification_token": "invalid verification token"
 }

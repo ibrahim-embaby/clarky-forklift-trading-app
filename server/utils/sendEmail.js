@@ -27,7 +27,7 @@ module.exports = async (to, otp, name, subject, template) => {
 
   const mailOptions = {
     from: {
-      name: "Clarcky",
+      name: "كلاركي | Clarky",
       address: process.env.SEND_IN_BLUE_USERNAME,
     },
     to: to,

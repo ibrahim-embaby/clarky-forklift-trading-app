@@ -18,10 +18,10 @@ async function verifyToken(req, res, next) {
       req.user = decodedPayload;
       next();
     } catch (err) {
-      return res.status(401).json({ message: "دخول غير مسموح1" });
+      return next(new ErrorResponse("دخول غير مسموح1", 401));
     }
   } else {
-    return res.status(403).json({ message: "2دخول غير مسموح" });
+    return next(new ErrorResponse("2دخول غير مسموح", 403));
   }
 }
 

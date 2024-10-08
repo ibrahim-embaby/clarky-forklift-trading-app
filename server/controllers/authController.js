@@ -10,6 +10,7 @@ const VerificationToken = require("../models/VerificationToken");
 const ErrorResponse = require("../utils/ErrorResponse");
 const jwt = require("jsonwebtoken");
 const sendEmail = require("../utils/sendEmail");
+const logger = require("../config/logger");
 
 /**
  * @desc register user
@@ -18,6 +19,8 @@ const sendEmail = require("../utils/sendEmail");
  * @access public
  */
 module.exports.registerUserCtrl = asyncHandler(async (req, res, next) => {
+  logger.info("started registerUserCtrl");
+
   try {
     const { error } = validateCreateUser(req.body);
     if (error) {
@@ -51,7 +54,7 @@ module.exports.registerUserCtrl = asyncHandler(async (req, res, next) => {
       user.email,
       link,
       user.username,
-      "Verify Your Account ",
+      "رابط تفعيل الحساب",
       "varificationmail"
     );
 
@@ -59,6 +62,7 @@ module.exports.registerUserCtrl = asyncHandler(async (req, res, next) => {
       success: true,
       message: req.t("registration_message"),
     });
+    logger.info("done registerUserCtrl");
   } catch (error) {
     if (error.code === 11000)
       return next(new ErrorResponse("duplicate phone number", 400));
@@ -73,6 +77,8 @@ module.exports.registerUserCtrl = asyncHandler(async (req, res, next) => {
  * @access public
  */
 module.exports.loginUserCtrl = asyncHandler(async (req, res, next) => {
+  logger.info("started loginUserCtrl");
+
   try {
     const { error } = validateLoginUser(req.body);
     if (error) {
@@ -113,6 +119,7 @@ module.exports.loginUserCtrl = asyncHandler(async (req, res, next) => {
       token: accessToken,
       profilePhoto: user.profilePhoto,
     });
+    logger.info("done loginUserCtrl");
   } catch (error) {
     next(error);
   }
@@ -168,6 +175,8 @@ module.exports.refreshTokenCtrl = asyncHandler(async (req, res, next) => {
  */
 module.exports.sendVerificationMailCtrl = asyncHandler(
   async (req, res, next) => {
+    logger.info("started sendVerificationMailCtrl");
+
     const { email } = req.body;
     if (!email) {
       return next(new ErrorResponse("email is required", 400));
@@ -200,13 +209,14 @@ module.exports.sendVerificationMailCtrl = asyncHandler(
         user.email,
         link,
         user.username,
-        "Verify Your Account ",
+        "رابط تفعيل الحساب",
         "varificationmail"
       );
       res.status(200).json({
         success: true,
         message: `We've sent you an email at ${email}`,
       });
+      logger.info("done sendVerificationMailCtrl");
     } catch (error) {
       next(error);
     }
@@ -220,6 +230,8 @@ module.exports.sendVerificationMailCtrl = asyncHandler(
  * @access public
  */
 module.exports.verifyEmailCtrl = asyncHandler(async (req, res, next) => {
+  logger.info("started verifyEmailCtrl");
+
   try {
     jwt.verify(
       req.body.token,
@@ -257,6 +269,7 @@ module.exports.verifyEmailCtrl = asyncHandler(async (req, res, next) => {
                 profilePhoto: user.profilePhoto,
               },
             });
+            logger.info("done verifyEmailCtrl");
           } else if (user?.isAccountVerified) {
             return next(
               new ErrorResponse(req.t("account_already_verified"), 400)
@@ -281,6 +294,8 @@ module.exports.verifyEmailCtrl = asyncHandler(async (req, res, next) => {
  * @access private (only logged user)
  */
 module.exports.signoutCtrl = asyncHandler(async (req, res, next) => {
+  logger.info("started signoutCtrl");
+
   res.clearCookie("refreshtoken", {
     httpOnly: true,
     sameSite: "none",
@@ -290,6 +305,7 @@ module.exports.signoutCtrl = asyncHandler(async (req, res, next) => {
     success: true,
     message: "Signout Successfully",
   });
+  logger.info("done signoutCtrl");
 });
 
 /**
@@ -353,6 +369,8 @@ module.exports.verifyOtpCtrl = asyncHandler(async (req, res, next) => {
  * @access public
  */
 module.exports.forgotPasswordCtrl = asyncHandler(async (req, res, next) => {
+  logger.info("started forgotPasswordCtrl");
+
   const { email } = req.body;
   if (!email) {
     return next(new ErrorResponse("email is required", 400));
@@ -381,7 +399,7 @@ module.exports.forgotPasswordCtrl = asyncHandler(async (req, res, next) => {
       user.email,
       link,
       user.username,
-      "Reset Password",
+      "إعادة تعيين كلمة المرور",
       "forgotpasswordmail"
     );
     // response to the client
@@ -389,6 +407,7 @@ module.exports.forgotPasswordCtrl = asyncHandler(async (req, res, next) => {
       success: true,
       message: req.t("password_link_sent"),
     });
+    logger.info("done forgotPasswordCtrl");
   } catch (error) {
     next(error);
   }
@@ -401,6 +420,8 @@ module.exports.forgotPasswordCtrl = asyncHandler(async (req, res, next) => {
  * @access public
  */
 module.exports.resetPasswordCtrl = asyncHandler(async (req, res, next) => {
+  logger.info("started forgotPasswordCtrl");
+
   try {
     jwt.verify(
       req.body.token,
@@ -431,6 +452,7 @@ module.exports.resetPasswordCtrl = asyncHandler(async (req, res, next) => {
                 success: true,
                 message: req.t("password_reseted"),
               });
+              logger.info("done forgotPasswordCtrl");
             } else {
               next(new ErrorResponse(req.t("enter_password"), 400));
             }

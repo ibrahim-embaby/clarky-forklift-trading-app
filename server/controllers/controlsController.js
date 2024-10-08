@@ -5,6 +5,7 @@ const { Status, validateStatus } = require("../models/Status");
 const { validateItemType, ItemType } = require("../models/ItemType");
 const { validateAdTarget, AdTarget } = require("../models/AdTarget");
 const { validateAdStatus, AdStatus } = require("../models/AdStatus");
+const ErrorResponse = require("../utils/ErrorResponse");
 
 /* ============= PROVINCE CONTROLLERS ============= */
 /**
@@ -13,19 +14,18 @@ const { validateAdStatus, AdStatus } = require("../models/AdStatus");
  * @method POST
  * @access private (admin only)
  */
-module.exports.addProvinceCtrl = asyncHandler(async (req, res) => {
+module.exports.addProvinceCtrl = asyncHandler(async (req, res, next) => {
   try {
     const { error } = validateCreateProvince(req.body);
     if (error) {
-      return res.status(400).json({ message: error.details[0].message });
+      return next(new ErrorResponse(error.details[0].message, 400));
     }
 
     const newProvince = await Province.create(req.body);
 
     res.status(201).json({ data: newProvince, message: "تمت الإضافة" });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: req.t("server_error") });
+    next(error);
   }
 });
 
@@ -35,7 +35,7 @@ module.exports.addProvinceCtrl = asyncHandler(async (req, res) => {
  * @method GET
  * @access public
  */
-module.exports.getProvincesCtrl = asyncHandler(async (req, res) => {
+module.exports.getProvincesCtrl = asyncHandler(async (req, res, next) => {
   try {
     const provinces = await Province.find({ isActive: true })
       .select("_id label value")
@@ -45,8 +45,7 @@ module.exports.getProvincesCtrl = asyncHandler(async (req, res) => {
       });
     res.status(200).json(provinces);
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: req.t("server_error") });
+    next(error);
   }
 });
 
@@ -56,13 +55,12 @@ module.exports.getProvincesCtrl = asyncHandler(async (req, res) => {
  * @method GET
  * @access public
  */
-module.exports.getSingleProvinceCtrl = asyncHandler(async (req, res) => {
+module.exports.getSingleProvinceCtrl = asyncHandler(async (req, res, next) => {
   try {
     const province = await Province.findById(req.params.id).populate("cities");
     res.status(200).json(province);
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: req.t("server_error") });
+    next(error);
   }
 });
 
@@ -72,19 +70,18 @@ module.exports.getSingleProvinceCtrl = asyncHandler(async (req, res) => {
  * @method POST
  * @access private (admin only)
  */
-module.exports.addCityCtrl = asyncHandler(async (req, res) => {
+module.exports.addCityCtrl = asyncHandler(async (req, res, next) => {
   try {
     const { error } = validateCreateCity(req.body);
     if (error) {
-      return res.status(400).json({ message: error.details[0].message });
+      return next(new ErrorResponse(error.details[0].message, 400));
     }
 
     const newCity = await City.create(req.body);
 
     res.status(201).json({ data: newCity, message: "تمت الإضافة" });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: req.t("server_error") });
+    next(error);
   }
 });
 
@@ -95,17 +92,17 @@ module.exports.addCityCtrl = asyncHandler(async (req, res) => {
  * @method POST
  * @access private (only admin)
  */
-module.exports.addStatusCtrl = asyncHandler(async (req, res) => {
+module.exports.addStatusCtrl = asyncHandler(async (req, res, next) => {
   try {
     const { error } = validateStatus(req.body);
-    if (error)
-      return res.status(400).json({ message: error.details[0].message });
+    if (error) {
+      return next(new ErrorResponse(error.details[0].message, 400));
+    }
 
     const newStatus = await Status.create(req.body);
     res.status(201).json({ data: newStatus, message: "تمت الإضافة" });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: req.t("server_error") });
+    next(error);
   }
 });
 
@@ -115,7 +112,7 @@ module.exports.addStatusCtrl = asyncHandler(async (req, res) => {
  * @method GET
  * @access public
  */
-module.exports.getStatusCtrl = asyncHandler(async (req, res) => {
+module.exports.getStatusCtrl = asyncHandler(async (req, res, next) => {
   try {
     const statuses = await Status.find({ isActive: true }).select(
       "_id label value"
@@ -123,8 +120,7 @@ module.exports.getStatusCtrl = asyncHandler(async (req, res) => {
 
     res.status(200).json(statuses);
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: req.t("server_error") });
+    next(error);
   }
 });
 
@@ -135,17 +131,16 @@ module.exports.getStatusCtrl = asyncHandler(async (req, res) => {
  * @method POST
  * @access private (only admin)
  */
-module.exports.addItemTypeCtrl = asyncHandler(async (req, res) => {
+module.exports.addItemTypeCtrl = asyncHandler(async (req, res, next) => {
   try {
     const { error } = validateItemType(req.body);
-    if (error)
-      return res.status(400).json({ message: error.details[0].message });
-
+    if (error) {
+      return next(new ErrorResponse(error.details[0].message, 400));
+    }
     const newItemType = await ItemType.create(req.body);
     res.status(201).json({ data: newItemType, message: "تمت الإضافة" });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: req.t("server_error") });
+    next(error);
   }
 });
 
@@ -155,15 +150,14 @@ module.exports.addItemTypeCtrl = asyncHandler(async (req, res) => {
  * @method GET
  * @access public
  */
-module.exports.getItemTypeCtrl = asyncHandler(async (req, res) => {
+module.exports.getItemTypeCtrl = asyncHandler(async (req, res, next) => {
   try {
     const itemTypes = await ItemType.find({ isActive: true }).select(
       "_id label value"
     );
     res.status(200).json(itemTypes);
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: req.t("server_error") });
+    next(error);
   }
 });
 
@@ -174,17 +168,16 @@ module.exports.getItemTypeCtrl = asyncHandler(async (req, res) => {
  * @method POST
  * @access private (only admin)
  */
-module.exports.addAdTargetCtrl = asyncHandler(async (req, res) => {
+module.exports.addAdTargetCtrl = asyncHandler(async (req, res, next) => {
   try {
     const { error } = validateAdTarget(req.body);
-    if (error)
-      return res.status(400).json({ message: error.details[0].message });
-
+    if (error) {
+      return next(new ErrorResponse(error.details[0].message, 400));
+    }
     const newAdTarget = await AdTarget.create(req.body);
     res.status(201).json({ data: newAdTarget, message: "تمت الإضافة" });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: req.t("server_error") });
+    next(error);
   }
 });
 
@@ -194,7 +187,7 @@ module.exports.addAdTargetCtrl = asyncHandler(async (req, res) => {
  * @method GET
  * @access public
  */
-module.exports.getAdTargetCtrl = asyncHandler(async (req, res) => {
+module.exports.getAdTargetCtrl = asyncHandler(async (req, res, next) => {
   try {
     const adTargets = await AdTarget.find({ isActive: true }).select(
       "_id label value"
@@ -202,8 +195,7 @@ module.exports.getAdTargetCtrl = asyncHandler(async (req, res) => {
 
     res.status(200).json(adTargets);
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: req.t("server_error") });
+    next(error);
   }
 });
 
@@ -214,17 +206,16 @@ module.exports.getAdTargetCtrl = asyncHandler(async (req, res) => {
  * @method POST
  * @access private (only admin)
  */
-module.exports.addAdStatusCtrl = asyncHandler(async (req, res) => {
+module.exports.addAdStatusCtrl = asyncHandler(async (req, res, next) => {
   try {
     const { error } = validateAdStatus(req.body);
-    if (error)
-      return res.status(400).json({ message: error.details[0].message });
-
+    if (error) {
+      return next(new ErrorResponse(error.details[0].message, 400));
+    }
     const newAdStatus = await AdStatus.create(req.body);
     res.status(201).json({ data: newAdStatus, message: "تمت الإضافة" });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: req.t("server_error") });
+    next(error);
   }
 });
 
@@ -234,7 +225,7 @@ module.exports.addAdStatusCtrl = asyncHandler(async (req, res) => {
  * @method GET
  * @access public
  */
-module.exports.getAdStatusCtrl = asyncHandler(async (req, res) => {
+module.exports.getAdStatusCtrl = asyncHandler(async (req, res, next) => {
   try {
     const adStatuses = await AdStatus.find({ isActive: true }).select(
       "_id label value backgroundColor"
@@ -242,8 +233,7 @@ module.exports.getAdStatusCtrl = asyncHandler(async (req, res) => {
 
     res.status(200).json(adStatuses);
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: req.t("server_error") });
+    next(error);
   }
 });
 
@@ -255,11 +245,10 @@ module.exports.getAdStatusCtrl = asyncHandler(async (req, res) => {
  * @access
  */
 
-// module.exports.addProvinceCtrl = asyncHandler( async(req, res) => {
+// module.exports.addProvinceCtrl = asyncHandler( async(req, res,next) => {
 //     try {
 
 //     } catch (error) {
-//         console.log(error);
-//         res.status(500).json({ message: req.t("server_error") });
+//         next(error)
 //     }
 // })

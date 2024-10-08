@@ -1,4 +1,5 @@
 const socketio = require("socket.io");
+const logger = require("./logger");
 
 let users = [];
 
@@ -25,11 +26,11 @@ const setupSocket = (server, allowedOrigins) => {
   });
 
   io.on("connection", (socket) => {
-    console.log("🚀 Someone connected!", socket.id);
+    logger.info(`🚀 Someone connected! ${socket.id}`);
 
     socket.on("addUser", (userId) => {
       addUser(userId, socket.id);
-      console.log("User added:", users);
+      logger.info(`User added: ${users}`);
     });
 
     socket.on("sendNotificationAlert", ({ receiverId }) => {
@@ -40,13 +41,13 @@ const setupSocket = (server, allowedOrigins) => {
     });
 
     socket.on("disconnect", () => {
-      console.log("⚠️ Someone disconnected");
+      logger.info("⚠️ Someone disconnected");
       removeUser(socket.id);
     });
   });
 
   io.on("error", (err) => {
-    console.error("Socket error:", err);
+    logger.error(`Socket error: ${err}`);
   });
 
   return io;

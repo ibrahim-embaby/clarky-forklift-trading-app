@@ -138,5 +138,6 @@
     "photo_validation_error": "الصورة مطلوبة.",
     "navbar_driver_join": "انضمام كسائق",
     "personal_photo":"الصورة الشخصية",
-    "edit_driver": "تعديل بيانات السائق"
+    "edit_driver": "تعديل بيانات السائق",
+    "filter": "تصفية"
 }

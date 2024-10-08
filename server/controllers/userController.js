@@ -4,6 +4,7 @@ const { Ad } = require("../models/Ad");
 const ErrorResponse = require("../utils/ErrorResponse");
 const { Notification } = require("../models/Notification");
 const { Driver } = require("../models/Driver");
+const logger = require("../config/logger");
 const cloudinary = require("cloudinary").v2;
 
 /**
@@ -13,6 +14,8 @@ const cloudinary = require("cloudinary").v2;
  * @access private (logged user & admin)
  */
 module.exports.getUserCtrl = asyncHandler(async (req, res) => {
+  logger.info("started getUserCtrl");
+
   try {
     const user = await User.findById(req.params.id).select("-password");
     if (!user) {
@@ -31,6 +34,7 @@ module.exports.getUserCtrl = asyncHandler(async (req, res) => {
  * @access public
  */
 module.exports.getMyAdsCtrl = asyncHandler(async (req, res, next) => {
+  logger.info("started getMyAdsCtrl");
   try {
     const { adStatus, page } = req.query;
     const pageSize = 12;
@@ -58,6 +62,7 @@ module.exports.getMyAdsCtrl = asyncHandler(async (req, res, next) => {
  * @access public
  */
 module.exports.getMyAdCtrl = asyncHandler(async (req, res, next) => {
+  logger.info("started getMyAdCtrl");
   try {
     const ad = await Ad.findOne({
       _id: req.params.adId,
@@ -80,13 +85,14 @@ module.exports.getMyAdCtrl = asyncHandler(async (req, res, next) => {
  * @method DELETE
  * @access private ( user himslef & admin)
  */
-module.exports.deleteUserCtrl = asyncHandler(async (req, res) => {
+module.exports.deleteUserCtrl = asyncHandler(async (req, res, next) => {
+  logger.info("started deleteUserCtrl");
   const { id } = req.params;
 
   try {
     const user = await User.findById(id);
     if (!user) {
-      return res.status(404).json({ message: req.t("user_not_found") });
+      return next(new ErrorResponse(req.t("user_not_found"), 404));
     }
 
     // Collect public_ids to delete from Cloudinary
@@ -130,8 +136,7 @@ module.exports.deleteUserCtrl = asyncHandler(async (req, res) => {
 
     res.status(200).json({ message: req.t("user_deleted") });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: req.t("server_error") });
+    next(error);
   }
 });
 
@@ -142,24 +147,20 @@ module.exports.deleteUserCtrl = asyncHandler(async (req, res) => {
  * @access private ( user himslef )
  */
 module.exports.updateUserCtrl = asyncHandler(async (req, res, next) => {
+  logger.info("started updateUserCtrl");
   try {
     const { error } = validateUpdateUser(req.body);
     if (error) {
       return next(new ErrorResponse(error.details[0].message, 400));
     }
-    console.log("req.body = =", req.body);
     const userId = req.user.id;
-    console.log("userId = ", userId);
     const user = await User.findById(userId);
     if (!user) {
       return next(new ErrorResponse(req.t("user_not_found"), 404));
     }
 
-    console.log("user = ", user);
-
     // Delete the old profile photo from Cloudinary if a new one is provided
     if (req.body.profilePhoto && user.profilePhoto?.public_id) {
-      console.log("deleted");
       await cloudinary.uploader.destroy(user.profilePhoto.public_id);
     }
 

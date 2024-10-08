@@ -8,10 +8,11 @@ const notFound = (req, res, next) => {
 const jwt = require("jsonwebtoken");
 const { Error } = require("mongoose");
 const ErrorResponse = require("../utils/ErrorResponse.js");
+const logger = require("../config/logger.js");
 
 const errorHandler = (error, req, res, next) => {
   let err, status;
-  console.log(error);
+  logger.error(error, { statusCode: status });
   if (error instanceof ErrorResponse) {
     status = error.statusCode;
     err = error.message;
