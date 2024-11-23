@@ -3,7 +3,9 @@
 Clarky is an app for forklift trading.
 
 [Demo - Visit Now](https://clarky-eg.netlify.app) 🚀
+
 [API Docs](https://documenter.getpostman.com/view/17851950/2sAYBUDCGv)
+
 ## 🖥️ Tech Stack
 
 **Frontend:**
