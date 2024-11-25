@@ -37,11 +37,17 @@ Clarky is an app for forklift trading.
 - ✅ Update profile
 - ✅ Multilingual (Arabic/English)
 - ✅ Real time user notfications
-
+- ✅ Join as a driver
+- ✅ update/delete driver data
+- ✅ search drivers by province, city, and experience years
+- ✅ Admin Dashboard
+- ✅ Admin accept/reject/delte ad
+- ✅ Admin reject ad and send a rejection reason
+- ✅ Admin accept/reject/delete driver
+  
 ## ⌛ Upcoming Features
 
 - 🚧 Sorting search results
-- 🚧 Admin dashboard
 
 ## 📋 Trello Board
 
