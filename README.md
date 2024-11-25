@@ -29,19 +29,19 @@ Clarky is an app for forklift trading.
 ## 🚀 Features
 
 - ✅ Login/Signup
-- ✅ Search ads by province, condtion, purpose and text
+- ✅ Search ads by province, condition, purpose and text
 - ✅ Search Results Pagination
 - ✅ View ad details
 - ✅ Create ad and send it for review
 - ✅ Update/Delete ad
 - ✅ Update profile
 - ✅ Multilingual (Arabic/English)
-- ✅ Real time user notfications
+- ✅ Real-time user notifications
 - ✅ Join as a driver
-- ✅ update/delete driver data
-- ✅ search drivers by province, city, and experience years
+- ✅ Update/delete driver data
+- ✅ Filter drivers by province, city, and experience years
 - ✅ Admin Dashboard
-- ✅ Admin accept/reject/delte ad
+- ✅ Admin accept/reject/delete ad
 - ✅ Admin reject ad and send a rejection reason
 - ✅ Admin accept/reject/delete driver
   
