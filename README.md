@@ -32,7 +32,7 @@ Clarky is a feature-rich, two-sided marketplace designed to connect buyers and s
   - **Published**: Visible on the platform.  
   - **Under Review**: Pending admin approval.  
   - **Rejected**: With rejection reason from admin.  
-- Edit or delete ads directly from the "My Ads" section.  
+- Edit or delete ads directly from the Ad page.  
 
 ### **Driver Recruitment**  
 - Users can apply to become drivers via a detailed form (Name, Experience, Location, Age, Phone, Description).  
