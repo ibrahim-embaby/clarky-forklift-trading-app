@@ -1,78 +1,65 @@
-# Clarky
+# **Clarky - Forklift Trading Marketplace**  
 
-Clarky is an app for forklift trading.
+Clarky is a feature-rich, two-sided marketplace designed to connect buyers and sellers in the forklifts industry. Developed in two iterations, it focuses on delivering a seamless user experience, scalable architecture, and robust admin tools to manage the platform effectively.  
 
-[Demo - Visit Now](https://clarky-eg.netlify.app) 🚀
+## **Overview**  
+- **Tech Stack:** MERN (MongoDB, Express.js, React.js, Node.js)  
+- **Current Version:** Remix.js for improved SEO  
+- **Deployment:** Hosted on [Hostinger](https://calrky.site) with Nginx as a proxy.  
+- **Monitoring & Tools:** Cloudflare for SSL and security, Hotjar, Tawk.to, and Google Analytics for user tracking.  
 
-[API Docs](https://documenter.getpostman.com/view/17851950/2sAYBUDCGv)
+## **Features**  
+### **Marketplace Functionality**  
+- Search and filter ads by **province**, **status** (new/used), **type** (equipment, battery, charger, parts), and keywords.  
+- View detailed ad pages, including:  
+  - Ad photos  
+  - Title and description  
+  - Seller information and contact details  
+  - Button to view other ads from the same seller  
 
-## 🖥️ Tech Stack
+### **User Management**  
+- **Registration:**  
+  - Form with fields: Name, Email, Phone, Password  
+  - Email verification with a clickable link.  
+- **Login/Password Reset:**  
+  - Login with credentials or reset password via email link.  
+- **Profile Options:**  
+  - Update personal details: Photo, Bio, Phone, Name.  
 
-**Frontend:**
+### **Ad Management**  
+- Create ads via a dedicated page.  
+- Ads categorized by status:  
+  - **Published**: Visible on the platform.  
+  - **Under Review**: Pending admin approval.  
+  - **Rejected**: With rejection reason from admin.  
+- Edit or delete ads directly from the "My Ads" section.  
 
-![reactjs](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)&nbsp;
-![react-router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white)&nbsp;
-![redux-toolkit](https://img.shields.io/badge/Redux_Toolkit-593D88?style=for-the-badge&logo=redux&logoColor=white)&nbsp;
-![mui](https://img.shields.io/badge/Material--Icons-0081CB?style=for-the-badge&logo=material-ui&logoColor=white)&nbsp;
+### **Driver Recruitment**  
+- Users can apply to become drivers via a detailed form (Name, Experience, Location, Age, Phone, Description).  
+- Drivers are listed publicly once approved, with filters for location and experience.  
 
-**Backend:**
+### **Admin Dashboard**  
+- **Statistics:** Overview of users, ads, and drivers by status.  
+- **User Management:** View and delete users.  
+- **Ad Management:** Approve, reject, or delete ads with filtering options.  
+- **Driver Management:** Approve, reject, or delete driver applications.  
 
-![nodejs](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white)&nbsp;
-![expressjs](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)&nbsp;
-![mongodb](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)&nbsp;
-![jwt](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=JSON%20web%20tokens&logoColor=white)&nbsp;
+### **Multilingual Support**  
+- Fully localized in **Arabic** and **English**.  
 
-<!-- **Deployed On:**
+## **Technical Enhancements**  
+- Transitioned from **React.js** to **Remix.js** to enhance SEO and performance.  
+- Secured using **Cloudflare SSL** and proxied through **Nginx**.  
+- Analytics and monitoring with **Hotjar**, **Tawk.to**, and **Google Analytics**.  
 
-![netlify](https://img.shields.io/badge/netlify-32e6e2?style=for-the-badge&logo=netlify&logoColor=white) -->
+## **Links and Resources**  
+- **First Version (React.js):** [GitHub Repository](https://github.com/ibrahim-embaby/clarky-forklift-trading-app)  
+- **Second Version (Remix.js):**  
+  - [Live Demo](https://calrky.site)  
+  - [API Documentation](https://documenter.getpostman.com/view/17851950/2sAYBUDCGv)  
+  - [Demo Video](https://bit.ly/4fOT57J)  
 
-## 🚀 Features
-
-- ✅ Login/Signup
-- ✅ Search ads by province, condition, purpose and text
-- ✅ Search Results Pagination
-- ✅ View ad details
-- ✅ Create ad and send it for review
-- ✅ Update/Delete ad
-- ✅ Update profile
-- ✅ Multilingual (Arabic/English)
-- ✅ Real-time user notifications
-- ✅ Join as a driver
-- ✅ Update/delete driver data
-- ✅ Filter drivers by province, city, and experience years
-- ✅ Admin Dashboard
-- ✅ Admin accept/reject/delete ad
-- ✅ Admin reject ad and send a rejection reason
-- ✅ Admin accept/reject/delete driver
-  
-## ⌛ Upcoming Features
-
-- 🚧 Sorting search results
-
-## 📋 Trello Board
-
-[Trello Board](https://trello.com/b/Cp7E47t7/clarky-website)
-
-## Sneak Peek of Website Pages ✨:
-
-![home](images/img-1.png)
-
-<table>
-  <tr>
-    <td><img src="images/img-2.png" alt="mockups" /></td>
-    <td><img src="images/img-3.png" alt="mockup" /></td>
-    <td><img src="images/img-4.png" alt="mockup" /></td>
-  </tr>
-   <tr>
-    <td><img src="images/img-5.png" alt="mockup" /></td>
-    <td><img src="images/img-6.png" alt="mockup" /></td>
-  </tr>
-</table>
-
-<h2>📬 Contact</h2>
-
-If you want to contact me, you can reach me through below handles.
-
-[![linkedin](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/ibrahim-embaby)
-
-© 2023 Ibrahim Mohamed
+## **Roadmap**  
+- Re-implement the **Notification Feature** from the first version into the second version.  
+- Expand on driver recruitment features with more filters.  
+- Further improve admin dashboard usability.  
